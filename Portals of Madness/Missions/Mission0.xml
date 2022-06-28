@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<encounters>
+	<side>right</side>
+	<encounter>
+		<id>1</id>
+		<name>Escape</name>
+		<optional>false</optional>
+		<startdialog>Aaaand... the lock is picked. Shall we?</startdialog>
+		<fights>
+			<fight>
+				<id>1</id>
+				<dialog>Look, we don't want any trouble, okay? * ... * Fine, the hard way it is then.</dialog>
+				<enemies>prisonPack</enemies>
+				<amount>3</amount>
+				<type>normal</type>
+			</fight>
+			<fight>
+				<id>2</id>
+				<dialog></dialog>
+				<enemies>prisonPack</enemies>
+				<amount>4</amount>
+				<type>normal</type>
+			</fight>
+			<fight>
+				<id>3</id>
+				<dialog></dialog>
+				<enemies>prisonBoss</enemies>
+				<amount>1</amount>
+				<type>miniboss</type>
+			</fight>
+		</fights>
+		<enddialog>Finally! Let's get out of here!</enddialog>
+	</encounter>
+	<encounter>
+		<id>2</id>
+		<name>Streets</name>
+		<optional>false</optional>
+		<startdialog>What's up with all the riots? What the hell is going on here?</startdialog>
+		<fights>
+			<fight>
+				<id>1</id>
+				<dialog></dialog>
+				<enemies>crazedCitizenPack</enemies>
+				<amount>4</amount>
+				<type>normal</type>
+			</fight>
+			<fight>
+				<id>2</id>
+				<dialog></dialog>
+				<enemies>crazedCitizenPack</enemies>
+				<amount>5</amount>
+				<type>normal</type>
+			</fight>
+		</fights>
+		<enddialog>Something is not right here. Let's figure out what is going on.</enddialog>
+	</encounter>
+	<encounter>
+		<id>3</id>
+		<name>The Bridge Encounter</name>
+		<optional>false</optional>
+		<startdialog>Soldier, what is going on out here? * ... * Not again!</startdialog>
+		<fights>
+			<fight>
+				<id>1</id>
+				<dialog></dialog>
+				<enemies>guardPack</enemies>
+				<amount>5</amount>
+				<type>normal</type>
+			</fight>
+			<fight>
+				<id>2</id>
+				<dialog></dialog>
+				<enemies>guardPack</enemies>
+				<amount>5</amount>
+				<type>normal</type>
+			</fight>
+		</fights>
+		<enddialog>We should go to the armory to get resupplied.</enddialog>
+	</encounter>
+	<encounter>
+		<id>4</id>
+		<name>Armory</name>
+		<optional>true</optional>
+		<startdialog></startdialog>
+		<fights>
+			<fight>
+				<id>1</id>
+				<dialog></dialog>
+				<enemies>guardPack</enemies>
+				<amount>5</amount>
+				<type>normal</type>
+			</fight>
+			<fight>
+				<id>2</id>
+				<dialog></dialog>
+				<enemies>guardPack</enemies>
+				<amount>5</amount>
+				<type>normal</type>
+			</fight>
+			<fight>
+				<id>3</id>
+				<dialog>... * Erm... you'll never catch me alive! * Wait! * No!</dialog>
+				<enemies>ratThief</enemies>
+				<amount>1</amount>
+				<type>miniboss</type>
+			</fight>
+		</fights>
+		<enddialog>Okay, let's get some answers.</enddialog>
+	</encounter>
+	<encounter>
+		<id>5</id>
+		<name>The Tower</name>
+		<optional>false</optional>
+		<startdialog></startdialog>
+		<fights>
+			<fight>
+				<id>1</id>
+				<dialog>* Stop right there!</dialog>
+				<enemies>guardPack</enemies>
+				<amount>2</amount>
+				<type>normal</type>
+			</fight>
+			<fight>
+				<id>2</id>
+				<dialog></dialog>
+				<enemies>guardPack</enemies>
+				<amount>2</amount>
+				<type>normal</type>
+			</fight>
+			<fight>
+				<id>3</id>
+				<dialog></dialog>
+				<enemies>mayor</enemies>
+				<amount>1</amount>
+				<type>boss</type>
+			</fight>
+		</fights>
+		<enddialog>* Fine, I'll tell you what I know.</enddialog>
+	</encounter>
+</encounters>

@@ -18,7 +18,15 @@ namespace Portals_of_Madness
         {
             InitializeComponent();
 
-            engine = new GameEngine();
+            engine = new GameEngine(this);
+            engine.Resolution(this);
+        }
+
+        public GameForm(int mapNumber, List<Character> pT)
+        {
+            InitializeComponent();
+
+            engine = new GameEngine(this, pT, mapNumber);
             engine.Resolution(this);
         }
     }

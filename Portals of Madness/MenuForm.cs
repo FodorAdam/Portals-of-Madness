@@ -45,16 +45,20 @@ namespace Portals_of_Madness
                 (w / 2 - buttonInfo.Width / 2, h / 2 - buttonInfo.Height / 2 + 3 * (3 * buttonHeight / 5));
         }
 
+        //Start a new game by starting the tutorial mission
         private void buttonNewGame_Click(object sender, EventArgs e)
         {
+            engine.NextMap(0);
             engine.ShowOtherForm("g");
         }
 
+        //Continue the game
         private void buttonContinue_Click(object sender, EventArgs e)
         {
             engine.ShowOtherForm("s");
         }
 
+        //Show the how to play form
         private void buttonInfo_Click(object sender, EventArgs e)
         {
             engine.ShowOtherForm("i");
