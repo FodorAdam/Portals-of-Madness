@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace Portals_of_Madness
 {
-    public partial class Form1 : Form
+    public partial class SelectionForm : Form
     {
-        public Form1()
+        GameEngine engine;
+
+        public SelectionForm()
         {
             InitializeComponent();
+
+            engine = new GameEngine();
+            engine.Resolution(this);
         }
     }
 }

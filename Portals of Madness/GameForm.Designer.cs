@@ -1,6 +1,6 @@
 ﻿namespace Portals_of_Madness
 {
-    partial class Form1
+    partial class GameForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,13 +30,14 @@
         {
             this.SuspendLayout();
             // 
-            // Form1
+            // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(357, 371);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Name = "GameForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+            this.Text = "Portals of Madness";
             this.ResumeLayout(false);
 
         }
@@ -44,4 +45,3 @@
         #endregion
     }
 }
-
