@@ -12,14 +12,16 @@ namespace Portals_of_Madness
 {
     public partial class GameForm : Form
     {
-        GameEngine engine;
+        public GameEngine engine { get; set; }
+        public Controller controller { get; set; }
 
         public GameForm()
         {
             InitializeComponent();
 
             engine = new GameEngine(this);
-            engine.Resolution(this);
+            controller = new Controller();
+            controller.Resolution(this);
         }
 
         public GameForm(int mapNumber, List<Character> pT)
@@ -27,7 +29,8 @@ namespace Portals_of_Madness
             InitializeComponent();
 
             engine = new GameEngine(this, pT, mapNumber);
-            engine.Resolution(this);
+            controller = new Controller();
+            controller.Resolution(this);
         }
     }
 }

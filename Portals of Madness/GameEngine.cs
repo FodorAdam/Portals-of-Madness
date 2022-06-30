@@ -10,29 +10,26 @@ namespace Portals_of_Madness
 {
     public class GameEngine
     {
-        GameForm gameForm;
-        SelectionForm selectionForm;
-        InfoForm infoForm;
-        int nextMap;
-        private List<Character> playerTeam;
-        private List<Character> enemyTeam;
-        private Mission mission;
-        private List<Character> initiativeTeam;
-        private bool playerTurn = false;
-        private Character currentCharacter;
-        private int currentID = -1;
-        private int encounterNumber = 1;
-        private int turn;
-        private GameForm form;
-
-        //When called by any form other than GameForm
-        public GameEngine(){}
+        public int nextMap { get; set; }
+        public List<Character> playerTeam { get; set; }
+        public List<Character> enemyTeam { get; set; }
+        public Mission mission { get; set; }
+        public List<Character> initiativeTeam { get; set; }
+        public bool playerTurn { get; set; }
+        public Character currentCharacter { get; set; }
+        public int currentID { get; set; }
+        public int encounterNumber { get; set; }
+        public int turn { get; set; }
+        public GameForm form { get; set; }
 
         //When called by GameForm after starting a new game
         public GameEngine(GameForm f)
         {
             nextMap = 0;
             Setup();
+            playerTurn = false;
+            currentID = -1;
+            encounterNumber = 1;
         }
 
         //When called by GameForm
@@ -42,57 +39,6 @@ namespace Portals_of_Madness
             form = f;
             playerTeam = pT;
             Setup();
-        }
-
-        //Set the size of the form to the resolution, then maximize it
-        public Point Resolution(Form f)
-        {
-            f.Location = new Point(0, 0);
-            int h = Screen.PrimaryScreen.WorkingArea.Height;
-            int w = Screen.PrimaryScreen.WorkingArea.Width;
-            f.ClientSize = new Size(w, h);
-            f.WindowState = FormWindowState.Maximized;
-
-            return new Point(w, h);
-        }
-
-        //Used to close the current form and swap to another
-        public void ChangeForm(Form f, string formChar)
-        {
-            f.Close();
-            ShowOtherForm(formChar);
-        }
-
-        //Swaps to another form
-        public void ShowOtherForm(string formChar)
-        {
-            switch (formChar)
-            {
-                case ("s"):
-                    selectionForm = new SelectionForm();
-                    selectionForm.ShowDialog();
-                    break;
-                case ("g"):
-                    gameForm = new GameForm();
-                    gameForm.ShowDialog();
-                    break;
-                case ("g+"):
-                    gameForm = new GameForm(nextMap, playerTeam);
-                    gameForm.ShowDialog();
-                    break;
-                case ("i"):
-                    infoForm = new InfoForm();
-                    infoForm.ShowDialog();
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        //Sets the next map to get loaded
-        public void NextMap(int n)
-        {
-            nextMap = n;
         }
 
         public void Setup()
@@ -137,7 +83,7 @@ namespace Portals_of_Madness
         {
             //TODO: Randomize the enemy teams according to the name in the XML file in Mission
             enemyTeam = new List<Character>();
-            enemyTeam = mission.getEnemies();
+            enemyTeam = mission.Enemies;
             string enemySide = (mission.PlayerSide().Equals("left") ? "right" : "left");
             arrangeTeamMembers(enemyTeam, enemySide);
             createInitiative();
@@ -161,10 +107,10 @@ namespace Portals_of_Madness
         {
             foreach (Character c in playerTeam)
             {
-                c.setCurrHealth(c.getMaxHealth());
-                c.setAlive(true);
-                c.setStunned(false);
-                c.setCurrResource(0);
+                c.currHealth = c.maxHealth;
+                c.alive = true;
+                c.stunned = false;
+                c.currResource = 0;
             }
         }
 
@@ -194,7 +140,7 @@ namespace Portals_of_Madness
         {
             Random rand = new Random();
             int target = rand.Next(playerTeam.Count());
-            if (!playerTeam[target].isAlive())
+            if (!playerTeam[target].alive)
             {
                 target = selectTarget();
             }
@@ -206,11 +152,11 @@ namespace Portals_of_Madness
             turn++;
             foreach (Character c in initiativeTeam)
             {
-                if (c.isAlive())
+                if (c.alive)
                 {
-                    foreach (DoT dot in c.getDoTs())
+                    foreach (DoT dot in c.dots)
                     {
-                        c.setCurrHealth(c.getCurrHealth() - dot.amount);
+                        c.currHealth -= dot.amount;
                         dot.Tick();
                         if (dot.duration <= 0)
                         {
@@ -218,13 +164,23 @@ namespace Portals_of_Madness
                         }
                     }
 
-                    if (c.getCurrHealth() <= 0)
+                    foreach (Buff buff in c.buffs)
+                    {
+                        buff.Tick();
+                        if (buff.duration <= 0)
+                        {
+                            c.removeBuffEffects(buff);
+                            c.removeBuff(buff);
+                        }
+                    }
+
+                    if (c.currHealth <= 0)
                     {
                         c.die();
                     }
-                    if (c.getCurrHealth() > c.getMaxHealth())
+                    if (c.currHealth > c.maxHealth)
                     {
-                        c.setCurrHealth(c.getMaxHealth());
+                        c.currHealth = c.maxHealth;
                     }
                     resourceGain(c);
                 }
@@ -235,17 +191,17 @@ namespace Portals_of_Madness
         {
             int gain = 3;
 
-            switch (c.getResourceName())
+            switch (c.resourceName)
             {
                 case "mana":
                     gain = 4;
                     break;
                 case "rage":
-                    if (c.getCurrHealth() < c.getMaxHealth() * 0.3)
+                    if (c.currHealth < c.maxHealth * 0.3)
                     {
                         gain = 8;
                     }
-                    else if (c.getCurrHealth() < c.getMaxHealth() * 0.7)
+                    else if (c.currHealth < c.maxHealth * 0.7)
                     {
                         gain = 4;
                     }
@@ -255,11 +211,11 @@ namespace Portals_of_Madness
                     }
                     break;
                 case "focus":
-                    if (c.getCurrHealth() < c.getMaxHealth() * 0.3)
+                    if (c.currHealth < c.maxHealth * 0.3)
                     {
                         gain = 2;
                     }
-                    else if (c.getCurrHealth() < c.getMaxHealth() * 0.7)
+                    else if (c.currHealth < c.maxHealth * 0.7)
                     {
                         gain = 4;
                     }
@@ -272,13 +228,13 @@ namespace Portals_of_Madness
                     break;
             }
 
-            if (c.getCurrResource() + gain <= c.getMaxResource())
+            if (c.currResource + gain <= c.maxResource)
             {
-                c.setCurrResource(c.getCurrResource() + gain);
+                c.currResource += gain;
             }
             else
             {
-                c.setCurrResource(c.getMaxResource());
+                c.currResource = c.maxResource;
             }
         }
 
@@ -293,20 +249,24 @@ namespace Portals_of_Madness
             {
                 currentID++;
             }
-            if (!initiativeTeam[currentID].isAlive())
+            if (!initiativeTeam[currentID].alive)
             {
                 currentSelect();
             }
-            if (initiativeTeam[currentID].isStunned())
+            if (initiativeTeam[currentID].stunned)
             {
-                initiativeTeam[currentID].setStunned(false);
+                --initiativeTeam[currentID].stunLength;
+                if(initiativeTeam[currentID].stunLength <= 0)
+                {
+                    initiativeTeam[currentID].stunned = false;
+                }
                 currentSelect();
             }
             setCurrentCharacter(initiativeTeam[currentID]);
             playerTurn = false;
             foreach (Character P in playerTeam)
             {
-                if (P.getName().Equals(currentCharacter.getName()))
+                if (P.name.Equals(currentCharacter.name))
                 {
                     playerTurn = true;
                 }
@@ -319,14 +279,14 @@ namespace Portals_of_Madness
             bool enemyAlive = false;
             foreach (Character P in playerTeam)
             {
-                if (P.getCurrHealth() > 0)
+                if (P.currHealth > 0)
                 {
                     playerAlive = true;
                 }
             }
             foreach (Character E in enemyTeam)
             {
-                if (E.getCurrHealth() > 0)
+                if (E.currHealth > 0)
                 {
                     enemyAlive = true;
                 }
@@ -357,7 +317,7 @@ namespace Portals_of_Madness
             {
                 for (int j = i + 1; j < initiativeTeam.Count(); j++)
                 {
-                    if (initiativeTeam[j].getSpeed() <= initiativeTeam[i].getSpeed())
+                    if (initiativeTeam[j].speed <= initiativeTeam[i].speed)
                     {
                         temp = initiativeTeam[i];
                         initiativeTeam[i] = initiativeTeam[j];
@@ -407,10 +367,10 @@ namespace Portals_of_Madness
             this.currentCharacter = currentCharacter;
             for (int i = 0; i < playerTeam.Count(); i++)
             {
-                playerTeam[i].setActive(false);
+                playerTeam[i].active = false;
             }
-            currentCharacter.setActive(true);
-            this.currentCharacter.setActive(true);
+            currentCharacter.active = true;
+            this.currentCharacter.active = true;
         }
     }
 }

@@ -49,6 +49,7 @@
     <Compile Include="Ability.cs" />
     <Compile Include="AICharacter.cs" />
     <Compile Include="Character.cs" />
+    <Compile Include="Controller.cs" />
     <Compile Include="GameEngine.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>

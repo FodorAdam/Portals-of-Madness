@@ -12,14 +12,14 @@ namespace Portals_of_Madness
 {
     public partial class MenuForm : Form
     {
-        GameEngine engine;
+        Controller controller;
 
         public MenuForm()
         {
             InitializeComponent();
 
-            engine = new GameEngine();
-            Point tmpPoint = engine.Resolution(this);
+            controller = new Controller();
+            Point tmpPoint = controller.Resolution(this);
             int w = tmpPoint.X;
             int h = tmpPoint.Y;
 
@@ -48,20 +48,20 @@ namespace Portals_of_Madness
         //Start a new game by starting the tutorial mission
         private void buttonNewGame_Click(object sender, EventArgs e)
         {
-            engine.NextMap(0);
-            engine.ShowOtherForm("g");
+            controller.NextMap(0);
+            controller.ShowOtherForm("g");
         }
 
         //Continue the game
         private void buttonContinue_Click(object sender, EventArgs e)
         {
-            engine.ShowOtherForm("s");
+            controller.ShowOtherForm("s");
         }
 
         //Show the how to play form
         private void buttonInfo_Click(object sender, EventArgs e)
         {
-            engine.ShowOtherForm("i");
+            controller.ShowOtherForm("i");
         }
     }
 }

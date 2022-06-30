@@ -9,11 +9,34 @@ namespace Portals_of_Madness
     //Used for damage over time and healing over time effects
     public struct DoT
     {
-        public double amount;
-        public int duration;
+        public string name { get; set; }
+        public double amount { get; set; }
+        public int duration { get; set; }
 
-        public DoT(double a, int d)
+        public DoT(string n, double a, int d)
         {
+            name = n;
+            amount = a;
+            duration = d;
+        }
+
+        public void Tick()
+        {
+            --duration;
+        }
+    }
+
+    public struct Buff
+    {
+        public string name { get; set; }
+        public string target { get; set; }
+        public double amount { get; set; }
+        public int duration { get; set; }
+
+        public Buff(string n, string t, double a, int d)
+        {
+            name = n;
+            target = t;
             amount = a;
             duration = d;
         }
@@ -26,47 +49,48 @@ namespace Portals_of_Madness
 
     public class Character : Sprite
     {
-        private readonly string name;
-        private int level;
-        private readonly string characterClass;
+        public string name { get; }
+        public int level { get; set; }
 
-        private readonly double baseHealth;
-        private readonly double healthMult;
-        private double maxHealth;
-        private double currHealth;
+        public double baseHealth { get; }
+        public double healthMult { get; }
+        public double maxHealth { get; set; }
+        public double currHealth { get; set; }
 
-        private readonly string resourceName;
-        private readonly int maxResource;
-        private int currResource;
+        public string resourceName { get; }
+        public int maxResource { get; }
+        public int currResource { get; set; }
 
-        private readonly double basePhysAttack;
-        private readonly double physAttackMult;
-        private double physAttack;
-        private readonly double baseMagicAttack;
-        private readonly double magicAttackMult;
-        private double magicAttack;
-        private readonly double basePhysArmor;
-        private readonly double physArmorMult;
-        private double physArmor;
-        private readonly double baseMagicArmor;
-        private readonly double magicArmorMult;
-        private double magicArmor;
-        private readonly List<string> weaknesses;
+        public double basePhysAttack { get; }
+        public double physAttackMult { get; }
+        public double physAttack { get; set; }
+        public double baseMagicAttack { get; }
+        public double magicAttackMult { get; }
+        public double magicAttack { get; set; }
+        public double basePhysArmor { get; }
+        public double physArmorMult { get; }
+        public double physArmor { get; set; }
+        public double baseMagicArmor { get; }
+        public double magicArmorMult { get; }
+        public double magicArmor { get; set; }
+        public List<string> weaknesses { get; }
 
-        private readonly Ability ability1;
-        private readonly Ability ability2;
-        private readonly Ability ability3;
+        public Ability ability1 { get; }
+        public Ability ability2 { get; }
+        public Ability ability3 { get; }
 
-        private readonly int baseSpeed;
-        private int speed;
+        public int baseSpeed { get; }
+        public int speed { get; set; }
 
-        private bool alive;
-        private bool stunned;
-        private bool active;
-        private List<DoT> dots;
+        public bool alive { get; set; }
+        public bool stunned { get; set; }
+        public int stunLength { get; set; }
+        public bool active { get; set; }
+        public List<DoT> dots { get; set; }
+        public List<Buff> buffs { get; set; }
 
         public Character(string im,
-            int l, string n, string c,
+            int l, string n,
             double bHP, double hpM,
             string rN, int mR,
             double pAt, double pAtM, double mAt, double mAtM,
@@ -76,7 +100,6 @@ namespace Portals_of_Madness
         {
             name = n;
             level = l;
-            characterClass = c;
 
             baseHealth = bHP;
             healthMult = hpM;
@@ -108,52 +131,63 @@ namespace Portals_of_Madness
             baseSpeed = ini;
             speed = ((baseSpeed - level % 10) >= 0 ? (baseSpeed - level % 10) : 0);
 
+            dots = new List<DoT>();
+            buffs = new List<Buff>();
             alive = true;
             stunned = false;
             active = false;
-    }
+        }
 
-    //Cast a ability at the target(s)
-    public bool castAbility(Ability ab, List<Character> targets)
+        public bool canCast(Ability ab)
         {
-            if (currResource >= ab.getCost())
+            if (currResource >= ab.cost)
             {
-                setCurrResource(getCurrResource() - ab.getCost());
-                foreach (Character target in targets)
-                {
-                    switch (ab.getAbilityType())
-                    {
-                        case "attack":
-                            target.healthChange(calcDamageWithArmor(ab));
-                            break;
-                        case "heal":
-                            target.healthChange(calcDamageWithoutArmor(ab));
-                            break;
-                        case "DoT":
-                            target.addDoT(calcDamageWithoutArmor(ab), ab.getDuration());
-                            break;
-                        case "HoT":
-                            target.addDoT(calcDamageWithoutArmor(ab), ab.getDuration());
-                            break;
-                        case "resurrect":
-                            target.resurrect();
-                            break;
-                        case "stun":
-                            target.stun(calcDamageWithoutArmor(ab));
-                            break;
-                        case "buff":
-                            //TODO: Buffs
-                            break;
-                        case "debuff":
-                            //TODO: Debuffs
-                            break;
-                        default:
-                            break;
-                    }
-                }
                 return true;
             }
             return false;
+        }
+
+        //Cast a ability at the target(s)
+        public void castAbility(Ability ab, List<Character> targets)
+        {
+            currResource -= ab.cost;
+            foreach (Character target in targets)
+            {
+                switch (ab.abilityType)
+                {
+                    case "attack":
+                        target.healthChange(calcDamageWithArmor(ab));
+                        break;
+                    case "heal":
+                        target.healthChange(calcDamageWithoutArmor(ab));
+                        break;
+                    case "DoT":
+                        target.addDoT(ab.name, calcDamageWithoutArmor(ab), ab.duration);
+                        break;
+                    case "HoT":
+                        target.addDoT(ab.name, calcDamageWithoutArmor(ab), ab.duration);
+                        break;
+                    case "resurrect":
+                        target.resurrect();
+                        break;
+                    case "stun":
+                        target.stun(calcDamageWithoutArmor(ab), ab.duration);
+                        break;
+                    case "buff":
+                        target.addBuff(ab.name, ab.modifier, ab.modifiedAmount, ab.duration);
+                        break;
+                    case "debuff":
+                        target.addBuff(ab.name, ab.modifier, ab.modifiedAmount, ab.duration);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        public Character summon(Ability ab)
+        {
+            return null;
         }
 
         //Calculate the final stats of the character
@@ -175,8 +209,8 @@ namespace Portals_of_Madness
             { 
                 mult = 2;
             }
-            return ((ab.getPhysAttackDamage() * getPhysAttack() - getPhysArmor())
-                + (ab.getMagicAttackDamage() * getMagicAttack() - getMagicArmor())) * mult;
+            return ((ab.physAttackDamage * physAttack - physArmor)
+                + (ab.magicAttackDamage * magicAttack - magicArmor)) * mult;
         }
         private double calcDamageWithoutArmor(Ability ab)
         {
@@ -185,14 +219,14 @@ namespace Portals_of_Madness
             {
                 mult = 2;
             }
-            return (ab.getPhysAttackDamage() * getPhysAttack() + ab.getMagicAttackDamage() * getMagicAttack()) * mult;
+            return (ab.physAttackDamage * physAttack + ab.magicAttackDamage * magicAttack) * mult;
         }
 
         private bool weakTo(Ability ab)
         {
             foreach (string weakness in weaknesses)
             {
-                if (weakness == ab.getAttackType())
+                if (weakness == ab.damageType)
                 {
                     return true;
                 }
@@ -206,11 +240,11 @@ namespace Portals_of_Madness
         }
 
         //Adds a DoT to the target
-        private void addDoT(double amount, int dur)
+        private void addDoT(string name, double amount, int dur)
         {
             if (alive)
             {
-                dots.Add(new DoT(amount, dur));
+                dots.Add(new DoT(name, amount, dur));
             }
         }
 
@@ -248,6 +282,11 @@ namespace Portals_of_Madness
             alive = false;
             stunned = false;
             dots.Clear();
+            foreach (Buff buff in buffs)
+            {
+                removeBuffEffects(buff);
+            }
+            buffs.Clear();
             currResource = 0;
         }
 
@@ -262,143 +301,118 @@ namespace Portals_of_Madness
         }
 
         //Stuns the target and deals damage to them
-        private void stun(double amount)
+        private void stun(double amount, int length)
         {
             if(alive)
             {
                 stunned = true;
                 healthChange(amount);
+                stunLength = length;
             }
         }
 
-        public Ability getAbility1()
-        {
-            return ability1;
-        }
-
-        public Ability getAbility2()
-        {
-            return ability2;
-        }
-
-        public Ability getAbility3()
-        {
-            return ability3;
-        }
-
-        public string getName()
-        {
-            return name;
-        }
-
-        public double getMaxHealth()
-        {
-            return maxHealth;
-        }
-
-        public double getCurrHealth()
-        {
-            return currHealth;
-        }
-
-        public string getResourceName()
-        {
-            return resourceName;
-        }
-
-        public int getMaxResource()
-        {
-            return maxResource;
-        }
-
-        public int getCurrResource()
-        {
-            return currResource;
-        }
-
-        public double getPhysAttack()
-        {
-            return physAttack;
-        }
-
-        public double getMagicAttack()
-        {
-            return magicAttack;
-        }
-
-        public double getPhysArmor()
-        {
-            return physArmor;
-        }
-
-        public double getMagicArmor()
-        {
-            return magicArmor;
-        }
-
-        public List<string> getWeaknesses()
-        {
-            return weaknesses;
-        }
-
-        public bool isAlive()
-        {
-            return alive;
-        }
-
-        public void setCurrHealth(double currHealth)
-        {
-            this.currHealth = currHealth;
-        }
-
-        public void setCurrResource(int currResource)
-        {
-            this.currResource = currResource;
-        }
-
-        public void setAlive(bool alive)
-        {
-            this.alive = alive;
-        }
-
-        public int getSpeed()
-        {
-            return speed;
-        }
-
-        public bool isStunned()
-        {
-            return stunned;
-        }
-
-        public void setStunned(bool stunned)
-        {
-            this.stunned = stunned;
-        }
-
-        public List<DoT> getDoTs()
-        {
-            return dots;
-        }
-
+        //Removes a DoT from the list
         public void removeDoT(DoT dot)
         {
             dots.Remove(dot);
         }
 
-        public string getCharacterClass()
+        public void addBuff(string name, string target, double amount, int dur)
         {
-            return characterClass;
+            if (alive)
+            {
+                Buff buff = new Buff(name, target, amount, dur);
+                switch (buff.target)
+                {
+                    case "health":
+                        maxHealth *= buff.amount;
+                        break;
+                    case "pAttack":
+                        physAttack *= buff.amount;
+                        break;
+                    case "mAttack":
+                        magicAttack *= buff.amount;
+                        break;
+                    case "pArmor":
+                        physArmor *= buff.amount;
+                        break;
+                    case "mArmor":
+                        magicArmor *= buff.amount;
+                        break;
+                    case "all":
+                        maxHealth *= buff.amount;
+                        physAttack *= buff.amount;
+                        magicAttack *= buff.amount;
+                        physArmor *= buff.amount;
+                        magicArmor *= buff.amount;
+                        break;
+                    case "attack":
+                        physAttack *= buff.amount;
+                        magicAttack *= buff.amount;
+                        break;
+                    case "armor":
+                        physArmor *= buff.amount;
+                        magicArmor *= buff.amount;
+                        break;
+                    case "survival":
+                        maxHealth *= buff.amount;
+                        physArmor *= buff.amount;
+                        magicArmor *= buff.amount;
+                        break;
+                    default:
+                        break;
+                }
+                buffs.Add(buff);
+            }
         }
 
-        public bool isActive()
+        public void removeBuffEffects(Buff buff)
         {
-            return active;
+            switch (buff.target)
+            {
+                case "health":
+                    maxHealth /= buff.amount;
+                    break;
+                case "pAttack":
+                    physAttack /= buff.amount;
+                    break;
+                case "mAttack":
+                    magicAttack /= buff.amount;
+                    break;
+                case "pArmor":
+                    physArmor /= buff.amount;
+                    break;
+                case "mArmor":
+                    magicArmor /= buff.amount;
+                    break;
+                case "all":
+                    maxHealth /= buff.amount;
+                    physAttack /= buff.amount;
+                    magicAttack /= buff.amount;
+                    physArmor /= buff.amount;
+                    magicArmor /= buff.amount;
+                    break;
+                case "attack":
+                    physAttack /= buff.amount;
+                    magicAttack /= buff.amount;
+                    break;
+                case "armor":
+                    physArmor /= buff.amount;
+                    magicArmor /= buff.amount;
+                    break;
+                case "survival":
+                    maxHealth /= buff.amount;
+                    physArmor /= buff.amount;
+                    magicArmor /= buff.amount;
+                    break;
+                default:
+                    break;
+            }
         }
 
-        public void setActive(bool ac)
+        public void removeBuff(Buff buff)
         {
-            active = ac;
+            buffs.Remove(buff);
         }
     }
 }

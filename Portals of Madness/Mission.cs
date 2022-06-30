@@ -10,11 +10,11 @@ namespace Portals_of_Madness
 {
     public class Mission
     {
-        private string name;
-        private List<Character> Enemies;
-        private string background;
-        private Encounters encounters;
-        private int encounterNumber;
+        public string name { get; set; }
+        public List<Character> Enemies { get; set; }
+        public string background { get; set; }
+        public Encounters encounters { get; set; }
+        public int encounterNumber { get; set; }
 
         public Mission(int number)
         {
@@ -53,26 +53,6 @@ namespace Portals_of_Madness
         public string PlayerSide()
         {
             return encounters.side;
-        }
-
-        public string getName()
-        {
-            return name;
-        }
-
-        public List<Character> getEnemies()
-        {
-            return Enemies;
-        }
-
-        public string getBackground()
-        {
-            return background;
-        }
-
-        public int getEncounterNumber()
-        {
-            return encounterNumber;
         }
 
         public void incrementEncounterNumber()

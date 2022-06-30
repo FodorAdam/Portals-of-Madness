@@ -12,14 +12,14 @@ namespace Portals_of_Madness
 {
     public partial class SelectionForm : Form
     {
-        GameEngine engine;
+        Controller controller;
 
         public SelectionForm()
         {
             InitializeComponent();
 
-            engine = new GameEngine();
-            engine.Resolution(this);
+            controller = new Controller();
+            controller.Resolution(this);
         }
     }
 }

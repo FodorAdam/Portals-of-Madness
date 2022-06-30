@@ -12,13 +12,13 @@ namespace Portals_of_Madness
 {
     public partial class InfoForm : Form
     {
-        GameEngine engine;
+        Controller controller;
         public InfoForm()
         {
             InitializeComponent();
 
-            engine = new GameEngine();
-            Point tmpPoint = engine.Resolution(this);
+            controller = new Controller();
+            Point tmpPoint = controller.Resolution(this);
             int w = tmpPoint.X;
             int h = tmpPoint.Y;
 
@@ -48,7 +48,7 @@ namespace Portals_of_Madness
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
-            engine.ChangeForm(this, "");
+            controller.ChangeForm(this, "");
         }
     }
 }

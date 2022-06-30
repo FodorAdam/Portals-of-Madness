@@ -8,23 +8,54 @@ namespace Portals_of_Madness
 {
     public class Ability
     {
-        private readonly string name;
-        private readonly int cost;
-        private readonly int cooldown;
-        private int cooldownRem;
-        private readonly double physAttackDamage;
-        private readonly double magicAttackDamage;
-        private readonly string attackType;
-        private readonly string targetType;
-        private readonly int duration;
-        private readonly int targetCount;
-        private readonly string abilityType;
-        private readonly string abilityModifier;
-        private readonly string imageIcon;
-        private readonly string sprite;
+        //Name
+        public string name { get; }
 
-    public Ability(string n, int co, int cd, double fAD, double mAD, int dur, string aT, string tT,
-            int tC, string abT, string aM, string iI, string sp)
+        //Resource cost
+        public int cost { get; }
+
+        //How many turns need to pass between uses
+        public int cooldown { get; }
+
+        //Remaining cooldown
+        public int cooldownRem { get; set; }
+
+        //Physical attack damage
+        public double physAttackDamage { get; }
+
+        //Magical attack damage
+        public double magicAttackDamage { get; }
+
+        //The type of the damage
+        public string damageType { get; }
+
+        //Whom does it target (ally, enemy, all or a specific character in the case of summons)
+        public string target { get; }
+
+        //How long it lasts (only for HotS, DoTs, buffs, debuffs and stuns)
+        public int duration { get; }
+
+        //Amount of people it targets
+        public int targetCount { get; }
+
+        //Type (DoT, heal, etc...)
+        public string abilityType { get; }
+
+        //In the case of attacks, heals and stuns it can be either random or aimed
+        //In the case of buffs and debuffs it is the stat that gets modified
+        public string modifier { get; }
+
+        //The amount of modifications buffs and debuffs do
+        public double modifiedAmount { get; }
+
+        //The icon showed on the buttons
+        public string imageIcon { get; }
+
+        //The sprite that shows the ability in action
+        public string sprite { get; }
+
+        public Ability(string n, int co, int cd, double fAD, double mAD, int dur, string aT, string tT,
+            int tC, string abT, string aM, double mA, string iI, string sp)
         {
             name = n;
             cost = co;
@@ -32,88 +63,14 @@ namespace Portals_of_Madness
             physAttackDamage = fAD;
             physAttackDamage = mAD;
             duration = dur;
-            attackType = aT;
-            targetType = tT;
+            damageType = aT;
+            target = tT;
             targetCount = tC;
             abilityType = abT;
-            abilityModifier = aM;
+            modifier = aM;
+            modifiedAmount = mA;
             imageIcon = iI;
             sprite = sp;
-        }
-
-        public string getName()
-        {
-            return name;
-        }
-
-        public int getCost()
-        {
-            return cost;
-        }
-
-        public int getCooldown()
-        {
-            return cooldown;
-        }
-
-        public int getCooldownRem()
-        {
-            return cooldownRem;
-        }
-
-        public double getPhysAttackDamage()
-        {
-            return physAttackDamage;
-        }
-
-        public double getMagicAttackDamage()
-        {
-            return magicAttackDamage;
-        }
-
-        public string getAttackType()
-        {
-            return attackType;
-        }
-
-        public string getTargetType()
-        {
-            return targetType;
-        }
-
-        public int getTargetCount()
-        {
-            return targetCount;
-        }
-
-        public string getAbilityType()
-        {
-            return abilityType;
-        }
-
-        public void setCooldownRem(int cooldownRem)
-        {
-            this.cooldownRem = cooldownRem;
-        }
-
-        public String getAbilityModifier()
-        {
-            return abilityModifier;
-        }
-
-        public string getImageIcon()
-        {
-            return imageIcon;
-        }
-
-        public string getSprite()
-        {
-            return sprite;
-        }
-
-        public int getDuration()
-        {
-            return duration;
         }
     }
 }
