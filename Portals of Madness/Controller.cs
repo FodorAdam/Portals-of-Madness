@@ -25,7 +25,7 @@ namespace Portals_of_Madness
         }
 
         //Set the size of the form to the resolution, then maximize it
-        public Point Resolution(Form f)
+        public Size Resolution(Form f)
         {
             f.Location = new Point(0, 0);
             int h = Screen.PrimaryScreen.WorkingArea.Height;
@@ -33,7 +33,7 @@ namespace Portals_of_Madness
             f.ClientSize = new Size(w, h);
             f.WindowState = FormWindowState.Maximized;
 
-            return new Point(w, h);
+            return new Size(w, h);
         }
 
         //Used to close the current form and swap to another

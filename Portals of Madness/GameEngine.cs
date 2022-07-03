@@ -8,6 +8,20 @@ using System.Drawing;
 
 namespace Portals_of_Madness
 {
+    public class CharacterPicture
+    {
+        public Character character { get; set; }
+        public PictureBox pictureBox { get; set; }
+
+        public CharacterPicture() { }
+
+        public CharacterPicture(Character c, PictureBox p)
+        {
+            character = c;
+            pictureBox = p;
+        }
+    }
+
     public class GameEngine
     {
         public int nextMap { get; set; }
@@ -26,28 +40,43 @@ namespace Portals_of_Madness
         public GameEngine(GameForm f)
         {
             nextMap = 0;
-            Setup();
-            playerTurn = false;
-            currentID = -1;
-            encounterNumber = 1;
+            TutorialPTeamSetup();
+            InitializeStuff(f);
         }
 
-        //When called by GameForm
+        //When called by GameForm after selecting a mission
         public GameEngine(GameForm f, List<Character> pT, int nM)
         {
             nextMap = nM;
-            form = f;
             playerTeam = pT;
+            InitializeStuff(f);
+        }
+
+        public void InitializeStuff(GameForm f)
+        {
+            form = f;
+            playerTurn = false;
+            currentID = -1;
+            encounterNumber = 1;
             Setup();
+        }
+
+        public void TutorialPTeamSetup()
+        {
+            playerTeam = new List<Character>();
+            GDBBackupModel gdbm = new GDBBackupModel();
+            playerTeam.Add(gdbm.PlayerCharactersDatabase.Where(a => a.name == "Eddie").Select(a => a).First().convToPlayerCharacter());
+            playerTeam.Add(gdbm.PlayerCharactersDatabase.Where(a => a.name == "Lance").Select(a => a).First().convToPlayerCharacter());
+            playerTeam.Add(gdbm.PlayerCharactersDatabase.Where(a => a.name == "Sam").Select(a => a).First().convToPlayerCharacter());
         }
 
         public void Setup()
         {
             turn = 0;
             encounterNumber = 1;
-            playerTeam = new List<Character>();
-            arrangeTeamMembers(playerTeam, mission.PlayerSide());
-            if (mission.isEncounter())
+            mission = new Mission(nextMap);
+            form.PlaceCharacters(playerTeam, mission.PlayerSide());
+            if (mission.IsEncounter())
             {
                 encounterSetup();
             }
@@ -57,42 +86,38 @@ namespace Portals_of_Madness
             }
         }
 
-        //TODO: Sync this up with the GameForm images
-        public void arrangeTeamMembers(List<Character> team, string side)
-        {
-            if ("left".Equals(side))
-            {
-                for (int i = 0; i < team.Count(); i++)
-                {
-                    //team[i].setX((int)(190 + Math.Pow(-1, i) * 40));
-                    //team[i].setY(200 + i * 70);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < team.Count(); i++)
-                {
-                    //team[i].setX((int)(1240 + Math.Pow(-1, i) * (-1) * 40));
-                    //team[i].setY(200 + i * 70);
-                }
-            }
-        }
-
         //Resets the enemies, puts them in their place, creates the order in which the characters get to go and starts the game
         public void encounterSetup()
         {
-            //TODO: Randomize the enemy teams according to the name in the XML file in Mission
             enemyTeam = new List<Character>();
-            enemyTeam = mission.Enemies;
+            mission.LoadNextEnemies();
+            foreach(AICharacter c in mission.Enemies)
+            {
+                enemyTeam.Add(c);
+            }
+            try
+            {
+                form.BackgroundImage =
+                    Image.FromFile($@"../../Art/Backgrounds/{mission.encounters.encounter[mission.encounterNumber].background1}.png");
+            }
+            catch
+            {
+                try
+                {
+                    form.BackgroundImage =
+                        Image.FromFile($@"../../Art/Backgrounds/{mission.encounters.encounter[mission.encounterNumber].background1}.jpg");
+                }
+                catch { }
+            }
             string enemySide = (mission.PlayerSide().Equals("left") ? "right" : "left");
-            arrangeTeamMembers(enemyTeam, enemySide);
+            form.PlaceCharacters(enemyTeam, enemySide);
             createInitiative();
-            manage();
+            //manage();
         }
 
         public void nextEncounter()
         {
-            if (mission.isEncounter())
+            if (mission.IsEncounter())
             {
                 encounterSetup();
             }
@@ -131,7 +156,7 @@ namespace Portals_of_Madness
             }
             else if (bothTeamsAlive() == 1)
             {
-                mission.incrementEncounterNumber();
+                mission.IncrementEncounterNumber();
                 nextEncounter();
             }
         }

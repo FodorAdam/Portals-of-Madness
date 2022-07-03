@@ -94,8 +94,8 @@ namespace Portals_of_Madness
             double bHP, double hpM,
             string rN, int mR,
             double pAt, double pAtM, double mAt, double mAtM,
-                double pAr, double pArM, double mAr, double mArM, List<string> weak,
-            Ability ab1, Ability ab2, Ability ab3, 
+            double pAr, double pArM, double mAr, double mArM, string weak,
+            string ab1, string ab2, string ab3, 
             int ini) : base(im)
         {
             name = n;
@@ -122,11 +122,13 @@ namespace Portals_of_Madness
             baseMagicArmor = mAr;
             magicArmorMult = mArM;
             magicArmor = calcStat(level, baseMagicArmor, magicArmorMult);
-            weaknesses = weak;
+            var weakSplit = weak.Split(',');
+            weaknesses = new List<string>();
+            weaknesses.AddRange(weakSplit);
 
-            ability1 = ab1;
-            ability2 = ab2;
-            ability3 = ab3;
+            ability1 = getAblilityByName(ab1);
+            ability2 = getAblilityByName(ab2);
+            ability3 = getAblilityByName(ab3);
             
             baseSpeed = ini;
             speed = ((baseSpeed - level % 10) >= 0 ? (baseSpeed - level % 10) : 0);
@@ -136,6 +138,21 @@ namespace Portals_of_Madness
             alive = true;
             stunned = false;
             active = false;
+        }
+
+        public Ability getAblilityByName(string abn)
+        {
+            Ability ab = null;
+            GDBBackupModel m = new GDBBackupModel();
+            foreach(AbilityDatabase abd in m.AbilityDatabase)
+            {
+                if(abd.name.Equals(abn))
+                {
+                    ab = abd.convToAbility();
+                    break;
+                }
+            }
+            return ab;
         }
 
         public bool canCast(Ability ab)

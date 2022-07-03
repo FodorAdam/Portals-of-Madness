@@ -19,9 +19,9 @@ namespace Portals_of_Madness
             InitializeComponent();
 
             controller = new Controller();
-            Point tmpPoint = controller.Resolution(this);
-            int w = tmpPoint.X;
-            int h = tmpPoint.Y;
+            Size tmpSize = controller.Resolution(this);
+            int w = tmpSize.Width;
+            int h = tmpSize.Height;
 
             //Set the size of the buttons
             int buttonWidth = w / 5;

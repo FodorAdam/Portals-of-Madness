@@ -15,8 +15,8 @@ namespace Portals_of_Madness
             double bHP, double hpM,
             string rN, int mR,
             double pAt, double pAtM, double mAt, double mAtM,
-                double pAr, double pArM, double mAr, double mArM, List<string> weak,
-            Ability ab1, Ability ab2, Ability ab3,
+            double pAr, double pArM, double mAr, double mArM, string weak,
+            string ab1, string ab2, string ab3,
             int ini, string aiT) : base(im, l, n, bHP, hpM, rN, mR,
             pAt, pAtM, mAt, mAtM, pAr, pArM, mAr, mArM, weak, ab1, ab2, ab3, ini)
         {

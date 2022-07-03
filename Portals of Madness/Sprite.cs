@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,32 +9,59 @@ namespace Portals_of_Madness
 {
     public class Sprite
     {
-        protected string baseImage;
-        protected string image;
+        public string baseImage { get; set; }
+        public Image image { get; set; }
 
-        public Sprite(string image)
+        public Sprite(string i)
         {
-            this.image = image;
+            var strings = i.Split(',');
+            Random rand = new Random();
+            int r = rand.Next(0, strings.Count() - 1);
+            baseImage = strings[r];
+            try
+            {
+                image = Image.FromFile($@"../../Art/Sprites/Characters/{baseImage}/base.png");
+            }
+            catch
+            {
+                Console.WriteLine($"Hát ez nincs itt haver: ../../Art/Sprites/Characters/{baseImage}/base.png");
+            }
         }
 
-        public string getBaseImage()
+        public void setImageToBase()
         {
-            return baseImage;
+            try
+            {
+                image = Image.FromFile($@"../../Art/Sprites/Characters/{baseImage}/base.png");
+            }
+            catch { }
         }
 
-        public string getImage()
+        public void setImageToAttack()
         {
-            return image;
+            try
+            {
+                image = Image.FromFile($@"../../Art/Sprites/Characters/{baseImage}/attack.png");
+            }
+            catch { }
         }
 
-        public void setBaseImage(String image)
+        public void setImageToHurt()
         {
-            this.baseImage = image;
+            try
+            {
+                image = Image.FromFile($@"../../Art/Sprites/Characters/{baseImage}/hurt.png");
+            }
+            catch { }
         }
 
-        public void setImage(String image)
+        public void setImageToDead()
         {
-            this.image = image + '1';
+            try
+            {
+                image = Image.FromFile($@"../../Art/Sprites/Characters/{baseImage}/dead.png");
+            }
+            catch { }
         }
     }
 }
