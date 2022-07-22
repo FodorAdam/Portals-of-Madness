@@ -14,17 +14,14 @@ namespace Portals_of_Madness
 
         public Sprite(string i)
         {
-            var strings = i.Split(',');
-            Random rand = new Random();
-            int r = rand.Next(0, strings.Count() - 1);
-            baseImage = strings[r];
+            baseImage = i;
             try
             {
                 image = Image.FromFile($@"../../Art/Sprites/Characters/{baseImage}/base.png");
             }
-            catch
+            catch(Exception e)
             {
-                Console.WriteLine($"Hát ez nincs itt haver: ../../Art/Sprites/Characters/{baseImage}/base.png");
+                Console.WriteLine($"{e.Message}");
             }
         }
 
@@ -34,7 +31,10 @@ namespace Portals_of_Madness
             {
                 image = Image.FromFile($@"../../Art/Sprites/Characters/{baseImage}/base.png");
             }
-            catch { }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e.Message}");
+            }
         }
 
         public void setImageToAttack()
@@ -43,7 +43,10 @@ namespace Portals_of_Madness
             {
                 image = Image.FromFile($@"../../Art/Sprites/Characters/{baseImage}/attack.png");
             }
-            catch { }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e.Message}");
+            }
         }
 
         public void setImageToHurt()
@@ -52,7 +55,10 @@ namespace Portals_of_Madness
             {
                 image = Image.FromFile($@"../../Art/Sprites/Characters/{baseImage}/hurt.png");
             }
-            catch { }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e.Message}");
+            }
         }
 
         public void setImageToDead()
@@ -61,7 +67,22 @@ namespace Portals_of_Madness
             {
                 image = Image.FromFile($@"../../Art/Sprites/Characters/{baseImage}/dead.png");
             }
-            catch { }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e.Message}");
+            }
+        }
+
+        public Image getProfileImage()
+        {
+            try
+            {
+                return Image.FromFile($@"../../Art/Sprites/Characters/{baseImage}/profile.png");
+            }
+            catch
+            {
+                return Image.FromFile($@"../../Art/Sprites/Characters/{baseImage}/base.png");
+            }
         }
     }
 }

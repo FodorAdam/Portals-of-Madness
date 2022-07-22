@@ -11,31 +11,51 @@ namespace Portals_of_Madness
     public class Mission
     {
         public string name { get; set; }
-        public List<AICharacter> Enemies { get; set; }
-        public List<AICharacter> EveryEnemy { get; set; }
+        public List<Character> Enemies { get; set; }
+        public List<Ability> EveryAbility { get; set; }
+        public XMLCharacters XMLCharacterList { get; set; }
         public string background { get; set; }
         public Encounters encounters { get; set; }
         public int encounterNumber { get; set; }
         public int fightNumber { get; set; }
+        public XMLOperations xmlOps { get; set; }
+        private static Random rand = new Random();
 
         public Mission(int number)
         {
-            Enemies = new List<AICharacter>();
-            EveryEnemy = new List<AICharacter>();
-            GDBBackupModel gdbm = new GDBBackupModel();
-            foreach (var character in gdbm.AICharactersDatabase)
-            {
-                EveryEnemy.Add(character.convToAICharacter());
-            }
+            Enemies = new List<Character>();
+            xmlOps = new XMLOperations();
 
             string path = $@"../../Missions/Mission{number}.xml";
             try
             {
-                encounters = Deserializer(path);
+                encounters = xmlOps.MissionDeserializer(path);
+            }
+            catch { }
+            EveryAbility = new List<Ability>();
+            try
+            {
+                XMLAbilities xabs = xmlOps.AbilityDeserializer($@"../../Abilities/Abilities.xml");
+                foreach (XMLAbility xab in xabs.xmlAbility)
+                {
+                    EveryAbility.Add(convToAbility(xab));
+                }
+            }
+            catch { }
+            try
+            {
+                XMLCharacterList = xmlOps.CharacterDeserializer($@"../../Characters/Characters.xml");
             }
             catch { }
             encounterNumber = 0;
             fightNumber = 0;
+        }
+
+        public Ability convToAbility(XMLAbility x)
+        {
+            return new Ability(x.name, x.cost, x.cooldown, x.physAttackDamage, x.magicAttackDamage,
+                x.duration, x.damageType, x.target, x.targetCount, x.abilityType, x.modifier, x.modifiedAmount,
+                x.imageIcon, x.sprite);
         }
 
         public void LoadNextEnemies()
@@ -54,31 +74,40 @@ namespace Portals_of_Madness
             ++fightNumber;
         }
 
-        public AICharacter SelectAICharacter()
+        public Character SelectCharacter(string n)
+        {
+            var cEnum = XMLCharacterList.xmlCharacter.Where(a => a.id.Contains("prisoner")).Select(a => a);
+            List<XMLCharacter> cList = new List<XMLCharacter>();
+            cList.AddRange(cEnum);
+            int i = rand.Next(0, cList.Count());
+            return xmlOps.convToCharacter(cList[i]);
+        }
+
+        public Character SelectAICharacter()
         {
             switch (encounters.encounter[encounterNumber].fights.fight[fightNumber].enemies)
             {
                 case "prisonPack":
-                    return EveryEnemy.Where(a => a.name == "Crazed Prisoner").Select(a => a).First();
+                    return SelectCharacter("prisoner");
                 case "crazedCitizenPack":
                     break;
                 case "guardPack":
-                    return EveryEnemy.Where(a => a.name == "Guard").Select(a => a).First();
+                    return SelectCharacter("cityguard");
                 default:
                     break;
             }
             return null;
         }
 
-        public List<AICharacter> selectBossFight()
+        public List<Character> selectBossFight()
         {
-            List<AICharacter> characters = new List<AICharacter>();
+            List<Character> characters = new List<Character>();
             switch (encounters.encounter[encounterNumber].fights.fight[fightNumber].enemies)
             {
                 case "prisonBoss":
-                    characters.Add(EveryEnemy.Where(a => a.name == "Crazed Prisoner").Select(a => a).First());
-                    characters.Add(EveryEnemy.Where(a => a.name == "The Warden").Select(a => a).First());
-                    characters.Add(EveryEnemy.Where(a => a.name == "Crazed Prisoner").Select(a => a).First());
+                    characters.Add(SelectCharacter("prisoner"));
+                    characters.Add(SelectCharacter("warden"));
+                    characters.Add(SelectCharacter("prisoner"));
                     break;
                 case "ratThief":
                     break;
@@ -90,25 +119,10 @@ namespace Portals_of_Madness
             return characters;
         }
 
-        //Deserializes the XML file
-        public Encounters Deserializer(string path)
-        {
-            Encounters obj = new Encounters();
-            XmlSerializer des = new XmlSerializer(typeof(Encounters));
-            try
-            {
-                TextReader sr = new StreamReader(path);
-                obj = (Encounters)des.Deserialize(sr);
-                sr.Close();
-            }
-            catch { }
-            return obj;
-        }
-
         //Checks if there is an encounter remaining
         public bool IsEncounter()
         {
-            Enemies = new List<AICharacter>();
+            Enemies = new List<Character>();
             return encounterNumber < encounters.encounter.Length;
         }
 

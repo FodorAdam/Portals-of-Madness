@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Portals_of_Madness
 {
@@ -49,10 +51,10 @@ namespace Portals_of_Madness
         public double modifiedAmount { get; }
 
         //The icon showed on the buttons
-        public string imageIcon { get; }
+        public Image imageIcon { get; }
 
         //The sprite that shows the ability in action
-        public string sprite { get; }
+        public Image sprite { get; }
 
         public Ability(string n, int co, int cd, double fAD, double mAD, int dur, string aT, string tT,
             int tC, string abT, string aM, double mA, string iI, string sp)
@@ -69,8 +71,81 @@ namespace Portals_of_Madness
             abilityType = abT;
             modifier = aM;
             modifiedAmount = mA;
-            imageIcon = iI;
-            sprite = sp;
+            try
+            {
+                imageIcon = Image.FromFile($@"../../Art/Sprites/Characters/{iI}.png");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e.Message}");
+            }
+            try
+            {
+                sprite = Image.FromFile($@"../../Art/Sprites/Characters/{sp}.png");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e.Message}");
+            }
         }
+    }
+
+    [XmlRoot("XMLAbilities")]
+    public class XMLAbilities
+    {
+        [XmlElement("XMLAbility")]
+        public XMLAbility[] xmlAbility { get; set; }
+    }
+
+    public class XMLAbility
+    {
+        [XmlElement("name")]
+        public string name { get; set; }
+
+        [XmlElement("cost")]
+        public int cost { get; set; }
+
+        [XmlElement("cooldown")]
+        public int cooldown { get; set; }
+
+
+        [XmlElement("physAttackDamage")]
+        public double physAttackDamage { get; set; }
+
+
+        [XmlElement("magicAttackDamage")]
+        public double magicAttackDamage { get; set; }
+
+
+        [XmlElement("damageType")]
+        public string damageType { get; set; }
+
+
+        [XmlElement("target")]
+        public string target { get; set; }
+
+
+        [XmlElement("duration")]
+        public int duration { get; set; }
+
+
+        [XmlElement("targetCount")]
+        public int targetCount { get; set; }
+
+
+        [XmlElement("abilityType")]
+        public string abilityType { get; set; }
+
+        [XmlElement("modifier")]
+        public string modifier { get; set; }
+
+        [XmlElement("modifiedAmount")]
+        public double modifiedAmount { get; set; }
+
+        [XmlElement("imageIcon")]
+        public string imageIcon { get; set; }
+
+        [XmlElement("sprite")]
+        public string sprite { get; set; }
     }
 }

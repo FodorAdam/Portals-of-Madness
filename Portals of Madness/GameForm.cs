@@ -17,6 +17,9 @@ namespace Portals_of_Madness
         public List<CharacterPicture> leftSide { get; set; }
         public List<CharacterPicture> rightSide { get; set; }
         public Size screenSize { get; set; }
+        public PlayerAbilityFrame abilityFrame { get; set; }
+        public PlayerCharacterFrame characterFrame { get; set; }
+        public DialogBox dialogBox { get; set; }
 
         public GameForm()
         {
@@ -35,6 +38,9 @@ namespace Portals_of_Madness
         public void Setup()
         {
             controller = new Controller();
+            abilityFrame = new PlayerAbilityFrame();
+            characterFrame = new PlayerCharacterFrame();
+            dialogBox = new DialogBox();
             screenSize = controller.Resolution(this);
             leftSide = new List<CharacterPicture>();
             rightSide = new List<CharacterPicture>();
@@ -67,6 +73,9 @@ namespace Portals_of_Madness
                 {
                     leftSide[i].character = team[i];
                     leftSide[i].pictureBox.Image = team[i].image;
+                    leftSide[i].InitializeBars();
+                    Controls.Add(leftSide[i].healthBar);
+                    Controls.Add(leftSide[i].resourceBar);
                 }
                 
             }
@@ -76,7 +85,10 @@ namespace Portals_of_Madness
                 {
                     rightSide[i].character = team[i];
                     rightSide[i].pictureBox.Image = team[i].image;
+                    rightSide[i].InitializeBars();
                     rightSide[i].pictureBox.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                    Controls.Add(rightSide[i].healthBar);
+                    Controls.Add(rightSide[i].resourceBar);
                 }
             }
         }
@@ -87,20 +99,19 @@ namespace Portals_of_Madness
             int mult = 1;
             if(side == "right")
             {
-                baseX = screenSize.Width - screenSize.Width / 3;
+                baseX = screenSize.Width - screenSize.Width / 3 - size;
                 mult = -1;
             }
             int baseY = screenSize.Height / 2;
-            list[9].pictureBox.Location = new Point(baseX,                   baseY);
-            list[0].pictureBox.Location = new Point(baseX - 2 * size * mult, baseY - size);
-            list[1].pictureBox.Location = new Point(baseX - 2 * size * mult, baseY + size);
-            list[2].pictureBox.Location = new Point(baseX - 4 * size * mult, baseY - 2 * size);
-            list[3].pictureBox.Location = new Point(baseX - 4 * size * mult, baseY);
-            list[4].pictureBox.Location = new Point(baseX - 4 * size * mult, baseY + 2 * size);
-            list[5].pictureBox.Location = new Point(baseX - 6 * size * mult, baseY - 3 * size);
-            list[6].pictureBox.Location = new Point(baseX - 6 * size * mult, baseY - size);
-            list[7].pictureBox.Location = new Point(baseX - 6 * size * mult, baseY + size);
-            list[8].pictureBox.Location = new Point(baseX - 6 * size * mult, baseY + 3 * size);
+            int i = 0;
+            for(int j=1; j <= 4; j++)
+            {
+                for(int k=0; k < j; k++)
+                {
+                    list[i].pictureBox.Location = new Point(baseX - (j - 1) * 2 * size * mult, baseY + (j - 1) * size - k * 2 * size);
+                    ++i;
+                }
+            }
         }
     }
 }

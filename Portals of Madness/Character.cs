@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Portals_of_Madness
 {
@@ -49,6 +50,7 @@ namespace Portals_of_Madness
 
     public class Character : Sprite
     {
+        public string id { get; }
         public string name { get; }
         public int level { get; set; }
 
@@ -89,17 +91,42 @@ namespace Portals_of_Madness
         public List<DoT> dots { get; set; }
         public List<Buff> buffs { get; set; }
 
+        public string rarity { get; }
+        public bool selected { get; set; }
+        public bool collectable { get; set; }
+        public string characterClass { get; }
+        public string aiType { get; }
+
         public Character(string im,
-            int l, string n,
+            string id, int l, string n, string chC,
             double bHP, double hpM,
             string rN, int mR,
             double pAt, double pAtM, double mAt, double mAtM,
             double pAr, double pArM, double mAr, double mArM, string weak,
-            string ab1, string ab2, string ab3, 
-            int ini) : base(im)
+            Ability ab1, Ability ab2, Ability ab3, 
+            int ini, string rar, bool coll, string ai) : base(im)
         {
+            this.id = id;
             name = n;
-            level = l;
+
+            if(l < 1)
+            {
+                level = 1;
+            }
+            else if(l > 30)
+            {
+                level = 30;
+            }
+            else
+            {
+                level = l;
+            }
+
+            characterClass = chC;
+
+            rarity = rar;
+            collectable = coll;
+            aiType = ai;
 
             baseHealth = bHP;
             healthMult = hpM;
@@ -108,7 +135,19 @@ namespace Portals_of_Madness
 
             resourceName = rN;
             maxResource = mR;
-            currResource = 0;
+
+            if(resourceName == "rage")
+            {
+                currResource = 0;
+            }
+            else if(resourceName == "focus")
+            {
+                currResource = maxResource;
+            }
+            else
+            {
+                currResource = maxResource / 2;
+            }
 
             basePhysAttack = pAt;
             physAttackMult = pAtM;
@@ -126,9 +165,9 @@ namespace Portals_of_Madness
             weaknesses = new List<string>();
             weaknesses.AddRange(weakSplit);
 
-            ability1 = getAblilityByName(ab1);
-            ability2 = getAblilityByName(ab2);
-            ability3 = getAblilityByName(ab3);
+            ability1 = ab1;
+            ability2 = ab2;
+            ability3 = ab3;
             
             baseSpeed = ini;
             speed = ((baseSpeed - level % 10) >= 0 ? (baseSpeed - level % 10) : 0);
@@ -138,21 +177,6 @@ namespace Portals_of_Madness
             alive = true;
             stunned = false;
             active = false;
-        }
-
-        public Ability getAblilityByName(string abn)
-        {
-            Ability ab = null;
-            GDBBackupModel m = new GDBBackupModel();
-            foreach(AbilityDatabase abd in m.AbilityDatabase)
-            {
-                if(abd.name.Equals(abn))
-                {
-                    ab = abd.convToAbility();
-                    break;
-                }
-            }
-            return ab;
         }
 
         public bool canCast(Ability ab)
@@ -173,16 +197,16 @@ namespace Portals_of_Madness
                 switch (ab.abilityType)
                 {
                     case "attack":
-                        target.healthChange(calcDamageWithArmor(ab));
+                        target.HealthChange(calcDamageWithArmor(ab));
                         break;
                     case "heal":
-                        target.healthChange(calcDamageWithoutArmor(ab));
+                        target.HealthChange(calcDamageWithoutArmor(ab));
                         break;
                     case "DoT":
-                        target.addDoT(ab.name, calcDamageWithoutArmor(ab), ab.duration);
+                        target.AddDoT(ab.name, calcDamageWithoutArmor(ab), ab.duration);
                         break;
                     case "HoT":
-                        target.addDoT(ab.name, calcDamageWithoutArmor(ab), ab.duration);
+                        target.AddDoT(ab.name, calcDamageWithoutArmor(ab), ab.duration);
                         break;
                     case "resurrect":
                         target.resurrect();
@@ -219,6 +243,27 @@ namespace Portals_of_Madness
             return result;
         }
 
+        public void SetLevel(int l)
+        {
+            if (l < 1)
+            {
+                level = 1;
+            }
+            else if (l > 30)
+            {
+                level = 30;
+            }
+            else
+            {
+                level = l;
+            }
+            maxHealth = calcStat(level, baseHealth, healthMult);
+            physAttack = calcStat(level, basePhysAttack, physAttackMult);
+            magicAttack = calcStat(level, baseMagicAttack, magicAttackMult);
+            physArmor = calcStat(level, basePhysArmor, physArmorMult);
+            magicArmor = calcStat(level, baseMagicArmor, magicArmorMult);
+        }
+
         private double calcDamageWithArmor(Ability ab) 
         {
             int mult = 1;
@@ -251,13 +296,8 @@ namespace Portals_of_Madness
             return false;
         }
 
-        public void SetActive(bool active)
-        {
-            this.active = active;
-        }
-
         //Adds a DoT to the target
-        private void addDoT(string name, double amount, int dur)
+        private void AddDoT(string name, double amount, int dur)
         {
             if (alive)
             {
@@ -266,7 +306,7 @@ namespace Portals_of_Madness
         }
 
         //Used for both taking and healing damage
-        private void healthChange(double amount)
+        private void HealthChange(double amount)
         {
             if(alive)
             {
@@ -323,7 +363,7 @@ namespace Portals_of_Madness
             if(alive)
             {
                 stunned = true;
-                healthChange(amount);
+                HealthChange(amount);
                 stunLength = length;
             }
         }
@@ -431,5 +471,124 @@ namespace Portals_of_Madness
         {
             buffs.Remove(buff);
         }
+
+        private int selectTarget(List<Character> playerTeam)
+        {
+            Random rand = new Random();
+            int target = rand.Next(0, playerTeam.Count);
+            if (!playerTeam[target].alive)
+            {
+                target = selectTarget(playerTeam);
+            }
+            return target;
+        }
+
+        public void Act(List<Character> playerTeam, List<Character> AITeam)
+        {
+            List<Character> targets = new List<Character>();
+            switch (aiType)
+            {
+                case "basic":
+                    for(int i = 0; i < ability1.targetCount; i++)
+                    {
+                        int target = selectTarget(playerTeam);
+                        targets.Add(playerTeam[target]);
+                    }
+                    castAbility(ability1, playerTeam);
+                    break;
+                case "advanced":
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    [XmlRoot("XMLCharacters")]
+    public class XMLCharacters
+    {
+        [XmlElement("XMLCharacter")]
+        public XMLCharacter[] xmlCharacter { get; set; }
+    }
+
+    public class XMLCharacter
+    {
+        [XmlElement("id")]
+        public string id { get; set; }
+
+        [XmlElement("imageSet")]
+        public string imageSet { get; set; }
+
+        [XmlElement("name")]
+        public string name { get; set; }
+
+        [XmlElement("level")]
+        public int level { get; set; }
+
+        [XmlElement("characterClass")]
+        public string characterClass { get; set; }
+
+        [XmlElement("baseHealth")]
+        public double baseHealth { get; set; }
+
+        [XmlElement("healthMult")]
+        public double healthMult { get; set; }
+
+        [XmlElement("resourceName")]
+        public string resourceName { get; set; }
+
+        [XmlElement("maxResource")]
+        public int maxResource { get; set; }
+
+        [XmlElement("basePhysAttack")]
+        public double basePhysAttack { get; set; }
+
+        [XmlElement("physAttackMult")]
+        public double physAttackMult { get; set; }
+
+        [XmlElement("baseMagicAttack")]
+        public double baseMagicAttack { get; set; }
+
+        [XmlElement("magicAttackMult")]
+        public double magicAttackMult { get; set; }
+
+        [XmlElement("basePhysArmor")]
+        public double basePhysArmor { get; set; }
+
+        [XmlElement("physArmorMult")]
+        public double physArmorMult { get; set; }
+
+        [XmlElement("baseMagicArmor")]
+        public double baseMagicArmor { get; set; }
+
+        [XmlElement("magicArmorMult")]
+        public double magicArmorMult { get; set; }
+
+        [XmlElement("weaknesses")]
+        public string weaknesses { get; set; }
+
+        [XmlElement("ability1Name")]
+        public string ability1Name { get; set; }
+
+        [XmlElement("ability2Name")]
+        public string ability2Name { get; set; }
+
+        [XmlElement("ability3Name")]
+        public string ability3Name { get; set; }
+
+        [XmlElement("baseSpeed")]
+        public int baseSpeed { get; set; }
+
+        [XmlElement("rarity")]
+        public string rarity { get; set; }
+
+        [XmlElement("acquired")]
+        public bool acquired { get; set; }
+
+        [XmlElement("aiName")]
+        public string aiName { get; set; }
+
+        [XmlElement("collectable")]
+        public bool collectable { get; set; }
     }
 }
