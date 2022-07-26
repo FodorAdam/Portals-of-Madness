@@ -12,11 +12,48 @@ namespace Portals_of_Madness
 {
     public class PlayerCharacterFrame : Panel
     {
-        public Image characterImage { get; set; }
+        public PictureBox characterImage { get; set; }
         public Label healthLabel { get; set; }
         public Label resourceLabel { get; set; }
 
-        public PlayerCharacterFrame() { }
+        public PlayerCharacterFrame()
+        {
+            healthLabel = new Label();
+            healthLabel.ForeColor = Color.Red;
+            resourceLabel = new Label();
+        }
+
+        public void UpdateFrame(string name, double curHealth, double maxHealth,
+            double curResource, double maxResource, string resourceName)
+        {
+            characterImage.Image = ImageConverter(name);
+            healthLabel.Text = $"{curHealth}/{maxHealth}";
+            resourceLabel.Text = $"{curResource}/{maxResource}";
+            if (resourceName == "focus")
+            {
+                resourceLabel.ForeColor = Color.FromArgb(252, 76, 2);
+            }
+            else if (resourceName == "rage")
+            {
+                resourceLabel.ForeColor = Color.FromArgb(159, 29, 53);
+            }
+            else
+            {
+                resourceLabel.ForeColor = Color.Blue;
+            }
+        }
+
+        public Image ImageConverter(string name)
+        {
+            try
+            {
+                return Image.FromFile($@"../../Art/Sprites/Characters/{name}/profile.png");
+            }
+            catch
+            {
+                return Image.FromFile($@"../../Art/Sprites/Characters/{name}/base.png");
+            }
+        }
     }
 
     public class AbilityButton : Button
@@ -31,24 +68,23 @@ namespace Portals_of_Madness
 
     public class PlayerAbilityFrame : Panel
     {
-        public AbilityButton ab1Button { get; set; }
-        public AbilityButton ab2Button { get; set; }
-        public AbilityButton ab3Button { get; set; }
+        public List<AbilityButton> abButtons { get; set; }
 
         public PlayerAbilityFrame() { }
 
         public void UpdateButtons(Character ch)
         {
-            ab1Button = new AbilityButton(ch.ability1);
-            ab2Button = new AbilityButton(ch.ability2);
-            ab3Button = new AbilityButton(ch.ability3);
+            abButtons = new List<AbilityButton>();
+            abButtons.Add(new AbilityButton(ch.ability1));
+            abButtons.Add(new AbilityButton(ch.ability2));
+            abButtons.Add(new AbilityButton(ch.ability3));
         }
     }
 
     public class DialogBox : Panel
     {
-        public Image leftCharacterImage { get; set; }
-        public Image rightCharacterImage { get; set; }
+        public PictureBox leftCharacterImage { get; set; }
+        public PictureBox rightCharacterImage { get; set; }
         public TextBox dialogTextBox { get; set; }
         public Button nextDialogButton { get; set; }
         public string[] dialogs { get; set; }
@@ -63,7 +99,7 @@ namespace Portals_of_Madness
 
         public void SetupNewStuff(string dialog, string charSet, string ps)
         {
-            this.Visible = true;
+            Visible = true;
             playerSide = ps;
             index = 0;
             if (dialog != "")
@@ -73,11 +109,11 @@ namespace Portals_of_Madness
                 characters = charSet.Split('*');
                 if (playerSide == "left")
                 {
-                    leftCharacterImage = ImageConverter(characters[index]);
+                    leftCharacterImage.Image = ImageConverter(characters[index]);
                 }
                 else
                 {
-                    rightCharacterImage = ImageConverter(characters[index]);
+                    rightCharacterImage.Image = ImageConverter(characters[index]);
                 }
             }
         }
@@ -102,11 +138,11 @@ namespace Portals_of_Madness
                 dialogTextBox.Text = dialogs[index];
                 if ((playerSide == "left" && index % 2 == 0) || (playerSide == "right" && index % 2 == 1))
                 {
-                    leftCharacterImage = ImageConverter(characters[index]);
+                    leftCharacterImage.Image = ImageConverter(characters[index]);
                 }
                 else
                 {
-                    rightCharacterImage = ImageConverter(characters[index]);
+                    rightCharacterImage.Image = ImageConverter(characters[index]);
                 }
             }
             else

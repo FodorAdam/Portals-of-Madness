@@ -188,7 +188,7 @@ namespace Portals_of_Madness
             return false;
         }
 
-        //Cast a ability at the target(s)
+        //Cast a ability at the targets
         public void castAbility(Ability ab, List<Character> targets)
         {
             currResource -= ab.cost;
@@ -223,6 +223,41 @@ namespace Portals_of_Madness
                     default:
                         break;
                 }
+            }
+        }
+
+        //Cast a ability at the target
+        public void castAbility(Ability ab, Character target)
+        {
+            currResource -= ab.cost;
+            switch (ab.abilityType)
+            {
+                case "attack":
+                    target.HealthChange(calcDamageWithArmor(ab));
+                    break;
+                case "heal":
+                    target.HealthChange(calcDamageWithoutArmor(ab));
+                    break;
+                case "DoT":
+                    target.AddDoT(ab.name, calcDamageWithoutArmor(ab), ab.duration);
+                    break;
+                case "HoT":
+                    target.AddDoT(ab.name, calcDamageWithoutArmor(ab), ab.duration);
+                    break;
+                case "resurrect":
+                    target.resurrect();
+                    break;
+                case "stun":
+                    target.stun(calcDamageWithoutArmor(ab), ab.duration);
+                    break;
+                case "buff":
+                    target.addBuff(ab.name, ab.modifier, ab.modifiedAmount, ab.duration);
+                    break;
+                case "debuff":
+                    target.addBuff(ab.name, ab.modifier, ab.modifiedAmount, ab.duration);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -472,15 +507,15 @@ namespace Portals_of_Madness
             buffs.Remove(buff);
         }
 
-        private int selectTarget(List<Character> playerTeam)
+        public Character SelectRandomTarget(List<Character> team)
         {
             Random rand = new Random();
-            int target = rand.Next(0, playerTeam.Count);
-            if (!playerTeam[target].alive)
+            int target = rand.Next(0, team.Count);
+            if (!team[target].alive)
             {
-                target = selectTarget(playerTeam);
+                return SelectRandomTarget(team);
             }
-            return target;
+            return team[target];
         }
 
         public void Act(List<Character> playerTeam, List<Character> AITeam)
@@ -491,8 +526,7 @@ namespace Portals_of_Madness
                 case "basic":
                     for(int i = 0; i < ability1.targetCount; i++)
                     {
-                        int target = selectTarget(playerTeam);
-                        targets.Add(playerTeam[target]);
+                        targets.Add(SelectRandomTarget(playerTeam));
                     }
                     castAbility(ability1, playerTeam);
                     break;
@@ -502,93 +536,5 @@ namespace Portals_of_Madness
                     break;
             }
         }
-    }
-
-    [XmlRoot("XMLCharacters")]
-    public class XMLCharacters
-    {
-        [XmlElement("XMLCharacter")]
-        public XMLCharacter[] xmlCharacter { get; set; }
-    }
-
-    public class XMLCharacter
-    {
-        [XmlElement("id")]
-        public string id { get; set; }
-
-        [XmlElement("imageSet")]
-        public string imageSet { get; set; }
-
-        [XmlElement("name")]
-        public string name { get; set; }
-
-        [XmlElement("level")]
-        public int level { get; set; }
-
-        [XmlElement("characterClass")]
-        public string characterClass { get; set; }
-
-        [XmlElement("baseHealth")]
-        public double baseHealth { get; set; }
-
-        [XmlElement("healthMult")]
-        public double healthMult { get; set; }
-
-        [XmlElement("resourceName")]
-        public string resourceName { get; set; }
-
-        [XmlElement("maxResource")]
-        public int maxResource { get; set; }
-
-        [XmlElement("basePhysAttack")]
-        public double basePhysAttack { get; set; }
-
-        [XmlElement("physAttackMult")]
-        public double physAttackMult { get; set; }
-
-        [XmlElement("baseMagicAttack")]
-        public double baseMagicAttack { get; set; }
-
-        [XmlElement("magicAttackMult")]
-        public double magicAttackMult { get; set; }
-
-        [XmlElement("basePhysArmor")]
-        public double basePhysArmor { get; set; }
-
-        [XmlElement("physArmorMult")]
-        public double physArmorMult { get; set; }
-
-        [XmlElement("baseMagicArmor")]
-        public double baseMagicArmor { get; set; }
-
-        [XmlElement("magicArmorMult")]
-        public double magicArmorMult { get; set; }
-
-        [XmlElement("weaknesses")]
-        public string weaknesses { get; set; }
-
-        [XmlElement("ability1Name")]
-        public string ability1Name { get; set; }
-
-        [XmlElement("ability2Name")]
-        public string ability2Name { get; set; }
-
-        [XmlElement("ability3Name")]
-        public string ability3Name { get; set; }
-
-        [XmlElement("baseSpeed")]
-        public int baseSpeed { get; set; }
-
-        [XmlElement("rarity")]
-        public string rarity { get; set; }
-
-        [XmlElement("acquired")]
-        public bool acquired { get; set; }
-
-        [XmlElement("aiName")]
-        public string aiName { get; set; }
-
-        [XmlElement("collectable")]
-        public bool collectable { get; set; }
     }
 }

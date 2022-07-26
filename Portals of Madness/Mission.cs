@@ -61,7 +61,8 @@ namespace Portals_of_Madness
         public void LoadNextEnemies()
         {
             Enemies.Clear();
-            if (encounters.encounter[encounterNumber].fights.fight[fightNumber].type.Equals("normal")){
+            if (encounters.encounter[encounterNumber].fights.fight[fightNumber].type.Equals("normal"))
+            {
                 for (int i = 0; i < encounters.encounter[encounterNumber].fights.fight[fightNumber].amount; i++)
                 {
                     Enemies.Add(SelectAICharacter());
@@ -137,63 +138,5 @@ namespace Portals_of_Madness
             ++encounterNumber;
             fightNumber = 1;
         }
-    }
-
-    [XmlRoot("Encounters")]
-    public class Encounters
-    {
-        [XmlElement("side")]
-        public string side { get; set; }
-
-        [XmlElement("Encounter")]
-        public Encounter[] encounter { get; set; }
-    }
-
-    public class Encounter
-    {
-        [XmlElement("id")]
-        public int id { get; set; }
-
-        [XmlElement("name")]
-        public string name { get; set; }
-
-        [XmlElement("background1")]
-        public string background1 { get; set; }
-
-        [XmlElement("optional")]
-        public bool optional { get; set; }
-
-        [XmlElement("startdialog")]
-        public string startdialog { get; set; }
-
-        [XmlElement("Fights")]
-        public Fights fights { get; set; }
-
-        [XmlElement("enddialog")]
-        public string enddialog { get; set; }
-    }
-
-    public class Fights
-    {
-        [XmlElement("Fight")]
-        public Fight[] fight { get; set; }
-    }
-
-    public class Fight
-    {
-        [XmlElement("id")]
-        public int id { get; set; }
-
-        [XmlElement("dialog")]
-        public string dialog { get; set; }
-
-        [XmlElement("enemies")]
-        public string enemies { get; set; }
-
-        [XmlElement("amount")]
-        public int amount { get; set; }
-
-        [XmlElement("type")]
-        public string type { get; set; }
     }
 }

@@ -20,6 +20,8 @@ namespace Portals_of_Madness
         public PlayerAbilityFrame abilityFrame { get; set; }
         public PlayerCharacterFrame characterFrame { get; set; }
         public DialogBox dialogBox { get; set; }
+        public Ability selectedAbility { get; set; }
+        public bool casting { get; set; }
 
         public GameForm()
         {
@@ -37,10 +39,14 @@ namespace Portals_of_Madness
 
         public void Setup()
         {
+            casting = false;
             controller = new Controller();
             abilityFrame = new PlayerAbilityFrame();
+            Controls.Add(abilityFrame);
             characterFrame = new PlayerCharacterFrame();
+            Controls.Add(characterFrame);
             dialogBox = new DialogBox();
+            Controls.Add(dialogBox);
             screenSize = controller.Resolution(this);
             leftSide = new List<CharacterPicture>();
             rightSide = new List<CharacterPicture>();
@@ -109,8 +115,104 @@ namespace Portals_of_Madness
                 for(int k=0; k < j; k++)
                 {
                     list[i].pictureBox.Location = new Point(baseX - (j - 1) * 2 * size * mult, baseY + (j - 1) * size - k * 2 * size);
+                    list[i].pictureBox.Click += delegate
+                    {
+                        AssignCharacterClickFunctions(list[i].character);
+                    };
                     ++i;
                 }
+            }
+        }
+
+        //TODO: Make this select more than 1 target if necessary
+        public void AssignCharacterClickFunctions(Character target)
+        {
+            if (casting)
+            {
+                if(selectedAbility.targetCount == 1)
+                {
+                    engine.currentCharacter.castAbility(selectedAbility, target);
+                }
+                else
+                {
+                    List<Character> targets;
+                    targets = SelectAimedTargets(target, selectedAbility.target == "ally" ? engine.playerTeam :
+                        selectedAbility.target == "enemy" ? engine.enemyTeam : engine.initiativeTeam);
+                    engine.currentCharacter.castAbility(selectedAbility, targets);
+                }
+            }
+        }
+
+        public List<Character> SelectAimedTargets(Character target, List<Character> team)
+        {
+            List<Character> targets = new List<Character>();
+            int num = selectedAbility.targetCount;
+            int pos = team.FindIndex(x => x == target);
+            for(int i=0; i<team.Count; i++)
+            {
+                int newPos = pos + CalcPos(i);
+                if(newPos >= 0 && newPos < team.Count)
+                {
+                    if (team[newPos].alive)
+                    {
+                        targets.Add(team[newPos]);
+                    }
+                }
+                
+            }
+            return targets;
+        }
+
+        public int CalcPos(int i)
+        {
+            return ((i + 1) / 2) * (int)Math.Pow(-1, (double)i % 2);
+        }
+
+        //Assigns functions to the buttons: if the ability's type is anything but random, it makes the ability
+        //the current ability and if it is random, it chooses random targets to attack instantly
+        public void AssignAbilityButtonFunctions()
+        {
+            abilityFrame.UpdateButtons(engine.currentCharacter);
+            for(int i=0; i<abilityFrame.abButtons.Count; i++)
+            {
+                abilityFrame.abButtons[i].Click += delegate
+                {
+                    Ability ab = abilityFrame.abButtons[i].ability;
+                    if(ab.abilityType == "random" && CanCast(ab))
+                    {
+                        for (int j = 0; j < ab.targetCount; j++)
+                        {
+                            engine.currentCharacter.castAbility(ab,
+                                engine.currentCharacter.SelectRandomTarget(
+                                    ab.target == "ally" ? engine.playerTeam :
+                                    ab.target == "enemy" ? engine.enemyTeam : engine.initiativeTeam));
+
+                        }
+                    }
+                    else
+                    {
+                        selectedAbility = ab;
+                        Cast();
+                    }
+                };
+            }
+        }
+
+        public bool CanCast(Ability ab)
+        {
+            return engine.currentCharacter.currResource >= ab.cost;
+        }
+
+        private void Cast()
+        {
+            if(CanCast(selectedAbility))
+            {
+                casting = true;
+                //targetArrowsSetup();
+            }
+            else
+            {
+                //targetArrows = new ArrayList();
             }
         }
     }
