@@ -41,12 +41,6 @@ namespace Portals_of_Madness
         {
             casting = false;
             controller = new Controller();
-            abilityFrame = new PlayerAbilityFrame();
-            Controls.Add(abilityFrame);
-            characterFrame = new PlayerCharacterFrame();
-            Controls.Add(characterFrame);
-            dialogBox = new DialogBox();
-            Controls.Add(dialogBox);
             screenSize = controller.Resolution(this);
             leftSide = new List<CharacterPicture>();
             rightSide = new List<CharacterPicture>();
@@ -60,6 +54,23 @@ namespace Portals_of_Madness
             }
             PlacePictureBoxes("left", leftSide, picSize, screenSize);
             PlacePictureBoxes("right", rightSide, picSize, screenSize);
+        }
+
+        public void InitializeUI(string side)
+        {
+            abilityFrame = new PlayerAbilityFrame(screenSize);
+            Controls.Add(abilityFrame);
+            for (int i = 0; i < abilityFrame.abButtons.Count; i++)
+            {
+                Controls.Add(abilityFrame.abButtons[i]);
+            }
+            characterFrame = new PlayerCharacterFrame(screenSize, side);
+            Controls.Add(characterFrame);
+            Controls.Add(characterFrame.characterImage);
+            Controls.Add(characterFrame.healthLabel);
+            Controls.Add(characterFrame.resourceLabel);
+            //dialogBox = new DialogBox(screenSize);
+            //Controls.Add(dialogBox);
         }
 
         public void SetupBoxes(CharacterPicture charPic, int picSize)
@@ -124,10 +135,10 @@ namespace Portals_of_Madness
             }
         }
 
-        //TODO: Make this select more than 1 target if necessary
+        //Make this select more than 1 target if necessary
         public void AssignCharacterClickFunctions(Character target)
         {
-            if (casting)
+            if(casting)
             {
                 if(selectedAbility.targetCount == 1)
                 {
@@ -186,7 +197,6 @@ namespace Portals_of_Madness
                                 engine.currentCharacter.SelectRandomTarget(
                                     ab.target == "ally" ? engine.playerTeam :
                                     ab.target == "enemy" ? engine.enemyTeam : engine.initiativeTeam));
-
                         }
                     }
                     else

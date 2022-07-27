@@ -56,11 +56,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ability.cs" />
-    <Compile Include="Character.cs" />
-    <Compile Include="Controller.cs" />
-    <Compile Include="GameEngine.cs">
+    <Compile Include="AbilityButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Character.cs" />
+    <Compile Include="CharacterPicture.cs" />
+    <Compile Include="Controller.cs" />
+    <Compile Include="DialogBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GameEngine.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +85,12 @@
       <DependentUpon>MenuForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Mission.cs" />
+    <Compile Include="PlayerAbilityFrame.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PlayerCharacterFrame.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectionForm.cs">
