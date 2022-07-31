@@ -77,9 +77,7 @@ namespace Portals_of_Madness
         public double magicArmor { get; set; }
         public List<string> weaknesses { get; }
 
-        public Ability ability1 { get; }
-        public Ability ability2 { get; }
-        public Ability ability3 { get; }
+        public List<Ability> abilities { get; }
 
         public int baseSpeed { get; }
         public int speed { get; set; }
@@ -165,10 +163,13 @@ namespace Portals_of_Madness
             weaknesses = new List<string>();
             weaknesses.AddRange(weakSplit);
 
-            ability1 = ab1;
-            ability2 = ab2;
-            ability3 = ab3;
-            
+            abilities = new List<Ability>
+            {
+                ab1,
+                ab2,
+                ab3
+            };
+
             baseSpeed = ini;
             speed = ((baseSpeed - level % 10) >= 0 ? (baseSpeed - level % 10) : 0);
 
@@ -343,9 +344,10 @@ namespace Portals_of_Madness
         //Used for both taking and healing damage
         private void HealthChange(double amount)
         {
+            Console.WriteLine(amount);
             if(alive)
             {
-                if(currHealth - amount <= 0)
+                if(currHealth + amount <= 0)
                 {
                     if (currHealth >= maxHealth * 0.8)
                     {
@@ -356,13 +358,13 @@ namespace Portals_of_Madness
                         die();
                     }
                 }
-                else if(currHealth - amount > maxHealth)
+                else if(currHealth + amount > maxHealth)
                 {
                     currHealth = maxHealth;
                 }
                 else
                 {
-                    currHealth -= amount;
+                    currHealth += amount;
                 }
             }
         }
@@ -524,11 +526,11 @@ namespace Portals_of_Madness
             switch (aiType)
             {
                 case "basic":
-                    for(int i = 0; i < ability1.targetCount; i++)
+                    for(int i = 0; i < abilities[0].targetCount; i++)
                     {
                         targets.Add(SelectRandomTarget(playerTeam));
                     }
-                    castAbility(ability1, playerTeam);
+                    castAbility(abilities[0], playerTeam);
                     break;
                 case "advanced":
                     break;

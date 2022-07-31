@@ -73,20 +73,51 @@ namespace Portals_of_Madness
             modifiedAmount = mA;
             try
             {
-                imageIcon = Image.FromFile($@"../../Art/Sprites/Characters/{iI}.png");
+                imageIcon = Image.FromFile($@"../../Art/Sprites/Spells/{iI}.png");
             }
-            catch (Exception e)
+            catch
             {
-                Console.WriteLine($"{e.Message}");
+                try
+                {
+                    imageIcon = Image.FromFile($@"../../Art/Sprites/Spells/{iI}.jpg");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"{e.Message}");
+                }
             }
             try
             {
-                sprite = Image.FromFile($@"../../Art/Sprites/Characters/{sp}.png");
+                sprite = Image.FromFile($@"../../Art/Sprites/Spells/{sp}.png");
             }
-            catch (Exception e)
+            catch
             {
-                Console.WriteLine($"{e.Message}");
+                try
+                {
+                    sprite = Image.FromFile($@"../../Art/Sprites/Spells/{sp}.jpg");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"{e.Message}");
+                }
             }
+        }
+
+        public override string ToString()
+        {
+            if(abilityType == "attack" || abilityType == "heal")
+            {
+                return $"{name}\nType: {abilityType}\nTarget: {targetCount} {target}\n" +
+                    $"Physical: {physAttackDamage}, magic: {magicAttackDamage}\n" +
+                    $"Element: {damageType}";
+            }
+            else if (abilityType == "stun" || abilityType == "DoT" || abilityType == "HoT")
+            {
+                return $"{name}\nType: {abilityType}\nTarget: {targetCount} {target}\n" +
+                    $"Physical: {physAttackDamage}, magic: {magicAttackDamage}\n" +
+                    $"Element: {damageType}\nDuration: {duration}";
+            }
+            return $"{name}\nType: {abilityType}";
         }
     }
 }

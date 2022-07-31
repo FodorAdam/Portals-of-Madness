@@ -129,8 +129,8 @@ namespace Portals_of_Madness
             }
             string enemySide = (mission.PlayerSide().Equals("left") ? "right" : "left");
             form.PlaceCharacters(enemyTeam, enemySide);
-            createInitiative();
-            manage();
+            CreateInitiative();
+            Manage();
         }
 
         public void nextEncounter()
@@ -157,7 +157,7 @@ namespace Portals_of_Madness
             }
         }
 
-        public void manage()
+        public void Manage()
         {
             if (bothTeamsAlive() == 0)
             {
@@ -165,13 +165,17 @@ namespace Portals_of_Madness
                 if (!playerTurn)
                 {
                     form.abilityFrame.Visible = false;
+                    form.characterFrame.Visible = false;
                     currentCharacter.Act(playerTeam, enemyTeam);
-                    manage();
+                    Manage();
                 }
                 else
                 {
                     form.abilityFrame.Visible = true;
+                    form.characterFrame.Visible = true;
                     form.abilityFrame.UpdateButtons(currentCharacter);
+                    form.AssignAbilityButtonFunctions();
+                    form.characterFrame.UpdateFrame(currentCharacter);
                 }
             }
             else if (bothTeamsAlive() == -1)
@@ -344,10 +348,6 @@ namespace Portals_of_Madness
             {
                 return 0;
             }
-            else if (!playerAlive && enemyAlive)
-            {
-                return -1;
-            }
             else if (playerAlive && !enemyAlive)
             {
                 return 1;
@@ -355,7 +355,7 @@ namespace Portals_of_Madness
             return -1;
         }
 
-        private void createInitiative()
+        private void CreateInitiative()
         {
             currentID = -1;
             initiativeTeam = new List<Character>();

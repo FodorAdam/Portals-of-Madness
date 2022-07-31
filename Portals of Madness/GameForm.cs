@@ -22,6 +22,7 @@ namespace Portals_of_Madness
         public DialogBox dialogBox { get; set; }
         public Ability selectedAbility { get; set; }
         public bool casting { get; set; }
+        public string side { get; set; }
 
         public GameForm()
         {
@@ -37,6 +38,7 @@ namespace Portals_of_Madness
             engine = new GameEngine(this, pT, mapNumber);
         }
 
+        //Sets up all the global variables
         public void Setup()
         {
             casting = false;
@@ -56,32 +58,35 @@ namespace Portals_of_Madness
             PlacePictureBoxes("right", rightSide, picSize, screenSize);
         }
 
+        //Initializes the UI
         public void InitializeUI(string side)
         {
             abilityFrame = new PlayerAbilityFrame(screenSize);
-            Controls.Add(abilityFrame);
             for (int i = 0; i < abilityFrame.abButtons.Count; i++)
             {
                 Controls.Add(abilityFrame.abButtons[i]);
             }
+            Controls.Add(abilityFrame);
+            this.side = side;
             characterFrame = new PlayerCharacterFrame(screenSize, side);
-            Controls.Add(characterFrame);
             Controls.Add(characterFrame.characterImage);
             Controls.Add(characterFrame.healthLabel);
             Controls.Add(characterFrame.resourceLabel);
+            Controls.Add(characterFrame);
             //dialogBox = new DialogBox(screenSize);
             //Controls.Add(dialogBox);
         }
 
+        //Sets up the character pictures
         public void SetupBoxes(CharacterPicture charPic, int picSize)
         {
-            charPic.pictureBox = new PictureBox();
-            charPic.pictureBox.Size = new Size(picSize, picSize);
-            charPic.pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            charPic.pictureBox.BackColor = Color.Transparent;
-            Controls.Add(charPic.pictureBox);
+            charPic.Size = new Size(picSize, picSize);
+            charPic.SizeMode = PictureBoxSizeMode.StretchImage;
+            charPic.BackColor = Color.Transparent;
+            Controls.Add(charPic);
         }
 
+        //Assigns the characters to their pictures
         public void PlaceCharacters(List<Character> team, string side)
         {
             if ("left".Equals(side))
@@ -89,27 +94,29 @@ namespace Portals_of_Madness
                 for (int i = 0; i < team.Count(); i++)
                 {
                     leftSide[i].character = team[i];
-                    leftSide[i].pictureBox.Image = team[i].image;
+                    leftSide[i].Image = team[i].image;
                     leftSide[i].InitializeBars();
                     Controls.Add(leftSide[i].healthBar);
                     Controls.Add(leftSide[i].resourceBar);
+                    leftSide[i].Click += AssignCharacterClickFunctions;
                 }
-                
             }
             else
             {
                 for (int i = 0; i < team.Count(); i++)
                 {
                     rightSide[i].character = team[i];
-                    rightSide[i].pictureBox.Image = team[i].image;
+                    rightSide[i].Image = team[i].image;
                     rightSide[i].InitializeBars();
-                    rightSide[i].pictureBox.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                    rightSide[i].Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
                     Controls.Add(rightSide[i].healthBar);
                     Controls.Add(rightSide[i].resourceBar);
+                    rightSide[i].Click += AssignCharacterClickFunctions;
                 }
             }
         }
 
+        //Places the character picture boxes in a triangular pattern
         public void PlacePictureBoxes(string side, List<CharacterPicture> list, int size, Size screenSize)
         {
             int baseX = screenSize.Width / 3;
@@ -125,20 +132,19 @@ namespace Portals_of_Madness
             {
                 for(int k=0; k < j; k++)
                 {
-                    list[i].pictureBox.Location = new Point(baseX - (j - 1) * 2 * size * mult, baseY + (j - 1) * size - k * 2 * size);
-                    list[i].pictureBox.Click += delegate
-                    {
-                        AssignCharacterClickFunctions(list[i].character);
-                    };
+                    list[i].Location = new Point(baseX - (int)((j - 1) * 1.4 * size * mult),
+                        baseY + (j - 1) * size - (int)(k * 1.4 * size));
                     ++i;
                 }
             }
         }
 
         //Make this select more than 1 target if necessary
-        public void AssignCharacterClickFunctions(Character target)
+        public void AssignCharacterClickFunctions(object sender, EventArgs e)
         {
-            if(casting)
+            CharacterPicture t = (CharacterPicture)sender;
+            Character target = t.character;
+            if (casting && CorrectTarget(t))
             {
                 if(selectedAbility.targetCount == 1)
                 {
@@ -151,7 +157,36 @@ namespace Portals_of_Madness
                         selectedAbility.target == "enemy" ? engine.enemyTeam : engine.initiativeTeam);
                     engine.currentCharacter.castAbility(selectedAbility, targets);
                 }
+                UpdateCharacterBars();
+                engine.Manage();
             }
+        }
+
+        public void UpdateCharacterBars()
+        {
+            foreach (CharacterPicture Pic in leftSide)
+            {
+                if(Pic.character != null)
+                {
+                    Pic.UpdatePanelWidth();
+                }
+            }
+            foreach (CharacterPicture Pic in rightSide)
+            {
+                if (Pic.character != null)
+                {
+                    Pic.UpdatePanelWidth();
+                }
+            }
+        }
+
+        public bool CorrectTarget(CharacterPicture t)
+        {
+            return (selectedAbility.target == "ally" && side == "left" && t.Location.X < screenSize.Width / 2) ||
+                (selectedAbility.target == "enemy" && side == "left" && t.Location.X > screenSize.Width / 2) ||
+                (selectedAbility.target == "ally" && side == "right" && t.Location.X > screenSize.Width / 2) ||
+                (selectedAbility.target == "enemy" && side == "right" && t.Location.X < screenSize.Width / 2) ||
+                selectedAbility.target == "all";
         }
 
         public List<Character> SelectAimedTargets(Character target, List<Character> team)
@@ -169,11 +204,11 @@ namespace Portals_of_Madness
                         targets.Add(team[newPos]);
                     }
                 }
-                
             }
             return targets;
         }
 
+        //Calculate positions in lists for multitarget abilities
         public int CalcPos(int i)
         {
             return ((i + 1) / 2) * (int)Math.Pow(-1, (double)i % 2);
@@ -183,28 +218,39 @@ namespace Portals_of_Madness
         //the current ability and if it is random, it chooses random targets to attack instantly
         public void AssignAbilityButtonFunctions()
         {
-            abilityFrame.UpdateButtons(engine.currentCharacter);
             for(int i=0; i<abilityFrame.abButtons.Count; i++)
             {
-                abilityFrame.abButtons[i].Click += delegate
+                abilityFrame.abButtons[i].MouseMove += AbilityButton_MouseOver;
+                abilityFrame.abButtons[i].Click += AbilityButton_Click;
+            }
+        }
+
+        private void AbilityButton_MouseOver(object sender, EventArgs e)
+        {
+            AbilityButton abButton = (AbilityButton)sender;
+            toolTip.SetToolTip(abButton, abButton.ability.ToString());
+        }
+
+        private void AbilityButton_Click(object sender, EventArgs e)
+        {
+            AbilityButton abButton = (AbilityButton)sender;
+            Ability ab = abButton.ability;
+            if (ab.abilityType == "random" && CanCast(ab))
+            {
+                for (int j = 0; j < ab.targetCount; j++)
                 {
-                    Ability ab = abilityFrame.abButtons[i].ability;
-                    if(ab.abilityType == "random" && CanCast(ab))
-                    {
-                        for (int j = 0; j < ab.targetCount; j++)
-                        {
-                            engine.currentCharacter.castAbility(ab,
-                                engine.currentCharacter.SelectRandomTarget(
-                                    ab.target == "ally" ? engine.playerTeam :
-                                    ab.target == "enemy" ? engine.enemyTeam : engine.initiativeTeam));
-                        }
-                    }
-                    else
-                    {
-                        selectedAbility = ab;
-                        Cast();
-                    }
-                };
+                    engine.currentCharacter.castAbility(ab,
+                        engine.currentCharacter.SelectRandomTarget(
+                            ab.target == "ally" ? engine.playerTeam :
+                            ab.target == "enemy" ? engine.enemyTeam : engine.initiativeTeam));
+                }
+                UpdateCharacterBars();
+                engine.Manage();
+            }
+            else
+            {
+                selectedAbility = ab;
+                Cast();
             }
         }
 

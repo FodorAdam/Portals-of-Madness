@@ -14,6 +14,9 @@ namespace Portals_of_Madness
         public AbilityButton()
         {
             BackColor = Color.Purple;
+            FlatStyle = FlatStyle.Flat;
+            FlatAppearance.BorderColor = Color.Black;
+            FlatAppearance.BorderSize = 1;
         }
 
         public void UpdateButton(Ability ab)

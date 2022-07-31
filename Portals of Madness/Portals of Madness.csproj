@@ -60,7 +60,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Character.cs" />
-    <Compile Include="CharacterPicture.cs" />
+    <Compile Include="CharacterPicture.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controller.cs" />
     <Compile Include="DialogBox.cs">
       <SubType>Component</SubType>

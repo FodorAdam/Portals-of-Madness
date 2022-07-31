@@ -28,12 +28,11 @@ namespace Portals_of_Madness
         public Size Resolution(Form f)
         {
             f.Location = new Point(0, 0);
-            int h = Screen.PrimaryScreen.WorkingArea.Height;
-            int w = Screen.PrimaryScreen.WorkingArea.Width;
-            f.ClientSize = new Size(w, h);
+            Size tmpSize = new Size(Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height);
+            f.ClientSize = tmpSize;
             f.WindowState = FormWindowState.Maximized;
 
-            return new Size(w, h);
+            return tmpSize;
         }
 
         //Used to close the current form and swap to another

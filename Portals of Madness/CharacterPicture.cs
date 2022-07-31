@@ -8,20 +8,18 @@ using System.Windows.Forms;
 
 namespace Portals_of_Madness
 {
-    public class CharacterPicture
+    public class CharacterPicture : PictureBox
     {
         public Character character { get; set; }
-        public PictureBox pictureBox { get; set; }
         public int baseBarWidth { get; set; }
         public Panel healthBar { get; set; }
         public Panel resourceBar { get; set; }
 
         public CharacterPicture() { }
 
-        public CharacterPicture(Character c, PictureBox p)
+        public CharacterPicture(Character c)
         {
             character = c;
-            pictureBox = p;
             InitializeBars();
         }
 
@@ -29,7 +27,7 @@ namespace Portals_of_Madness
         {
             healthBar = new Panel();
             healthBar.Height = 5;
-            baseBarWidth = pictureBox.Width;
+            baseBarWidth = Width;
             healthBar.Width = baseBarWidth;
             healthBar.BackColor = Color.Red;
             resourceBar = new Panel();
@@ -53,14 +51,14 @@ namespace Portals_of_Madness
 
         public void UpdatePanelLocations()
         {
-            healthBar.Location = new Point(pictureBox.Location.X, pictureBox.Location.Y + pictureBox.Height + 2);
-            resourceBar.Location = new Point(pictureBox.Location.X, pictureBox.Location.Y + pictureBox.Height + healthBar.Height + 2);
+            healthBar.Location = new Point(Location.X, Location.Y + Height + 2);
+            resourceBar.Location = new Point(Location.X, Location.Y + Height + healthBar.Height + 2);
         }
 
         public void UpdatePanelWidth()
         {
-            healthBar.Width = (int)((character.currHealth / character.maxHealth) * baseBarWidth);
-            resourceBar.Width = (int)(((double)character.currResource / (double)character.maxResource) * baseBarWidth);
+            healthBar.Width = (int)(character.currHealth / character.maxHealth * baseBarWidth);
+            resourceBar.Width = (int)(character.currResource / (double)character.maxResource * baseBarWidth);
         }
     }
 }

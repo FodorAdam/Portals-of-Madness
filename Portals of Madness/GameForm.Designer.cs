@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // GameForm
@@ -43,5 +45,7 @@
         }
 
         #endregion
+
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

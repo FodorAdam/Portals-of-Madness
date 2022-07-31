@@ -16,47 +16,64 @@ namespace Portals_of_Madness
 
         public PlayerCharacterFrame(Size screensize, string side)
         {
-            characterImage = new PictureBox();
-            healthLabel = new Label();
-            healthLabel.ForeColor = Color.Red;
-            resourceLabel = new Label();
-            characterImage.Width = screensize.Width / 20;
-            characterImage.Height = screensize.Height / 20;
-            healthLabel.Width = characterImage.Width;
-            healthLabel.Height = characterImage.Height / 10;
-            resourceLabel.Width = characterImage.Width;
-            resourceLabel.Height = characterImage.Height / 10;
+            BackColor = Color.DarkGray;
+            Height = screensize.Height / 4;
+            Width = screensize.Width / 8;
+
+            characterImage = new PictureBox
+            {
+                Width = Width - Width / 5,
+                Height = Height - Height / 4,
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                BackColor = Color.DarkGray
+            };
+
+            healthLabel = new Label
+            {
+                ForeColor = Color.Red,
+                Width = Width - Width / 5,
+                Height = Height - Height * 7 / 8,
+                BackColor = Color.DarkGray,
+                TextAlign = ContentAlignment.MiddleCenter
+            };
+
+            resourceLabel = new Label
+            {
+                Width = Width - Width / 5,
+                Height = Height - Height * 7 / 8,
+                BackColor = Color.DarkGray,
+                TextAlign = ContentAlignment.MiddleCenter
+            };
+
+            Height = Height / 4 + characterImage.Height + healthLabel.Height + resourceLabel.Height;
+
+            int xCoord = 0;
             if (side == "right")
             {
-                characterImage.Location = new Point(screensize.Width - characterImage.Width,
-                    screensize.Height - characterImage.Height - resourceLabel.Height - healthLabel.Height);
-                healthLabel.Location = new Point(screensize.Width - characterImage.Width,
-                    screensize.Height - characterImage.Height - resourceLabel.Height);
-                resourceLabel.Location = new Point(screensize.Width - characterImage.Width,
-                    screensize.Height - characterImage.Height);
+                xCoord = screensize.Width - Width;
             }
-            else
-            {
-                characterImage.Location = new Point(0,
-                    screensize.Height - characterImage.Height - resourceLabel.Height - healthLabel.Height);
-                healthLabel.Location = new Point(0,
-                    screensize.Height - characterImage.Height - resourceLabel.Height);
-                resourceLabel.Location = new Point(0,
-                    screensize.Height - characterImage.Height);
-            }
+            int yCoord = screensize.Height - Height;
+
+            Location = new Point(xCoord, yCoord);
+
+            characterImage.Location = new Point(xCoord + Width / 10,
+                yCoord + Height / 10);
+            healthLabel.Location = new Point(xCoord + Width / 10,
+                characterImage.Location.Y + characterImage.Height);
+            resourceLabel.Location = new Point(xCoord + Width / 10,
+                healthLabel.Location.Y + healthLabel.Height);
         }
 
-        public void UpdateFrame(string name, double curHealth, double maxHealth,
-            double curResource, double maxResource, string resourceName)
+        public void UpdateFrame(Character c)
         {
-            characterImage.Image = ImageConverter(name);
-            healthLabel.Text = $"{curHealth}/{maxHealth}";
-            resourceLabel.Text = $"{curResource}/{maxResource}";
-            if (resourceName == "focus")
+            characterImage.Image = ImageConverter(c.baseImage);
+            healthLabel.Text = $"{c.currHealth}/{c.maxHealth}";
+            resourceLabel.Text = $"{c.currResource}/{c.maxResource}";
+            if (c.resourceName == "focus")
             {
                 resourceLabel.ForeColor = Color.FromArgb(252, 76, 2);
             }
-            else if (resourceName == "rage")
+            else if (c.resourceName == "rage")
             {
                 resourceLabel.ForeColor = Color.FromArgb(159, 29, 53);
             }
@@ -68,14 +85,23 @@ namespace Portals_of_Madness
 
         public Image ImageConverter(string name)
         {
+            Image image = null;
             try
             {
-                return Image.FromFile($@"../../Art/Sprites/Characters/{name}/profile.png");
+                image = Image.FromFile($@"../../Art/Sprites/Characters/{name}/profile.png");
             }
             catch
             {
-                return Image.FromFile($@"../../Art/Sprites/Characters/{name}/base.png");
+                try
+                {
+                    image = Image.FromFile($@"../../Art/Sprites/Characters/{name}/base.png");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
+            return image;
         }
     }
 }

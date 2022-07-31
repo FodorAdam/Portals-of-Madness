@@ -14,27 +14,42 @@ namespace Portals_of_Madness
 
         public PlayerAbilityFrame(Size screensize)
         {
-            Width = screensize.Width / 10;
             Height = screensize.Height / 10;
-            Location = new Point((screensize.Width - Width) / 2, screensize.Height - Height);
-            int buttonLength = Height;
-            abButtons = new List<AbilityButton>();
-            abButtons.Add(new AbilityButton());
-            abButtons.Add(new AbilityButton());
-            abButtons.Add(new AbilityButton());
-            for(int i = 0; i < abButtons.Count; i++)
+            int buttonLength = Height - Height / 5;
+            Width = Height *3;
+            BackColor = Color.Black;
+            Location = new Point((screensize.Width - Width) / 2, screensize.Height - Height * 2);
+            abButtons = new List<AbilityButton>
+            {
+                new AbilityButton(),
+                new AbilityButton(),
+                new AbilityButton()
+            };
+            for (int i = 0; i < abButtons.Count; i++)
             {
                 abButtons[i].Height = buttonLength;
                 abButtons[i].Width = buttonLength;
-                abButtons[i].Location = new Point(Location.X + i * buttonLength + 5, Location.Y);
+                int extra = Height / 10;
+                abButtons[i].Location = new Point(Location.X + i * buttonLength + (i + 1) * extra,
+                    Location.Y + Height / 10);
             }
         }
 
         public void UpdateButtons(Character ch)
         {
-            abButtons[0].UpdateButton(ch.ability1);
-            abButtons[1].UpdateButton(ch.ability2);
-            abButtons[2].UpdateButton(ch.ability3);
+            for(int i=0; i < abButtons.Count; i++)
+            {
+                abButtons[i].UpdateButton(ch.abilities[i]);
+                if(ch.currResource >= ch.abilities[i].cost)
+                {
+                    abButtons[i].FlatAppearance.BorderColor = Color.Green;
+                }
+                else
+                {
+                    abButtons[i].FlatAppearance.BorderColor = Color.Red;
+                }
+            }
+            
         }
     }
 }
