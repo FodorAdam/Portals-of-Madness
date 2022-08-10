@@ -199,7 +199,7 @@
 		<physAttackDamage>0.6</physAttackDamage>
 		<magicAttackDamage>0</magicAttackDamage>
 		<damageType>crushing</damageType>
-		<target>1</target>
+		<target>enemy</target>
 		<duration>0</duration>
 		<targetCount>1</targetCount>
 		<abilityType>attack</abilityType>

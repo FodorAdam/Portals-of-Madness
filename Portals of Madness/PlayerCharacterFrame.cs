@@ -66,14 +66,14 @@ namespace Portals_of_Madness
 
         public void UpdateFrame(Character c)
         {
-            characterImage.Image = ImageConverter(c.baseImage);
-            healthLabel.Text = $"{c.currHealth}/{c.maxHealth}";
-            resourceLabel.Text = $"{c.currResource}/{c.maxResource}";
-            if (c.resourceName == "focus")
+            characterImage.Image = ImageConverter(c.BaseImage);
+            healthLabel.Text = $"{c.CurrentHealth}/{c.MaxHealth}";
+            resourceLabel.Text = $"{c.CurrentResource}/{c.MaxResource}";
+            if (c.ResourceName == "focus")
             {
                 resourceLabel.ForeColor = Color.FromArgb(252, 76, 2);
             }
-            else if (c.resourceName == "rage")
+            else if (c.ResourceName == "rage")
             {
                 resourceLabel.ForeColor = Color.FromArgb(159, 29, 53);
             }

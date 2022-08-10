@@ -1,57 +1,63 @@
 ﻿using System;
-using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 
 namespace Portals_of_Madness
 {
     public class Mission
     {
-        public string name { get; set; }
         public List<Character> Enemies { get; set; }
         public List<Ability> EveryAbility { get; set; }
         public XMLCharacters XMLCharacterList { get; set; }
-        public string background { get; set; }
-        public Encounters encounters { get; set; }
-        public int encounterNumber { get; set; }
-        public int fightNumber { get; set; }
-        public XMLOperations xmlOps { get; set; }
-        private static Random rand = new Random();
+        public Encounters EncounterContainer { get; set; }
+        public int EncounterNumber { get; set; }
+        public int FightNumber { get; set; }
+        public XMLOperations XMLOps { get; set; }
+        private static readonly Random Rand = new Random();
 
         public Mission(int number)
         {
             Enemies = new List<Character>();
-            xmlOps = new XMLOperations();
+            XMLOps = new XMLOperations();
 
             string path = $@"../../Missions/Mission{number}.xml";
             try
             {
-                encounters = xmlOps.MissionDeserializer(path);
+                EncounterContainer = XMLOps.MissionDeserializer(path);
             }
-            catch { }
+            catch
+            {
+                Console.WriteLine($"Mission{number}.xml not found!");
+            }
+
             EveryAbility = new List<Ability>();
             try
             {
-                XMLAbilities xabs = xmlOps.AbilityDeserializer($@"../../Abilities/Abilities.xml");
+                XMLAbilities xabs = XMLOps.AbilityDeserializer($@"../../Abilities/Abilities.xml");
                 foreach (XMLAbility xab in xabs.xmlAbility)
                 {
-                    EveryAbility.Add(convToAbility(xab));
+                    EveryAbility.Add(ConvertToAbility(xab));
                 }
             }
-            catch { }
+            catch
+            {
+                Console.WriteLine($"Abilities.xml not found!");
+            }
+
             try
             {
-                XMLCharacterList = xmlOps.CharacterDeserializer($@"../../Characters/Characters.xml");
+                XMLCharacterList = XMLOps.CharacterDeserializer($@"../../Characters/Characters.xml");
             }
-            catch { }
-            encounterNumber = 0;
-            fightNumber = 0;
+            catch
+            {
+                Console.WriteLine($"Characters.xml not found!");
+            }
+
+            EncounterNumber = 0;
+            FightNumber = 0;
         }
 
-        public Ability convToAbility(XMLAbility x)
+        public Ability ConvertToAbility(XMLAbility x)
         {
             return new Ability(x.name, x.cost, x.cooldown, x.physAttackDamage, x.magicAttackDamage,
                 x.duration, x.damageType, x.target, x.targetCount, x.abilityType, x.modifier, x.modifiedAmount,
@@ -61,32 +67,32 @@ namespace Portals_of_Madness
         public void LoadNextEnemies()
         {
             Enemies.Clear();
-            if (encounters.encounter[encounterNumber].fights.fight[fightNumber].type.Equals("normal"))
+            if (EncounterContainer.encounter[EncounterNumber].fights.fight[FightNumber].type.Equals("normal"))
             {
-                for (int i = 0; i < encounters.encounter[encounterNumber].fights.fight[fightNumber].amount; i++)
+                for (int i = 0; i < EncounterContainer.encounter[EncounterNumber].fights.fight[FightNumber].amount; i++)
                 {
                     Enemies.Add(SelectAICharacter());
                 }
             }
             else
             {
-                Enemies.AddRange(selectBossFight());
+                Enemies.AddRange(SelectBossFight());
             }
-            ++fightNumber;
+            ++FightNumber;
         }
 
         public Character SelectCharacter(string n)
         {
-            var cEnum = XMLCharacterList.xmlCharacter.Where(a => a.id.Contains("prisoner")).Select(a => a);
+            var cEnum = XMLCharacterList.xmlCharacter.Where(a => a.id.Contains(n)).Select(a => a);
             List<XMLCharacter> cList = new List<XMLCharacter>();
             cList.AddRange(cEnum);
-            int i = rand.Next(0, cList.Count());
-            return xmlOps.convToCharacter(cList[i]);
+            int i = Rand.Next(0, cList.Count());
+            return XMLOps.ConvertToCharacter(cList[i]);
         }
 
         public Character SelectAICharacter()
         {
-            switch (encounters.encounter[encounterNumber].fights.fight[fightNumber].enemies)
+            switch (EncounterContainer.encounter[EncounterNumber].fights.fight[FightNumber].enemies)
             {
                 case "prisonPack":
                     return SelectCharacter("prisoner");
@@ -100,10 +106,10 @@ namespace Portals_of_Madness
             return null;
         }
 
-        public List<Character> selectBossFight()
+        public List<Character> SelectBossFight()
         {
             List<Character> characters = new List<Character>();
-            switch (encounters.encounter[encounterNumber].fights.fight[fightNumber].enemies)
+            switch (EncounterContainer.encounter[EncounterNumber].fights.fight[FightNumber].enemies)
             {
                 case "prisonBoss":
                     characters.Add(SelectCharacter("prisoner"));
@@ -123,20 +129,24 @@ namespace Portals_of_Madness
         //Checks if there is an encounter remaining
         public bool IsEncounter()
         {
-            Enemies = new List<Character>();
-            return encounterNumber < encounters.encounter.Length;
+            Enemies.Clear();
+            if(EncounterContainer.encounter.Length - 1 < EncounterNumber)
+            {
+                return false;
+            }
+            return FightNumber < EncounterContainer.encounter[EncounterNumber].fights.fight.Length;
         }
 
         //Returns the side the player is on
         public string PlayerSide()
         {
-            return encounters.side;
+            return EncounterContainer.side;
         }
 
         public void IncrementEncounterNumber()
         {
-            ++encounterNumber;
-            fightNumber = 1;
+            ++EncounterNumber;
+            FightNumber = 1;
         }
     }
 }

@@ -74,7 +74,7 @@ namespace Portals_of_Madness
             }
             else
             {
-                this.Visible = false;
+                Visible = false;
             }
         }
     }

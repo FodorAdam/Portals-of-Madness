@@ -1,36 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Drawing;
-using System.Xml.Serialization;
-using System.IO;
 
 namespace Portals_of_Madness
 {
     public class GameEngine
     {
-        public int nextMap { get; set; }
-        public List<Character> playerTeam { get; set; }
-        public List<Character> enemyTeam { get; set; }
-        public Mission mission { get; set; }
-        public List<Character> initiativeTeam { get; set; }
-        public List<Character> allCharacters { get; set; }
-        public List<Ability> allAbilities { get; set; }
-        public bool playerTurn { get; set; }
-        public Character currentCharacter { get; set; }
-        public int currentID { get; set; }
-        public int encounterNumber { get; set; }
-        public int turn { get; set; }
-        public GameForm form { get; set; }
-        public XMLOperations xmlOps { get; set; }
+        public int NextMap { get; set; }
+        public List<Character> PlayerTeam { get; set; }
+        public List<Character> EnemyTeam { get; set; }
+        public Mission CurrentMission { get; set; }
+        public List<Character> InitiativeTeam { get; set; }
+        public List<Character> AllCharacters { get; set; }
+        public List<Ability> AllAbilities { get; set; }
+        public bool PlayerTurn { get; set; }
+        public Character CurrentCharacter { get; set; }
+        public int CurrentID { get; set; }
+        public int Turn { get; set; }
+        public GameForm Form { get; set; }
+        public XMLOperations XMLOps { get; set; }
 
         //When called by GameForm after starting a new game
         public GameEngine(GameForm f)
         {
-            nextMap = 0;
+            NextMap = 0;
             DeXMLify();
             TutorialPTeamSetup();
             InitializeStuff(f);
@@ -39,222 +33,222 @@ namespace Portals_of_Madness
         //When called by GameForm after selecting a mission
         public GameEngine(GameForm f, List<Character> pT, int nM)
         {
-            nextMap = nM;
+            NextMap = nM;
             DeXMLify();
-            playerTeam = pT;
+            PlayerTeam = pT;
             InitializeStuff(f);
         }
 
         public void DeXMLify()
         {
-            xmlOps = new XMLOperations();
-            allAbilities = new List<Ability>();
+            XMLOps = new XMLOperations();
+            AllAbilities = new List<Ability>();
             try
             {
-                XMLAbilities xabs = xmlOps.AbilityDeserializer($@"../../Abilities/Abilities.xml");
+                XMLAbilities xabs = XMLOps.AbilityDeserializer($@"../../Abilities/Abilities.xml");
                 foreach (XMLAbility xab in xabs.xmlAbility)
                 {
-                    allAbilities.Add(xmlOps.convToAbility(xab));
+                    AllAbilities.Add(XMLOps.ConvertToAbility(xab));
                 }
             }
-            catch { }
-            allCharacters = new List<Character>();
+            catch
+            {
+                Console.WriteLine("Abilities.xml not found.");
+            }
+            AllCharacters = new List<Character>();
             try
             {
-                XMLCharacters xchs = xmlOps.CharacterDeserializer($@"../../Characters/Characters.xml");
+                XMLCharacters xchs = XMLOps.CharacterDeserializer($@"../../Characters/Characters.xml");
                 foreach(XMLCharacter xch in xchs.xmlCharacter)
                 {
-                    allCharacters.Add(xmlOps.convToCharacter(xch));
+                    AllCharacters.Add(XMLOps.ConvertToCharacter(xch));
                 }
             }
-            catch { }
+            catch
+            {
+                Console.WriteLine("Characters.xml not found.");
+            }
         }
 
         public void InitializeStuff(GameForm f)
         {
-            form = f;
-            playerTurn = false;
-            currentID = -1;
-            encounterNumber = 1;
+            InitiativeTeam = new List<Character>();
+            Form = f;
+            PlayerTurn = false;
+            CurrentID = -1;
             Setup();
         }
 
         public void TutorialPTeamSetup()
         {
-            playerTeam = new List<Character>();
-            playerTeam.Add(allCharacters.Where(a => a.name == "Eddie").Select(a => a).First());
-            playerTeam.Add(allCharacters.Where(a => a.name == "Lance").Select(a => a).First());
-            playerTeam.Add(allCharacters.Where(a => a.name == "Sam").Select(a => a).First());
+            PlayerTeam = new List<Character>
+            {
+                AllCharacters.Where(a => a.Name == "Eddie").Select(a => a).First(),
+                AllCharacters.Where(a => a.Name == "Lance").Select(a => a).First(),
+                AllCharacters.Where(a => a.Name == "Sam").Select(a => a).First()
+            };
         }
 
         public void Setup()
         {
-            turn = 0;
-            encounterNumber = 1;
-            mission = new Mission(nextMap);
-            form.InitializeUI(mission.PlayerSide());
-            form.PlaceCharacters(playerTeam, mission.PlayerSide());
-            if (mission.IsEncounter())
+            Turn = 0;
+            CurrentMission = new Mission(NextMap);
+            Form.InitializeUI(CurrentMission.PlayerSide());
+            Form.PlaceCharacters(PlayerTeam, CurrentMission.PlayerSide());
+            if (CurrentMission.IsEncounter())
             {
-                encounterSetup();
+                EncounterSetup();
             }
             else
             {
-                showResult(true);
+                ShowResult(true);
             }
         }
 
         //Resets the enemies, puts them in their place, creates the order in which the characters get to go and starts the game
-        public void encounterSetup()
+        public void EncounterSetup()
         {
-            enemyTeam = new List<Character>();
-            mission.LoadNextEnemies();
-            foreach(Character c in mission.Enemies)
+            EnemyTeam = new List<Character>();
+            CurrentMission.LoadNextEnemies();
+            foreach(Character c in CurrentMission.Enemies)
             {
-                enemyTeam.Add(c);
+                EnemyTeam.Add(c);
             }
             try
             {
-                form.BackgroundImage =
-                    Image.FromFile($@"../../Art/Backgrounds/{mission.encounters.encounter[mission.encounterNumber].background1}.png");
+                Form.BackgroundImage =
+                    Image.FromFile($@"../../Art/Backgrounds/{CurrentMission.EncounterContainer.encounter[CurrentMission.EncounterNumber].background1}.png");
             }
             catch
             {
                 try
                 {
-                    form.BackgroundImage =
-                        Image.FromFile($@"../../Art/Backgrounds/{mission.encounters.encounter[mission.encounterNumber].background1}.jpg");
+                    Form.BackgroundImage =
+                        Image.FromFile($@"../../Art/Backgrounds/{CurrentMission.EncounterContainer.encounter[CurrentMission.EncounterNumber].background1}.jpg");
                 }
-                catch { }
+                catch
+                {
+                    Console.WriteLine($"{CurrentMission.EncounterContainer.encounter[CurrentMission.EncounterNumber].background1} not found!");
+                }
             }
-            string enemySide = (mission.PlayerSide().Equals("left") ? "right" : "left");
-            form.PlaceCharacters(enemyTeam, enemySide);
+            string enemySide = (CurrentMission.PlayerSide().Equals("left") ? "right" : "left");
+            Form.PlaceCharacters(EnemyTeam, enemySide);
             CreateInitiative();
             Manage();
         }
 
-        public void nextEncounter()
+        public void NextFight()
         {
-            if (mission.IsEncounter())
+            if(CurrentMission.IsEncounter())
             {
-                encounterSetup();
+                EncounterSetup();
             }
             else
             {
-                showResult(true);
+                CurrentMission.IncrementEncounterNumber();
+                ShowResult(true);
             }
         }
 
         //TODO: End screen after either winning or losing
-        private void showResult(bool res)
+        private void ShowResult(bool res)
         {
-            foreach (Character c in playerTeam)
+            Form.ShowResultButton(res);
+            foreach (Character c in PlayerTeam)
             {
-                c.currHealth = c.maxHealth;
-                c.alive = true;
-                c.stunned = false;
-                c.currResource = 0;
+                c.CurrentHealth = c.MaxHealth;
+                c.Alive = true;
+                c.Stunned = false;
+                c.CurrentResource = 0;
             }
         }
 
         public void Manage()
         {
-            if (bothTeamsAlive() == 0)
+            if(AreBothTeamsAlive() == 0)
             {
-                currentSelect();
-                if (!playerTurn)
+                SelectCurrentCharacter();
+                if(!PlayerTurn)
                 {
-                    form.abilityFrame.Visible = false;
-                    form.characterFrame.Visible = false;
-                    currentCharacter.Act(playerTeam, enemyTeam);
+                    Form.AbilityFrame.Visible = false;
+                    Form.CharacterFrame.Visible = false;
+                    CurrentCharacter.Act(PlayerTeam, EnemyTeam);
                     Manage();
                 }
                 else
                 {
-                    form.abilityFrame.Visible = true;
-                    form.characterFrame.Visible = true;
-                    form.abilityFrame.UpdateButtons(currentCharacter);
-                    form.AssignAbilityButtonFunctions();
-                    form.characterFrame.UpdateFrame(currentCharacter);
+                    Form.AbilityFrame.Visible = true;
+                    Form.CharacterFrame.Visible = true;
+                    Form.AbilityFrame.UpdateButtons(CurrentCharacter);
+                    Form.AssignAbilityButtonFunctions();
+                    Form.CharacterFrame.UpdateFrame(CurrentCharacter);
                 }
             }
-            else if (bothTeamsAlive() == -1)
+            else if (AreBothTeamsAlive() == -1)
             {
-                showResult(false);
+                ShowResult(false);
             }
-            else if (bothTeamsAlive() == 1)
+            else if (AreBothTeamsAlive() == 1)
             {
-                mission.IncrementEncounterNumber();
-                nextEncounter();
+                NextFight();
             }
         }
 
-        private int selectTarget()
+        private void StartNewTurn()
         {
-            Random rand = new Random();
-            int target = rand.Next(playerTeam.Count());
-            if (!playerTeam[target].alive)
+            Turn++;
+            foreach (Character c in InitiativeTeam)
             {
-                target = selectTarget();
-            }
-            return target;
-        }
-
-        private void newTurn()
-        {
-            turn++;
-            foreach (Character c in initiativeTeam)
-            {
-                if (c.alive)
+                if (c.Alive)
                 {
-                    foreach (DoT dot in c.dots)
+                    foreach (DoT dot in c.DoTs)
                     {
-                        c.currHealth -= dot.amount;
+                        c.CurrentHealth -= dot.Amount;
                         dot.Tick();
-                        if (dot.duration <= 0)
+                        if (dot.Duration <= 0)
                         {
-                            c.removeDoT(dot);
+                            c.RemoveDoT(dot);
                         }
                     }
 
-                    foreach (Buff buff in c.buffs)
+                    foreach (Buff buff in c.Buffs)
                     {
                         buff.Tick();
-                        if (buff.duration <= 0)
+                        if (buff.Duration <= 0)
                         {
-                            c.removeBuffEffects(buff);
-                            c.removeBuff(buff);
+                            c.RemoveBuffEffects(buff);
+                            c.RemoveBuff(buff);
                         }
                     }
 
-                    if (c.currHealth <= 0)
+                    if (c.CurrentHealth <= 0)
                     {
-                        c.die();
+                        c.Die();
                     }
-                    if (c.currHealth > c.maxHealth)
+                    if (c.CurrentHealth > c.MaxHealth)
                     {
-                        c.currHealth = c.maxHealth;
+                        c.CurrentHealth = c.MaxHealth;
                     }
-                    resourceGain(c);
+                    GainResources(c);
                 }
             }
         }
 
-        private void resourceGain(Character c)
+        private void GainResources(Character c)
         {
             int gain = 3;
 
-            switch (c.resourceName)
+            switch (c.ResourceName)
             {
                 case "mana":
                     gain = 4;
                     break;
                 case "rage":
-                    if (c.currHealth < c.maxHealth * 0.3)
+                    if (c.CurrentHealth < c.MaxHealth * 0.3)
                     {
                         gain = 8;
                     }
-                    else if (c.currHealth < c.maxHealth * 0.7)
+                    else if (c.CurrentHealth < c.MaxHealth * 0.7)
                     {
                         gain = 4;
                     }
@@ -264,11 +258,11 @@ namespace Portals_of_Madness
                     }
                     break;
                 case "focus":
-                    if (c.currHealth < c.maxHealth * 0.3)
+                    if (c.CurrentHealth < c.MaxHealth * 0.3)
                     {
                         gain = 2;
                     }
-                    else if (c.currHealth < c.maxHealth * 0.7)
+                    else if (c.CurrentHealth < c.MaxHealth * 0.7)
                     {
                         gain = 4;
                     }
@@ -281,65 +275,70 @@ namespace Portals_of_Madness
                     break;
             }
 
-            if (c.currResource + gain <= c.maxResource)
+            if (c.CurrentResource + gain <= c.MaxResource)
             {
-                c.currResource += gain;
+                c.CurrentResource += gain;
             }
             else
             {
-                c.currResource = c.maxResource;
+                c.CurrentResource = c.MaxResource;
             }
         }
 
-        private void currentSelect()
+        private void SelectCurrentCharacter()
         {
-            if (currentID == -1 || (currentID + 1) >= initiativeTeam.Count())
+            if (CurrentID == -1 || (CurrentID + 1) >= InitiativeTeam.Count())
             {
-                currentID = 0;
-                newTurn();
+                CurrentID = 0;
+                StartNewTurn();
             }
             else
             {
-                currentID++;
+                CurrentID++;
             }
-            if (!initiativeTeam[currentID].alive)
+
+            if (!InitiativeTeam[CurrentID].Alive)
             {
-                currentSelect();
+                SelectCurrentCharacter();
             }
-            if (initiativeTeam[currentID].stunned)
+
+            if (InitiativeTeam[CurrentID].Stunned)
             {
-                --initiativeTeam[currentID].stunLength;
-                if(initiativeTeam[currentID].stunLength <= 0)
+                --InitiativeTeam[CurrentID].StunLength;
+                if(InitiativeTeam[CurrentID].StunLength <= 0)
                 {
-                    initiativeTeam[currentID].stunned = false;
+                    InitiativeTeam[CurrentID].Stunned = false;
                 }
-                currentSelect();
+                SelectCurrentCharacter();
             }
-            currentCharacter = initiativeTeam[currentID];
-            playerTurn = false;
-            foreach (Character P in playerTeam)
+
+            CurrentCharacter = InitiativeTeam[CurrentID];
+            PlayerTurn = false;
+            foreach (Character P in PlayerTeam)
             {
-                if (P.name.Equals(currentCharacter.name))
+                if(P.Equals(CurrentCharacter))
                 {
-                    playerTurn = true;
+                    PlayerTurn = true;
                 }
             }
         }
 
-        private int bothTeamsAlive()
+        //Determines wether both teams have at least one member alive, return 0 if yes,
+        //returns 1 if all enemies are dead, -1 if the player is dead
+        private int AreBothTeamsAlive()
         {
             bool playerAlive = false;
             bool enemyAlive = false;
-            foreach (Character P in playerTeam)
+            foreach (Character P in PlayerTeam)
             {
-                if (P.currHealth > 0)
+                if (P.CurrentHealth > 0)
                 {
                     playerAlive = true;
                 }
             }
-            foreach (Character E in enemyTeam)
+            foreach (Character E in EnemyTeam)
             {
-                if (E.currHealth > 0)
+                if (E.CurrentHealth > 0)
                 {
                     enemyAlive = true;
                 }
@@ -357,20 +356,20 @@ namespace Portals_of_Madness
 
         private void CreateInitiative()
         {
-            currentID = -1;
-            initiativeTeam = new List<Character>();
-            initiativeTeam.AddRange(playerTeam);
-            initiativeTeam.AddRange(enemyTeam);
-            Character temp;
-            for (int i = 0; i < initiativeTeam.Count() - 1; i++)
+            CurrentID = -1;
+            InitiativeTeam.Clear();
+            InitiativeTeam.AddRange(PlayerTeam);
+            InitiativeTeam.AddRange(EnemyTeam);
+            Character tmp;
+            for (int i = 0; i < InitiativeTeam.Count() - 1; i++)
             {
-                for (int j = i + 1; j < initiativeTeam.Count(); j++)
+                for (int j = i + 1; j < InitiativeTeam.Count(); j++)
                 {
-                    if (initiativeTeam[j].speed <= initiativeTeam[i].speed)
+                    if (InitiativeTeam[j].Speed <= InitiativeTeam[i].Speed)
                     {
-                        temp = initiativeTeam[i];
-                        initiativeTeam[i] = initiativeTeam[j];
-                        initiativeTeam[j] = temp;
+                        tmp = InitiativeTeam[i];
+                        InitiativeTeam[i] = InitiativeTeam[j];
+                        InitiativeTeam[j] = tmp;
                     }
                 }
             }

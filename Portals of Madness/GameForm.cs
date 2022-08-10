@@ -1,78 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Portals_of_Madness
 {
     public partial class GameForm : Form
     {
-        public GameEngine engine { get; set; }
-        public Controller controller { get; set; }
-        public List<CharacterPicture> leftSide { get; set; }
-        public List<CharacterPicture> rightSide { get; set; }
-        public Size screenSize { get; set; }
-        public PlayerAbilityFrame abilityFrame { get; set; }
-        public PlayerCharacterFrame characterFrame { get; set; }
-        public DialogBox dialogBox { get; set; }
-        public Ability selectedAbility { get; set; }
-        public bool casting { get; set; }
-        public string side { get; set; }
+        public GameEngine Engine { get; set; }
+        public Controller Controller { get; set; }
+        public List<CharacterPicture> LeftSide { get; set; }
+        public List<CharacterPicture> RightSide { get; set; }
+        public Size ScreenSize { get; set; }
+        public PlayerAbilityFrame AbilityFrame { get; set; }
+        public PlayerCharacterFrame CharacterFrame { get; set; }
+        public DialogBox DialogBox { get; set; }
+        public Ability SelectedAbility { get; set; }
+        public bool Casting { get; set; }
+        public string Side { get; set; }
+        public Button ResultButton { get; set; }
 
         public GameForm()
         {
             InitializeComponent();
             Setup();
-            engine = new GameEngine(this);
+            Engine = new GameEngine(this);
         }
 
         public GameForm(int mapNumber, List<Character> pT)
         {
             InitializeComponent();
             Setup();
-            engine = new GameEngine(this, pT, mapNumber);
+            Engine = new GameEngine(this, pT, mapNumber);
         }
 
         //Sets up all the global variables
         public void Setup()
         {
-            casting = false;
-            controller = new Controller();
-            screenSize = controller.Resolution(this);
-            leftSide = new List<CharacterPicture>();
-            rightSide = new List<CharacterPicture>();
-            int picSize = screenSize.Width / 24;
+            Casting = false;
+            Controller = new Controller();
+            ScreenSize = Controller.Resolution(this);
+
+            LeftSide = new List<CharacterPicture>();
+            RightSide = new List<CharacterPicture>();
+            int picSize = ScreenSize.Width / 24;
             for (int i = 0; i < 10; i++)
             {
-                leftSide.Add(new CharacterPicture());
-                SetupBoxes(leftSide[i], picSize);
-                rightSide.Add(new CharacterPicture());
-                SetupBoxes(rightSide[i], picSize);
+                LeftSide.Add(new CharacterPicture());
+                SetupBoxes(LeftSide[i], picSize);
+                RightSide.Add(new CharacterPicture());
+                SetupBoxes(RightSide[i], picSize);
             }
-            PlacePictureBoxes("left", leftSide, picSize, screenSize);
-            PlacePictureBoxes("right", rightSide, picSize, screenSize);
+
+            PlacePictureBoxes("left", LeftSide, picSize, ScreenSize);
+            PlacePictureBoxes("right", RightSide, picSize, ScreenSize);
+
+            ResultButton = new Button
+            {
+                Location = new Point(Width / 2, Height / 2),
+                Visible = false
+            };
+            Controls.Add(ResultButton);
         }
 
         //Initializes the UI
         public void InitializeUI(string side)
         {
-            abilityFrame = new PlayerAbilityFrame(screenSize);
-            for (int i = 0; i < abilityFrame.abButtons.Count; i++)
+            AbilityFrame = new PlayerAbilityFrame(ScreenSize);
+            for (int i = 0; i < AbilityFrame.AbilityButtons.Count; i++)
             {
-                Controls.Add(abilityFrame.abButtons[i]);
+                Controls.Add(AbilityFrame.AbilityButtons[i]);
             }
-            Controls.Add(abilityFrame);
-            this.side = side;
-            characterFrame = new PlayerCharacterFrame(screenSize, side);
-            Controls.Add(characterFrame.characterImage);
-            Controls.Add(characterFrame.healthLabel);
-            Controls.Add(characterFrame.resourceLabel);
-            Controls.Add(characterFrame);
+            Controls.Add(AbilityFrame);
+            this.Side = side;
+            CharacterFrame = new PlayerCharacterFrame(ScreenSize, side);
+            Controls.Add(CharacterFrame.characterImage);
+            Controls.Add(CharacterFrame.healthLabel);
+            Controls.Add(CharacterFrame.resourceLabel);
+            Controls.Add(CharacterFrame);
             //dialogBox = new DialogBox(screenSize);
             //Controls.Add(dialogBox);
         }
@@ -91,27 +97,49 @@ namespace Portals_of_Madness
         {
             if ("left".Equals(side))
             {
-                for (int i = 0; i < team.Count(); i++)
+                for (int i = 0; i < 10; i++)
                 {
-                    leftSide[i].character = team[i];
-                    leftSide[i].Image = team[i].image;
-                    leftSide[i].InitializeBars();
-                    Controls.Add(leftSide[i].healthBar);
-                    Controls.Add(leftSide[i].resourceBar);
-                    leftSide[i].Click += AssignCharacterClickFunctions;
+                    if(i < team.Count())
+                    {
+                        LeftSide[i].Character = team[i];
+                        LeftSide[i].Image = team[i].Image;
+                        LeftSide[i].InitializeBars();
+                        Controls.Add(LeftSide[i].HealthBar);
+                        Controls.Add(LeftSide[i].ResourceBar);
+                        LeftSide[i].Click += AssignCharacterClickFunctions;
+                    }
+                    else
+                    {
+                        LeftSide[i].Character = null;
+                        LeftSide[i].Image = null;
+                        Controls.Remove(LeftSide[i].HealthBar);
+                        Controls.Remove(LeftSide[i].ResourceBar);
+                        LeftSide[i].Click -= AssignCharacterClickFunctions;
+                    }
                 }
             }
             else
             {
-                for (int i = 0; i < team.Count(); i++)
+                for (int i = 0; i < 10; i++)
                 {
-                    rightSide[i].character = team[i];
-                    rightSide[i].Image = team[i].image;
-                    rightSide[i].InitializeBars();
-                    rightSide[i].Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
-                    Controls.Add(rightSide[i].healthBar);
-                    Controls.Add(rightSide[i].resourceBar);
-                    rightSide[i].Click += AssignCharacterClickFunctions;
+                    if (i < team.Count())
+                    {
+                        RightSide[i].Character = team[i];
+                        RightSide[i].Image = team[i].Image;
+                        RightSide[i].InitializeBars();
+                        RightSide[i].Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                        Controls.Add(RightSide[i].HealthBar);
+                        Controls.Add(RightSide[i].ResourceBar);
+                        RightSide[i].Click += AssignCharacterClickFunctions;
+                    }
+                    else
+                    {
+                        RightSide[i].Character = null;
+                        RightSide[i].Image = null;
+                        Controls.Remove(RightSide[i].HealthBar);
+                        Controls.Remove(RightSide[i].ResourceBar);
+                        RightSide[i].Click -= AssignCharacterClickFunctions;
+                    }
                 }
             }
         }
@@ -143,37 +171,37 @@ namespace Portals_of_Madness
         public void AssignCharacterClickFunctions(object sender, EventArgs e)
         {
             CharacterPicture t = (CharacterPicture)sender;
-            Character target = t.character;
-            if (casting && CorrectTarget(t))
+            Character target = t.Character;
+            if (Casting && CorrectTarget(t))
             {
-                if(selectedAbility.targetCount == 1)
+                if(SelectedAbility.TargetCount == 1)
                 {
-                    engine.currentCharacter.castAbility(selectedAbility, target);
+                    Engine.CurrentCharacter.CastAbility(SelectedAbility, target);
                 }
                 else
                 {
                     List<Character> targets;
-                    targets = SelectAimedTargets(target, selectedAbility.target == "ally" ? engine.playerTeam :
-                        selectedAbility.target == "enemy" ? engine.enemyTeam : engine.initiativeTeam);
-                    engine.currentCharacter.castAbility(selectedAbility, targets);
+                    targets = SelectAimedTargets(target, SelectedAbility.Target == "ally" ? Engine.PlayerTeam :
+                        SelectedAbility.Target == "enemy" ? Engine.EnemyTeam : Engine.InitiativeTeam);
+                    Engine.CurrentCharacter.CastAbility(SelectedAbility, targets);
                 }
                 UpdateCharacterBars();
-                engine.Manage();
+                Engine.Manage();
             }
         }
 
         public void UpdateCharacterBars()
         {
-            foreach (CharacterPicture Pic in leftSide)
+            foreach (CharacterPicture Pic in LeftSide)
             {
-                if(Pic.character != null)
+                if(Pic.Character != null)
                 {
                     Pic.UpdatePanelWidth();
                 }
             }
-            foreach (CharacterPicture Pic in rightSide)
+            foreach (CharacterPicture Pic in RightSide)
             {
-                if (Pic.character != null)
+                if (Pic.Character != null)
                 {
                     Pic.UpdatePanelWidth();
                 }
@@ -182,24 +210,24 @@ namespace Portals_of_Madness
 
         public bool CorrectTarget(CharacterPicture t)
         {
-            return (selectedAbility.target == "ally" && side == "left" && t.Location.X < screenSize.Width / 2) ||
-                (selectedAbility.target == "enemy" && side == "left" && t.Location.X > screenSize.Width / 2) ||
-                (selectedAbility.target == "ally" && side == "right" && t.Location.X > screenSize.Width / 2) ||
-                (selectedAbility.target == "enemy" && side == "right" && t.Location.X < screenSize.Width / 2) ||
-                selectedAbility.target == "all";
+            return (SelectedAbility.Target == "ally" && Side == "left" && t.Location.X < ScreenSize.Width / 2) ||
+                (SelectedAbility.Target == "enemy" && Side == "left" && t.Location.X > ScreenSize.Width / 2) ||
+                (SelectedAbility.Target == "ally" && Side == "right" && t.Location.X > ScreenSize.Width / 2) ||
+                (SelectedAbility.Target == "enemy" && Side == "right" && t.Location.X < ScreenSize.Width / 2) ||
+                SelectedAbility.Target == "all";
         }
 
         public List<Character> SelectAimedTargets(Character target, List<Character> team)
         {
             List<Character> targets = new List<Character>();
-            int num = selectedAbility.targetCount;
+            int num = SelectedAbility.TargetCount;
             int pos = team.FindIndex(x => x == target);
-            for(int i=0; i<team.Count; i++)
+            for(int i=0; i<num; i++)
             {
                 int newPos = pos + CalcPos(i);
                 if(newPos >= 0 && newPos < team.Count)
                 {
-                    if (team[newPos].alive)
+                    if (team[newPos].Alive)
                     {
                         targets.Add(team[newPos]);
                     }
@@ -211,17 +239,17 @@ namespace Portals_of_Madness
         //Calculate positions in lists for multitarget abilities
         public int CalcPos(int i)
         {
-            return ((i + 1) / 2) * (int)Math.Pow(-1, (double)i % 2);
+            return (i + 1) / 2 * (int)Math.Pow(-1, (double)i % 2);
         }
 
         //Assigns functions to the buttons: if the ability's type is anything but random, it makes the ability
         //the current ability and if it is random, it chooses random targets to attack instantly
         public void AssignAbilityButtonFunctions()
         {
-            for(int i=0; i<abilityFrame.abButtons.Count; i++)
+            for(int i=0; i<AbilityFrame.AbilityButtons.Count; i++)
             {
-                abilityFrame.abButtons[i].MouseMove += AbilityButton_MouseOver;
-                abilityFrame.abButtons[i].Click += AbilityButton_Click;
+                AbilityFrame.AbilityButtons[i].MouseMove += AbilityButton_MouseOver;
+                AbilityFrame.AbilityButtons[i].Click += AbilityButton_Click;
             }
         }
 
@@ -235,41 +263,73 @@ namespace Portals_of_Madness
         {
             AbilityButton abButton = (AbilityButton)sender;
             Ability ab = abButton.ability;
-            if (ab.abilityType == "random" && CanCast(ab))
+            if (ab.AbilityType == "random" && Engine.CurrentCharacter.CanCast(ab))
             {
-                for (int j = 0; j < ab.targetCount; j++)
+                Casting = false;
+                for (int j = 0; j < ab.TargetCount; j++)
                 {
-                    engine.currentCharacter.castAbility(ab,
-                        engine.currentCharacter.SelectRandomTarget(
-                            ab.target == "ally" ? engine.playerTeam :
-                            ab.target == "enemy" ? engine.enemyTeam : engine.initiativeTeam));
+                    Engine.CurrentCharacter.CastAbility(ab,
+                        Engine.CurrentCharacter.SelectRandomTarget(
+                            ab.Target == "ally" ? Engine.PlayerTeam :
+                            ab.Target == "enemy" ? Engine.EnemyTeam : Engine.InitiativeTeam));
                 }
                 UpdateCharacterBars();
-                engine.Manage();
+                Engine.Manage();
             }
             else
             {
-                selectedAbility = ab;
+                SelectedAbility = ab;
                 Cast();
             }
         }
 
-        public bool CanCast(Ability ab)
-        {
-            return engine.currentCharacter.currResource >= ab.cost;
-        }
-
         private void Cast()
         {
-            if(CanCast(selectedAbility))
+            if(Engine.CurrentCharacter.CanCast(SelectedAbility))
             {
-                casting = true;
+                Casting = true;
                 //targetArrowsSetup();
             }
             else
             {
                 //targetArrows = new ArrayList();
             }
+        }
+
+        public void ShowResultButton(bool res)
+        {
+            ResultButton.Visible = true;
+            if (res)
+            {
+                if(Engine.CurrentMission.EncounterNumber == Engine.CurrentMission.EncounterContainer.encounter.Length - 1)
+                {
+                    ResultButton.Text = "Victory!";
+                    ResultButton.Click += ToSelectionForm;
+                }
+                else
+                {
+                    ResultButton.Text = "To the next encounter.";
+                    ResultButton.Visible = false;
+                    ResultButton.Click += ContinueTheMission;
+                }
+            }
+            else
+            {
+                {
+                    ResultButton.Text = "You lost.";
+                    ResultButton.Click += ToSelectionForm;
+                }
+            }
+        }
+
+        private void ContinueTheMission(object sender, EventArgs e)
+        {
+            Engine.Manage();
+        }
+
+        private void ToSelectionForm(object sender, EventArgs e)
+        {
+            Controller.ChangeForm(this, "s");
         }
     }
 }

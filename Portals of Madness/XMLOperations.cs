@@ -10,15 +10,15 @@ namespace Portals_of_Madness
 {
     public class XMLOperations
     {
-        List<Ability> allAbilities;
+        readonly List<Ability> AllAbilities;
 
         public XMLOperations()
         {
-            allAbilities = new List<Ability>();
+            AllAbilities = new List<Ability>();
             XMLAbilities xabs = AbilityDeserializer($@"../../Abilities/Abilities.xml");
             foreach(XMLAbility xab in xabs.xmlAbility)
             {
-                allAbilities.Add(convToAbility(xab));
+                AllAbilities.Add(ConvertToAbility(xab));
             }
         }
 
@@ -71,11 +71,11 @@ namespace Portals_of_Madness
             return obj;
         }
 
-        public Ability getAblilityByName(string abn)
+        public Ability GetAblilityByName(string abn)
         {
-            foreach (Ability ab in allAbilities)
+            foreach (Ability ab in AllAbilities)
             {
-                if (ab.name.Equals(abn))
+                if (ab.Name.Equals(abn))
                 {
                     return ab;
                 }
@@ -83,20 +83,20 @@ namespace Portals_of_Madness
             return null;
         }
 
-        public Ability convToAbility(XMLAbility x)
+        public Ability ConvertToAbility(XMLAbility x)
         {
             return new Ability(x.name, x.cost, x.cooldown, x.physAttackDamage, x.magicAttackDamage,
                 x.duration, x.damageType, x.target, x.targetCount, x.abilityType, x.modifier, x.modifiedAmount,
                 x.imageIcon, x.sprite);
         }
 
-        public Character convToCharacter(XMLCharacter x)
+        public Character ConvertToCharacter(XMLCharacter x)
         {
             return new Character(x.imageSet, x.id, x.level, x.name, x.characterClass, x.baseHealth, x.healthMult,
                 x.resourceName, x.maxResource, x.basePhysAttack, x.physAttackMult, x.baseMagicAttack,
                 x.magicAttackMult, x.basePhysAttack, x.physAttackMult, x.baseMagicArmor,
                 x.magicArmorMult, x.weaknesses,
-                getAblilityByName(x.ability1Name), getAblilityByName(x.ability2Name), getAblilityByName(x.ability3Name),
+                GetAblilityByName(x.ability1Name), GetAblilityByName(x.ability2Name), GetAblilityByName(x.ability3Name),
                 x.baseSpeed, x.rarity, x.collectable, x.aiName);
         }
     }

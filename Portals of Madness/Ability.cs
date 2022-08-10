@@ -1,123 +1,118 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace Portals_of_Madness
 {
     public class Ability
     {
         //Name
-        public string name { get; }
+        public string Name { get; }
 
         //Resource cost
-        public int cost { get; }
+        public int Cost { get; }
 
         //How many turns need to pass between uses
-        public int cooldown { get; }
+        public int Cooldown { get; }
 
         //Remaining cooldown
-        public int cooldownRem { get; set; }
+        public int CooldownRemaining { get; set; }
 
         //Physical attack damage
-        public double physAttackDamage { get; }
+        public double PhysicalAttackDamage { get; }
 
         //Magical attack damage
-        public double magicAttackDamage { get; }
+        public double MagicAttackDamage { get; }
 
         //The type of the damage
-        public string damageType { get; }
+        public string DamageType { get; }
 
         //Whom does it target (ally, enemy, all or a specific character in the case of summons)
-        public string target { get; }
+        public string Target { get; }
 
         //How long it lasts (only for HotS, DoTs, buffs, debuffs and stuns)
-        public int duration { get; }
+        public int Duration { get; }
 
         //Amount of people it targets
-        public int targetCount { get; }
+        public int TargetCount { get; }
 
         //Type (DoT, heal, etc...)
-        public string abilityType { get; }
+        public string AbilityType { get; }
 
         //In the case of attacks, heals and stuns it can be either random or aimed
         //In the case of buffs and debuffs it is the stat that gets modified
-        public string modifier { get; }
+        public string Modifier { get; }
 
         //The amount of modifications buffs and debuffs do
-        public double modifiedAmount { get; }
+        public double ModifiedAmount { get; }
 
         //The icon showed on the buttons
-        public Image imageIcon { get; }
+        public Image IconImage { get; }
 
         //The sprite that shows the ability in action
-        public Image sprite { get; }
+        public Image AttackSprite { get; }
 
         public Ability(string n, int co, int cd, double fAD, double mAD, int dur, string aT, string tT,
             int tC, string abT, string aM, double mA, string iI, string sp)
         {
-            name = n;
-            cost = co;
-            cooldown = cd;
-            physAttackDamage = fAD;
-            physAttackDamage = mAD;
-            duration = dur;
-            damageType = aT;
-            target = tT;
-            targetCount = tC;
-            abilityType = abT;
-            modifier = aM;
-            modifiedAmount = mA;
+            Name = n;
+            Cost = co;
+            Cooldown = cd;
+            PhysicalAttackDamage = fAD;
+            PhysicalAttackDamage = mAD;
+            Duration = dur;
+            DamageType = aT;
+            Target = tT;
+            TargetCount = tC;
+            AbilityType = abT;
+            Modifier = aM;
+            ModifiedAmount = mA;
             try
             {
-                imageIcon = Image.FromFile($@"../../Art/Sprites/Spells/{iI}.png");
+                IconImage = Image.FromFile($@"../../Art/Sprites/Spells/{iI}.png");
             }
             catch
             {
                 try
                 {
-                    imageIcon = Image.FromFile($@"../../Art/Sprites/Spells/{iI}.jpg");
+                    IconImage = Image.FromFile($@"../../Art/Sprites/Spells/{iI}.jpg");
                 }
-                catch (Exception e)
+                catch
                 {
-                    Console.WriteLine($"{e.Message}");
+                    Console.WriteLine($"{iI}.jpg not found!");
                 }
             }
             try
             {
-                sprite = Image.FromFile($@"../../Art/Sprites/Spells/{sp}.png");
+                AttackSprite = Image.FromFile($@"../../Art/Sprites/Spells/{sp}.png");
             }
             catch
             {
                 try
                 {
-                    sprite = Image.FromFile($@"../../Art/Sprites/Spells/{sp}.jpg");
+                    AttackSprite = Image.FromFile($@"../../Art/Sprites/Spells/{sp}.jpg");
                 }
-                catch (Exception e)
+                catch
                 {
-                    Console.WriteLine($"{e.Message}");
+                    Console.WriteLine($"{sp}.jpg not found!");
                 }
             }
         }
 
         public override string ToString()
         {
-            if(abilityType == "attack" || abilityType == "heal")
+            if(AbilityType == "attack" || AbilityType == "heal")
             {
-                return $"{name}\nType: {abilityType}\nTarget: {targetCount} {target}\n" +
-                    $"Physical: {physAttackDamage}, magic: {magicAttackDamage}\n" +
-                    $"Element: {damageType}";
+                return $"{Name}\nType: {AbilityType}\nTarget: {TargetCount} {Target}\n" +
+                    $"Physical: {PhysicalAttackDamage}, magic: {MagicAttackDamage}\n" +
+                    $"Element: {DamageType}";
             }
-            else if (abilityType == "stun" || abilityType == "DoT" || abilityType == "HoT")
+            else if (AbilityType == "stun" || AbilityType == "DoT" || AbilityType == "HoT")
             {
-                return $"{name}\nType: {abilityType}\nTarget: {targetCount} {target}\n" +
-                    $"Physical: {physAttackDamage}, magic: {magicAttackDamage}\n" +
-                    $"Element: {damageType}\nDuration: {duration}";
+                return $"{Name}\nType: {AbilityType}\nTarget: {TargetCount} {Target}\n" +
+                    $"Physical: {PhysicalAttackDamage}, magic: {MagicAttackDamage}\n" +
+                    $"Element: {DamageType}\nDuration: {Duration}";
             }
-            return $"{name}\nType: {abilityType}";
+            return $"{Name}\nType: {AbilityType}";
         }
     }
 }

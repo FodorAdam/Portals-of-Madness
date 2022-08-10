@@ -10,7 +10,7 @@ namespace Portals_of_Madness
 {
     public class PlayerAbilityFrame : Panel
     {
-        public List<AbilityButton> abButtons { get; set; }
+        public List<AbilityButton> AbilityButtons { get; set; }
 
         public PlayerAbilityFrame(Size screensize)
         {
@@ -19,34 +19,34 @@ namespace Portals_of_Madness
             Width = Height *3;
             BackColor = Color.Black;
             Location = new Point((screensize.Width - Width) / 2, screensize.Height - Height * 2);
-            abButtons = new List<AbilityButton>
+            AbilityButtons = new List<AbilityButton>
             {
                 new AbilityButton(),
                 new AbilityButton(),
                 new AbilityButton()
             };
-            for (int i = 0; i < abButtons.Count; i++)
+            for (int i = 0; i < AbilityButtons.Count; i++)
             {
-                abButtons[i].Height = buttonLength;
-                abButtons[i].Width = buttonLength;
+                AbilityButtons[i].Height = buttonLength;
+                AbilityButtons[i].Width = buttonLength;
                 int extra = Height / 10;
-                abButtons[i].Location = new Point(Location.X + i * buttonLength + (i + 1) * extra,
+                AbilityButtons[i].Location = new Point(Location.X + i * buttonLength + (i + 1) * extra,
                     Location.Y + Height / 10);
             }
         }
 
         public void UpdateButtons(Character ch)
         {
-            for(int i=0; i < abButtons.Count; i++)
+            for(int i=0; i < AbilityButtons.Count; i++)
             {
-                abButtons[i].UpdateButton(ch.abilities[i]);
-                if(ch.currResource >= ch.abilities[i].cost)
+                AbilityButtons[i].UpdateButton(ch.Abilities[i]);
+                if(ch.CurrentResource >= ch.Abilities[i].Cost)
                 {
-                    abButtons[i].FlatAppearance.BorderColor = Color.Green;
+                    AbilityButtons[i].FlatAppearance.BorderColor = Color.Green;
                 }
                 else
                 {
-                    abButtons[i].FlatAppearance.BorderColor = Color.Red;
+                    AbilityButtons[i].FlatAppearance.BorderColor = Color.Red;
                 }
             }
             

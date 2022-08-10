@@ -1,99 +1,94 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace Portals_of_Madness
 {
     //Used for damage over time and healing over time effects
     public struct DoT
     {
-        public string name { get; set; }
-        public double amount { get; set; }
-        public int duration { get; set; }
+        public string Name { get; set; }
+        public double Amount { get; set; }
+        public int Duration { get; set; }
 
         public DoT(string n, double a, int d)
         {
-            name = n;
-            amount = a;
-            duration = d;
+            Name = n;
+            Amount = a;
+            Duration = d;
         }
 
         public void Tick()
         {
-            --duration;
+            --Duration;
         }
     }
 
     public struct Buff
     {
-        public string name { get; set; }
-        public string target { get; set; }
-        public double amount { get; set; }
-        public int duration { get; set; }
+        public string Name { get; set; }
+        public string Target { get; set; }
+        public double Amount { get; set; }
+        public int Duration { get; set; }
 
         public Buff(string n, string t, double a, int d)
         {
-            name = n;
-            target = t;
-            amount = a;
-            duration = d;
+            Name = n;
+            Target = t;
+            Amount = a;
+            Duration = d;
         }
 
         public void Tick()
         {
-            --duration;
+            --Duration;
         }
     }
 
     public class Character : Sprite
     {
-        public string id { get; }
-        public string name { get; }
-        public int level { get; set; }
+        public string ID { get; }
+        public string Name { get; }
+        public int Level { get; set; }
 
-        public double baseHealth { get; }
-        public double healthMult { get; }
-        public double maxHealth { get; set; }
-        public double currHealth { get; set; }
+        public double BaseHealth { get; }
+        public double HealthMult { get; }
+        public double MaxHealth { get; set; }
+        public double CurrentHealth { get; set; }
 
-        public string resourceName { get; }
-        public int maxResource { get; }
-        public int currResource { get; set; }
+        public string ResourceName { get; }
+        public int MaxResource { get; }
+        public int CurrentResource { get; set; }
 
-        public double basePhysAttack { get; }
-        public double physAttackMult { get; }
-        public double physAttack { get; set; }
-        public double baseMagicAttack { get; }
-        public double magicAttackMult { get; }
-        public double magicAttack { get; set; }
-        public double basePhysArmor { get; }
-        public double physArmorMult { get; }
-        public double physArmor { get; set; }
-        public double baseMagicArmor { get; }
-        public double magicArmorMult { get; }
-        public double magicArmor { get; set; }
-        public List<string> weaknesses { get; }
+        public double BasePhysicalAttack { get; }
+        public double PhysicalAttackMultiplier { get; }
+        public double PhysicalAttack { get; set; }
+        public double BaseMagicAttack { get; }
+        public double MagicAttackMultiplier { get; }
+        public double MagicAttack { get; set; }
+        public double BasePhysicalArmor { get; }
+        public double PhysicalArmorMultiplier { get; }
+        public double PhysicalArmor { get; set; }
+        public double BaseMagicArmor { get; }
+        public double MagicArmorMultiplier { get; }
+        public double MagicArmor { get; set; }
+        public List<string> Weaknesses { get; }
 
-        public List<Ability> abilities { get; }
+        public List<Ability> Abilities { get; }
 
-        public int baseSpeed { get; }
-        public int speed { get; set; }
+        public int BaseSpeed { get; }
+        public int Speed { get; set; }
 
-        public bool alive { get; set; }
-        public bool stunned { get; set; }
-        public int stunLength { get; set; }
-        public bool active { get; set; }
-        public List<DoT> dots { get; set; }
-        public List<Buff> buffs { get; set; }
+        public bool Alive { get; set; }
+        public bool Stunned { get; set; }
+        public int StunLength { get; set; }
+        public List<DoT> DoTs { get; set; }
+        public List<Buff> Buffs { get; set; }
 
-        public string rarity { get; }
-        public bool selected { get; set; }
-        public bool collectable { get; set; }
-        public string characterClass { get; }
-        public string aiType { get; }
+        public string Rarity { get; }
+        public bool Selected { get; set; }
+        public bool Collectable { get; set; }
+        public string CharacterClass { get; }
+        public string AIType { get; }
 
         public Character(string im,
             string id, int l, string n, string chC,
@@ -104,85 +99,84 @@ namespace Portals_of_Madness
             Ability ab1, Ability ab2, Ability ab3, 
             int ini, string rar, bool coll, string ai) : base(im)
         {
-            this.id = id;
-            name = n;
+            this.ID = id;
+            Name = n;
 
             if(l < 1)
             {
-                level = 1;
+                Level = 1;
             }
             else if(l > 30)
             {
-                level = 30;
+                Level = 30;
             }
             else
             {
-                level = l;
+                Level = l;
             }
 
-            characterClass = chC;
+            CharacterClass = chC;
 
-            rarity = rar;
-            collectable = coll;
-            aiType = ai;
+            Rarity = rar;
+            Collectable = coll;
+            AIType = ai;
 
-            baseHealth = bHP;
-            healthMult = hpM;
-            maxHealth = calcStat(level, baseHealth, healthMult);
-            currHealth = maxHealth;
+            BaseHealth = bHP;
+            HealthMult = hpM;
+            MaxHealth = CalculateStat(Level, BaseHealth, HealthMult);
+            CurrentHealth = MaxHealth;
 
-            resourceName = rN;
-            maxResource = mR;
+            ResourceName = rN;
+            MaxResource = mR;
 
-            if(resourceName == "rage")
+            if(ResourceName == "rage")
             {
-                currResource = 0;
+                CurrentResource = 0;
             }
-            else if(resourceName == "focus")
+            else if(ResourceName == "focus")
             {
-                currResource = maxResource;
+                CurrentResource = MaxResource;
             }
             else
             {
-                currResource = maxResource / 2;
+                CurrentResource = MaxResource / 2;
             }
 
-            basePhysAttack = pAt;
-            physAttackMult = pAtM;
-            physAttack = calcStat(level, basePhysAttack, physAttackMult);
-            baseMagicAttack = mAt;
-            magicAttackMult = mAtM;
-            magicAttack = calcStat(level, baseMagicAttack, magicAttackMult);
-            basePhysArmor = pAr;
-            physArmorMult = pArM;
-            physArmor = calcStat(level, basePhysArmor, physArmorMult);
-            baseMagicArmor = mAr;
-            magicArmorMult = mArM;
-            magicArmor = calcStat(level, baseMagicArmor, magicArmorMult);
+            BasePhysicalAttack = pAt;
+            PhysicalAttackMultiplier = pAtM;
+            PhysicalAttack = CalculateStat(Level, BasePhysicalAttack, PhysicalAttackMultiplier);
+            BaseMagicAttack = mAt;
+            MagicAttackMultiplier = mAtM;
+            MagicAttack = CalculateStat(Level, BaseMagicAttack, MagicAttackMultiplier);
+            BasePhysicalArmor = pAr;
+            PhysicalArmorMultiplier = pArM;
+            PhysicalArmor = CalculateStat(Level, BasePhysicalArmor, PhysicalArmorMultiplier);
+            BaseMagicArmor = mAr;
+            MagicArmorMultiplier = mArM;
+            MagicArmor = CalculateStat(Level, BaseMagicArmor, MagicArmorMultiplier);
             var weakSplit = weak.Split(',');
-            weaknesses = new List<string>();
-            weaknesses.AddRange(weakSplit);
+            Weaknesses = new List<string>();
+            Weaknesses.AddRange(weakSplit);
 
-            abilities = new List<Ability>
+            Abilities = new List<Ability>
             {
                 ab1,
                 ab2,
                 ab3
             };
 
-            baseSpeed = ini;
-            speed = ((baseSpeed - level % 10) >= 0 ? (baseSpeed - level % 10) : 0);
+            BaseSpeed = ini;
+            Speed = ((BaseSpeed - Level % 10) >= 0 ? (BaseSpeed - Level % 10) : 0);
 
-            dots = new List<DoT>();
-            buffs = new List<Buff>();
-            alive = true;
-            stunned = false;
-            active = false;
+            DoTs = new List<DoT>();
+            Buffs = new List<Buff>();
+            Alive = true;
+            Stunned = false;
         }
 
-        public bool canCast(Ability ab)
+        public bool CanCast(Ability ab)
         {
-            if (currResource >= ab.cost)
+            if (CurrentResource >= ab.Cost)
             {
                 return true;
             }
@@ -190,36 +184,36 @@ namespace Portals_of_Madness
         }
 
         //Cast a ability at the targets
-        public void castAbility(Ability ab, List<Character> targets)
+        public void CastAbility(Ability ab, List<Character> targets)
         {
-            currResource -= ab.cost;
+            CurrentResource -= ab.Cost;
             foreach (Character target in targets)
             {
-                switch (ab.abilityType)
+                switch (ab.AbilityType)
                 {
                     case "attack":
-                        target.HealthChange(calcDamageWithArmor(ab));
+                        target.HealthChange(CalculateDamageWithArmor(ab));
                         break;
                     case "heal":
-                        target.HealthChange(calcDamageWithoutArmor(ab));
+                        target.HealthChange(CalculateDamageWithoutArmor(ab));
                         break;
                     case "DoT":
-                        target.AddDoT(ab.name, calcDamageWithoutArmor(ab), ab.duration);
+                        target.AddDoT(ab.Name, CalculateDamageWithoutArmor(ab), ab.Duration);
                         break;
                     case "HoT":
-                        target.AddDoT(ab.name, calcDamageWithoutArmor(ab), ab.duration);
+                        target.AddDoT(ab.Name, CalculateDamageWithoutArmor(ab), ab.Duration);
                         break;
                     case "resurrect":
-                        target.resurrect();
+                        target.Resurrect();
                         break;
                     case "stun":
-                        target.stun(calcDamageWithoutArmor(ab), ab.duration);
+                        target.Stun(CalculateDamageWithoutArmor(ab), ab.Duration);
                         break;
                     case "buff":
-                        target.addBuff(ab.name, ab.modifier, ab.modifiedAmount, ab.duration);
+                        target.AddBuff(ab.Name, ab.Modifier, ab.ModifiedAmount, ab.Duration);
                         break;
                     case "debuff":
-                        target.addBuff(ab.name, ab.modifier, ab.modifiedAmount, ab.duration);
+                        target.AddBuff(ab.Name, ab.Modifier, ab.ModifiedAmount, ab.Duration);
                         break;
                     default:
                         break;
@@ -228,47 +222,47 @@ namespace Portals_of_Madness
         }
 
         //Cast a ability at the target
-        public void castAbility(Ability ab, Character target)
+        public void CastAbility(Ability ab, Character target)
         {
-            currResource -= ab.cost;
-            switch (ab.abilityType)
+            CurrentResource -= ab.Cost;
+            switch (ab.AbilityType)
             {
                 case "attack":
-                    target.HealthChange(calcDamageWithArmor(ab));
+                    target.HealthChange(CalculateDamageWithArmor(ab));
                     break;
                 case "heal":
-                    target.HealthChange(calcDamageWithoutArmor(ab));
+                    target.HealthChange(CalculateDamageWithoutArmor(ab));
                     break;
                 case "DoT":
-                    target.AddDoT(ab.name, calcDamageWithoutArmor(ab), ab.duration);
+                    target.AddDoT(ab.Name, CalculateDamageWithoutArmor(ab), ab.Duration);
                     break;
                 case "HoT":
-                    target.AddDoT(ab.name, calcDamageWithoutArmor(ab), ab.duration);
+                    target.AddDoT(ab.Name, CalculateDamageWithoutArmor(ab), ab.Duration);
                     break;
                 case "resurrect":
-                    target.resurrect();
+                    target.Resurrect();
                     break;
                 case "stun":
-                    target.stun(calcDamageWithoutArmor(ab), ab.duration);
+                    target.Stun(CalculateDamageWithoutArmor(ab), ab.Duration);
                     break;
                 case "buff":
-                    target.addBuff(ab.name, ab.modifier, ab.modifiedAmount, ab.duration);
+                    target.AddBuff(ab.Name, ab.Modifier, ab.ModifiedAmount, ab.Duration);
                     break;
                 case "debuff":
-                    target.addBuff(ab.name, ab.modifier, ab.modifiedAmount, ab.duration);
+                    target.AddBuff(ab.Name, ab.Modifier, ab.ModifiedAmount, ab.Duration);
                     break;
                 default:
                     break;
             }
         }
 
-        public Character summon(Ability ab)
+        public Character Summon(Ability ab)
         {
             return null;
         }
 
         //Calculate the final stats of the character
-        private double calcStat(int level, double baseStat, double characterMult)
+        private double CalculateStat(int level, double baseStat, double characterMult)
         {
             double result = baseStat;
 
@@ -283,48 +277,48 @@ namespace Portals_of_Madness
         {
             if (l < 1)
             {
-                level = 1;
+                Level = 1;
             }
             else if (l > 30)
             {
-                level = 30;
+                Level = 30;
             }
             else
             {
-                level = l;
+                Level = l;
             }
-            maxHealth = calcStat(level, baseHealth, healthMult);
-            physAttack = calcStat(level, basePhysAttack, physAttackMult);
-            magicAttack = calcStat(level, baseMagicAttack, magicAttackMult);
-            physArmor = calcStat(level, basePhysArmor, physArmorMult);
-            magicArmor = calcStat(level, baseMagicArmor, magicArmorMult);
+            MaxHealth = CalculateStat(Level, BaseHealth, HealthMult);
+            PhysicalAttack = CalculateStat(Level, BasePhysicalAttack, PhysicalAttackMultiplier);
+            MagicAttack = CalculateStat(Level, BaseMagicAttack, MagicAttackMultiplier);
+            PhysicalArmor = CalculateStat(Level, BasePhysicalArmor, PhysicalArmorMultiplier);
+            MagicArmor = CalculateStat(Level, BaseMagicArmor, MagicArmorMultiplier);
         }
 
-        private double calcDamageWithArmor(Ability ab) 
+        private double CalculateDamageWithArmor(Ability ab) 
         {
             int mult = 1;
-            if (weakTo(ab)) 
+            if (WeakTo(ab)) 
             { 
                 mult = 2;
             }
-            return ((ab.physAttackDamage * physAttack - physArmor)
-                + (ab.magicAttackDamage * magicAttack - magicArmor)) * mult;
+            return ((ab.PhysicalAttackDamage * PhysicalAttack - PhysicalArmor)
+                + (ab.MagicAttackDamage * MagicAttack - MagicArmor)) * mult;
         }
-        private double calcDamageWithoutArmor(Ability ab)
+        private double CalculateDamageWithoutArmor(Ability ab)
         {
             int mult = 1;
-            if (weakTo(ab))
+            if(WeakTo(ab))
             {
                 mult = 2;
             }
-            return (ab.physAttackDamage * physAttack + ab.magicAttackDamage * magicAttack) * mult;
+            return (ab.PhysicalAttackDamage * PhysicalAttack + ab.MagicAttackDamage * MagicAttack) * mult;
         }
 
-        private bool weakTo(Ability ab)
+        private bool WeakTo(Ability ab)
         {
-            foreach (string weakness in weaknesses)
+            foreach (string weakness in Weaknesses)
             {
-                if (weakness == ab.damageType)
+                if (weakness == ab.DamageType)
                 {
                     return true;
                 }
@@ -335,185 +329,184 @@ namespace Portals_of_Madness
         //Adds a DoT to the target
         private void AddDoT(string name, double amount, int dur)
         {
-            if (alive)
+            if (Alive)
             {
-                dots.Add(new DoT(name, amount, dur));
+                DoTs.Add(new DoT(name, amount, dur));
             }
         }
 
         //Used for both taking and healing damage
         private void HealthChange(double amount)
         {
-            Console.WriteLine(amount);
-            if(alive)
+            if(Alive)
             {
-                if(currHealth + amount <= 0)
+                if(CurrentHealth + amount <= 0)
                 {
-                    if (currHealth >= maxHealth * 0.8)
+                    if (CurrentHealth >= MaxHealth * 0.8)
                     {
-                        currHealth = 1;
+                        CurrentHealth = 1;
                     }
                     else
                     {
-                        die();
+                        Die();
                     }
                 }
-                else if(currHealth + amount > maxHealth)
+                else if(CurrentHealth + amount > MaxHealth)
                 {
-                    currHealth = maxHealth;
+                    CurrentHealth = MaxHealth;
                 }
                 else
                 {
-                    currHealth += amount;
+                    CurrentHealth += amount;
                 }
             }
         }
 
         //The character dies
-        public void die()
+        public void Die()
         {
-            currHealth = 0;
-            alive = false;
-            stunned = false;
-            dots.Clear();
-            foreach (Buff buff in buffs)
+            CurrentHealth = 0;
+            Alive = false;
+            Stunned = false;
+            DoTs.Clear();
+            foreach (Buff buff in Buffs)
             {
-                removeBuffEffects(buff);
+                RemoveBuffEffects(buff);
             }
-            buffs.Clear();
-            currResource = 0;
+            Buffs.Clear();
+            CurrentResource = 0;
         }
 
         //Resurrects characters to 20% of their maximum health
-        private void resurrect()
+        private void Resurrect()
         {
-            if(!alive)
+            if(!Alive)
             {
-                alive = true;
-                currHealth = maxHealth * 0.2;
+                Alive = true;
+                CurrentHealth = MaxHealth * 0.2;
             }
         }
 
         //Stuns the target and deals damage to them
-        private void stun(double amount, int length)
+        private void Stun(double amount, int length)
         {
-            if(alive)
+            if(Alive)
             {
-                stunned = true;
+                Stunned = true;
                 HealthChange(amount);
-                stunLength = length;
+                StunLength = length;
             }
         }
 
         //Removes a DoT from the list
-        public void removeDoT(DoT dot)
+        public void RemoveDoT(DoT dot)
         {
-            dots.Remove(dot);
+            DoTs.Remove(dot);
         }
 
-        public void addBuff(string name, string target, double amount, int dur)
+        public void AddBuff(string name, string target, double amount, int dur)
         {
-            if (alive)
+            if (Alive)
             {
                 Buff buff = new Buff(name, target, amount, dur);
-                switch (buff.target)
+                switch (buff.Target)
                 {
                     case "health":
-                        maxHealth *= buff.amount;
+                        MaxHealth *= buff.Amount;
                         break;
                     case "pAttack":
-                        physAttack *= buff.amount;
+                        PhysicalAttack *= buff.Amount;
                         break;
                     case "mAttack":
-                        magicAttack *= buff.amount;
+                        MagicAttack *= buff.Amount;
                         break;
                     case "pArmor":
-                        physArmor *= buff.amount;
+                        PhysicalArmor *= buff.Amount;
                         break;
                     case "mArmor":
-                        magicArmor *= buff.amount;
+                        MagicArmor *= buff.Amount;
                         break;
                     case "all":
-                        maxHealth *= buff.amount;
-                        physAttack *= buff.amount;
-                        magicAttack *= buff.amount;
-                        physArmor *= buff.amount;
-                        magicArmor *= buff.amount;
+                        MaxHealth *= buff.Amount;
+                        PhysicalAttack *= buff.Amount;
+                        MagicAttack *= buff.Amount;
+                        PhysicalArmor *= buff.Amount;
+                        MagicArmor *= buff.Amount;
                         break;
                     case "attack":
-                        physAttack *= buff.amount;
-                        magicAttack *= buff.amount;
+                        PhysicalAttack *= buff.Amount;
+                        MagicAttack *= buff.Amount;
                         break;
                     case "armor":
-                        physArmor *= buff.amount;
-                        magicArmor *= buff.amount;
+                        PhysicalArmor *= buff.Amount;
+                        MagicArmor *= buff.Amount;
                         break;
                     case "survival":
-                        maxHealth *= buff.amount;
-                        physArmor *= buff.amount;
-                        magicArmor *= buff.amount;
+                        MaxHealth *= buff.Amount;
+                        PhysicalArmor *= buff.Amount;
+                        MagicArmor *= buff.Amount;
                         break;
                     default:
                         break;
                 }
-                buffs.Add(buff);
+                Buffs.Add(buff);
             }
         }
 
-        public void removeBuffEffects(Buff buff)
+        public void RemoveBuffEffects(Buff buff)
         {
-            switch (buff.target)
+            switch (buff.Target)
             {
                 case "health":
-                    maxHealth /= buff.amount;
+                    MaxHealth /= buff.Amount;
                     break;
                 case "pAttack":
-                    physAttack /= buff.amount;
+                    PhysicalAttack /= buff.Amount;
                     break;
                 case "mAttack":
-                    magicAttack /= buff.amount;
+                    MagicAttack /= buff.Amount;
                     break;
                 case "pArmor":
-                    physArmor /= buff.amount;
+                    PhysicalArmor /= buff.Amount;
                     break;
                 case "mArmor":
-                    magicArmor /= buff.amount;
+                    MagicArmor /= buff.Amount;
                     break;
                 case "all":
-                    maxHealth /= buff.amount;
-                    physAttack /= buff.amount;
-                    magicAttack /= buff.amount;
-                    physArmor /= buff.amount;
-                    magicArmor /= buff.amount;
+                    MaxHealth /= buff.Amount;
+                    PhysicalAttack /= buff.Amount;
+                    MagicAttack /= buff.Amount;
+                    PhysicalArmor /= buff.Amount;
+                    MagicArmor /= buff.Amount;
                     break;
                 case "attack":
-                    physAttack /= buff.amount;
-                    magicAttack /= buff.amount;
+                    PhysicalAttack /= buff.Amount;
+                    MagicAttack /= buff.Amount;
                     break;
                 case "armor":
-                    physArmor /= buff.amount;
-                    magicArmor /= buff.amount;
+                    PhysicalArmor /= buff.Amount;
+                    MagicArmor /= buff.Amount;
                     break;
                 case "survival":
-                    maxHealth /= buff.amount;
-                    physArmor /= buff.amount;
-                    magicArmor /= buff.amount;
+                    MaxHealth /= buff.Amount;
+                    PhysicalArmor /= buff.Amount;
+                    MagicArmor /= buff.Amount;
                     break;
                 default:
                     break;
             }
         }
 
-        public void removeBuff(Buff buff)
+        public void RemoveBuff(Buff buff)
         {
-            buffs.Remove(buff);
+            Buffs.Remove(buff);
         }
 
         public Character SelectRandomTarget(List<Character> team)
         {
             Random rand = new Random();
             int target = rand.Next(0, team.Count);
-            if (!team[target].alive)
+            if (!team[target].Alive)
             {
                 return SelectRandomTarget(team);
             }
@@ -522,20 +515,26 @@ namespace Portals_of_Madness
 
         public void Act(List<Character> playerTeam, List<Character> AITeam)
         {
-            List<Character> targets = new List<Character>();
-            switch (aiType)
+            if (Alive)
             {
-                case "basic":
-                    for(int i = 0; i < abilities[0].targetCount; i++)
-                    {
-                        targets.Add(SelectRandomTarget(playerTeam));
-                    }
-                    castAbility(abilities[0], playerTeam);
-                    break;
-                case "advanced":
-                    break;
-                default:
-                    break;
+                List<Character> targets = new List<Character>();
+                switch (AIType)
+                {
+                    case "basic":
+                        if (CanCast(Abilities[0]))
+                        {
+                            for (int i = 0; i < Abilities[0].TargetCount; i++)
+                            {
+                                targets.Add(SelectRandomTarget(playerTeam));
+                            }
+                            CastAbility(Abilities[0], playerTeam);
+                        }
+                        break;
+                    case "advanced":
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

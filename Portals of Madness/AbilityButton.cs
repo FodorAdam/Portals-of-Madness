@@ -22,7 +22,7 @@ namespace Portals_of_Madness
         public void UpdateButton(Ability ab)
         {
             ability = ab;
-            BackgroundImage = ability.imageIcon;
+            BackgroundImage = ability.IconImage;
         }
     }
 }

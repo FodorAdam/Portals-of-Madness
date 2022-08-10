@@ -1,49 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace Portals_of_Madness
 {
     public class CharacterPicture : PictureBox
     {
-        public Character character { get; set; }
-        public int baseBarWidth { get; set; }
-        public Panel healthBar { get; set; }
-        public Panel resourceBar { get; set; }
+        public Character Character { get; set; }
+        public int BaseBarWidth { get; set; }
+        public Panel HealthBar { get; set; }
+        public Panel ResourceBar { get; set; }
 
         public CharacterPicture() { }
 
         public CharacterPicture(Character c)
         {
-            character = c;
+            Character = c;
             InitializeBars();
         }
 
         public void InitializeBars()
         {
-            healthBar = new Panel();
-            healthBar.Height = 5;
-            baseBarWidth = Width;
-            healthBar.Width = baseBarWidth;
-            healthBar.BackColor = Color.Red;
-            resourceBar = new Panel();
-            resourceBar.Height = 5;
-            resourceBar.Width = baseBarWidth;
-            if (character.resourceName == "focus")
+            HealthBar = new Panel();
+            HealthBar.Height = 5;
+            BaseBarWidth = Width;
+            HealthBar.Width = BaseBarWidth;
+            HealthBar.BackColor = Color.Red;
+            ResourceBar = new Panel();
+            ResourceBar.Height = 5;
+            ResourceBar.Width = BaseBarWidth;
+            if (Character.ResourceName == "focus")
             {
-                resourceBar.BackColor = Color.FromArgb(252, 76, 2);
+                ResourceBar.BackColor = Color.FromArgb(252, 76, 2);
             }
-            else if (character.resourceName == "rage")
+            else if (Character.ResourceName == "rage")
             {
-                resourceBar.BackColor = Color.FromArgb(159, 29, 53);
+                ResourceBar.BackColor = Color.FromArgb(159, 29, 53);
             }
             else
             {
-                resourceBar.BackColor = Color.Blue;
+                ResourceBar.BackColor = Color.Blue;
             }
             UpdatePanelLocations();
             UpdatePanelWidth();
@@ -51,14 +46,14 @@ namespace Portals_of_Madness
 
         public void UpdatePanelLocations()
         {
-            healthBar.Location = new Point(Location.X, Location.Y + Height + 2);
-            resourceBar.Location = new Point(Location.X, Location.Y + Height + healthBar.Height + 2);
+            HealthBar.Location = new Point(Location.X, Location.Y + Height + 2);
+            ResourceBar.Location = new Point(Location.X, Location.Y + Height + HealthBar.Height + 2);
         }
 
         public void UpdatePanelWidth()
         {
-            healthBar.Width = (int)(character.currHealth / character.maxHealth * baseBarWidth);
-            resourceBar.Width = (int)(character.currResource / (double)character.maxResource * baseBarWidth);
+            HealthBar.Width = (int)(Character.CurrentHealth / Character.MaxHealth * BaseBarWidth);
+            ResourceBar.Width = (int)(Character.CurrentResource / (double)Character.MaxResource * BaseBarWidth);
         }
     }
 }
