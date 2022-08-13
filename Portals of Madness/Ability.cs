@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 
 namespace Portals_of_Madness
 {
@@ -68,20 +69,14 @@ namespace Portals_of_Madness
             ModifiedAmount = mA;
             try
             {
-                IconImage = Image.FromFile($@"../../Art/Sprites/Spells/{iI}.png");
+                IconImage = Image.FromFile($@"../../Art/Sprites/Spells/{iI}.jpg");
             }
             catch
             {
-                try
-                {
-                    IconImage = Image.FromFile($@"../../Art/Sprites/Spells/{iI}.jpg");
-                }
-                catch
-                {
-                    Console.WriteLine($"{iI}.jpg not found!");
-                }
+                Console.WriteLine($"{iI} not found!");
             }
-            try
+
+            /*try
             {
                 AttackSprite = Image.FromFile($@"../../Art/Sprites/Spells/{sp}.png");
             }
@@ -93,9 +88,9 @@ namespace Portals_of_Madness
                 }
                 catch
                 {
-                    Console.WriteLine($"{sp}.jpg not found!");
+                    Console.WriteLine($"{sp} not found!");
                 }
-            }
+            }*/
         }
 
         public override string ToString()

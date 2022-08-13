@@ -94,11 +94,18 @@ namespace Portals_of_Madness
             {
                 try
                 {
-                    image = Image.FromFile($@"../../Art/Sprites/Characters/{name}/base.png");
+                    image = Image.FromFile($@"../../Art/Sprites/Characters/{name}/profile.jpg");
                 }
-                catch (Exception e)
+                catch
                 {
-                    Console.WriteLine(e.Message);
+                    try
+                    {
+                        image = Image.FromFile($@"../../Art/Sprites/Characters/{name}/base.png");
+                    }
+                    catch
+                    {
+                        image = Image.FromFile($@"../../Art/Sprites/Characters/{name}/base.jpg");
+                    }
                 }
             }
             return image;

@@ -47,14 +47,30 @@ namespace Portals_of_Madness
 
         public Image ImageConverter(string name)
         {
+            Image image;
             try
             {
-                return Image.FromFile($@"../../Art/Sprites/Characters/{name}/profile.png");
+                image = Image.FromFile($@"../../Art/Sprites/Characters/{name}/profile.png");
             }
             catch
             {
-                return Image.FromFile($@"../../Art/Sprites/Characters/{name}/base.png");
+                try
+                {
+                    image = Image.FromFile($@"../../Art/Sprites/Characters/{name}/profile.jpg");
+                }
+                catch
+                {
+                    try
+                    {
+                        image = Image.FromFile($@"../../Art/Sprites/Characters/{name}/base.png");
+                    }
+                    catch
+                    {
+                        image = Image.FromFile($@"../../Art/Sprites/Characters/{name}/base.jpg");
+                    }
+                }
             }
+            return image;
         }
 
         private void nextDialogButton_ClickEvent(object sender, EventArgs e)

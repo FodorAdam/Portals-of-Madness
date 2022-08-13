@@ -117,19 +117,11 @@ namespace Portals_of_Madness
             try
             {
                 Form.BackgroundImage =
-                    Image.FromFile($@"../../Art/Backgrounds/{CurrentMission.EncounterContainer.encounter[CurrentMission.EncounterNumber].background1}.png");
+                    Image.FromFile($@"../../Art/Backgrounds/{CurrentMission.EncounterContainer.encounter[CurrentMission.EncounterNumber].background1}.jpg");
             }
             catch
             {
-                try
-                {
-                    Form.BackgroundImage =
-                        Image.FromFile($@"../../Art/Backgrounds/{CurrentMission.EncounterContainer.encounter[CurrentMission.EncounterNumber].background1}.jpg");
-                }
-                catch
-                {
-                    Console.WriteLine($"{CurrentMission.EncounterContainer.encounter[CurrentMission.EncounterNumber].background1} not found!");
-                }
+                Console.WriteLine($"{CurrentMission.EncounterContainer.encounter[CurrentMission.EncounterNumber].background1} not found!");
             }
             string enemySide = (CurrentMission.PlayerSide().Equals("left") ? "right" : "left");
             Form.PlaceCharacters(EnemyTeam, enemySide);
@@ -150,17 +142,10 @@ namespace Portals_of_Madness
             }
         }
 
-        //TODO: End screen after either winning or losing
+        //End screen after either winning or losing
         private void ShowResult(bool res)
         {
             Form.ShowResultButton(res);
-            foreach (Character c in PlayerTeam)
-            {
-                c.CurrentHealth = c.MaxHealth;
-                c.Alive = true;
-                c.Stunned = false;
-                c.CurrentResource = 0;
-            }
         }
 
         public void Manage()
@@ -173,6 +158,7 @@ namespace Portals_of_Madness
                     Form.AbilityFrame.Visible = false;
                     Form.CharacterFrame.Visible = false;
                     CurrentCharacter.Act(PlayerTeam, EnemyTeam);
+                    Form.UpdateCharacterBars();
                     Manage();
                 }
                 else
@@ -225,6 +211,7 @@ namespace Portals_of_Madness
                     {
                         c.Die();
                     }
+
                     if (c.CurrentHealth > c.MaxHealth)
                     {
                         c.CurrentHealth = c.MaxHealth;
@@ -287,14 +274,12 @@ namespace Portals_of_Madness
 
         private void SelectCurrentCharacter()
         {
-            if (CurrentID == -1 || (CurrentID + 1) >= InitiativeTeam.Count())
+            ++CurrentID;
+
+            if (CurrentID == InitiativeTeam.Count())
             {
                 CurrentID = 0;
                 StartNewTurn();
-            }
-            else
-            {
-                CurrentID++;
             }
 
             if (!InitiativeTeam[CurrentID].Alive)

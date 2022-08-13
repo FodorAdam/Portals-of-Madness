@@ -527,7 +527,7 @@ namespace Portals_of_Madness
                             {
                                 targets.Add(SelectRandomTarget(playerTeam));
                             }
-                            CastAbility(Abilities[0], playerTeam);
+                            CastAbility(Abilities[0], targets);
                         }
                         break;
                     case "advanced":

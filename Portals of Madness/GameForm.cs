@@ -219,27 +219,35 @@ namespace Portals_of_Madness
 
         public List<Character> SelectAimedTargets(Character target, List<Character> team)
         {
-            List<Character> targets = new List<Character>();
-            int num = SelectedAbility.TargetCount;
-            int pos = team.FindIndex(x => x == target);
-            for(int i=0; i<num; i++)
+            if(SelectedAbility.TargetCount >= team.Count)
             {
-                int newPos = pos + CalcPos(i);
-                if(newPos >= 0 && newPos < team.Count)
+                return team;
+            }
+
+            List<Character> targets = new List<Character>();
+            int pos = team.FindIndex(x => x == target);
+            if(pos + SelectedAbility.TargetCount / 2 >= team.Count)
+            {
+                for(int i = 1; i <= SelectedAbility.TargetCount; i++)
                 {
-                    if (team[newPos].Alive)
-                    {
-                        targets.Add(team[newPos]);
-                    }
+                    targets.Add(team[team.Count - i]);
+                }
+            }
+            else if(pos - SelectedAbility.TargetCount / 2 < 0)
+            {
+                for (int i = 0; i < SelectedAbility.TargetCount; i++)
+                {
+                    targets.Add(team[i]);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < SelectedAbility.TargetCount; i++)
+                {
+                    targets.Add(team[pos - SelectedAbility.TargetCount / 2 + i]);
                 }
             }
             return targets;
-        }
-
-        //Calculate positions in lists for multitarget abilities
-        public int CalcPos(int i)
-        {
-            return (i + 1) / 2 * (int)Math.Pow(-1, (double)i % 2);
         }
 
         //Assigns functions to the buttons: if the ability's type is anything but random, it makes the ability
@@ -248,20 +256,28 @@ namespace Portals_of_Madness
         {
             for(int i=0; i<AbilityFrame.AbilityButtons.Count; i++)
             {
-                AbilityFrame.AbilityButtons[i].MouseMove += AbilityButton_MouseOver;
+                AbilityFrame.AbilityButtons[i].MouseEnter += AbilityButton_MouseEnter;
+                AbilityFrame.AbilityButtons[i].MouseLeave += AbilityButton_MouseLeave;
                 AbilityFrame.AbilityButtons[i].Click += AbilityButton_Click;
             }
         }
 
-        private void AbilityButton_MouseOver(object sender, EventArgs e)
+        private void AbilityButton_MouseEnter(object sender, EventArgs e)
         {
             AbilityButton abButton = (AbilityButton)sender;
-            toolTip.SetToolTip(abButton, abButton.ability.ToString());
+            toolTip.Show(abButton.ability.ToString(), abButton);
+        }
+
+        private void AbilityButton_MouseLeave(object sender, EventArgs e)
+        {
+            AbilityButton abButton = (AbilityButton)sender;
+            toolTip.Hide(abButton);
         }
 
         private void AbilityButton_Click(object sender, EventArgs e)
         {
             AbilityButton abButton = (AbilityButton)sender;
+            SelectedAbility = null;
             Ability ab = abButton.ability;
             if (ab.AbilityType == "random" && Engine.CurrentCharacter.CanCast(ab))
             {
