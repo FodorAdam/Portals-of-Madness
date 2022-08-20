@@ -183,48 +183,8 @@ namespace Portals_of_Madness
             return false;
         }
 
-        //Cast a ability at the targets
-        public void CastAbility(Ability ab, List<Character> targets)
+        public void SelectAbility(Ability ab, Character target)
         {
-            CurrentResource -= ab.Cost;
-            foreach (Character target in targets)
-            {
-                switch (ab.AbilityType)
-                {
-                    case "attack":
-                        target.HealthChange(CalculateDamageWithArmor(ab));
-                        break;
-                    case "heal":
-                        target.HealthChange(CalculateDamageWithoutArmor(ab));
-                        break;
-                    case "DoT":
-                        target.AddDoT(ab.Name, CalculateDamageWithoutArmor(ab), ab.Duration);
-                        break;
-                    case "HoT":
-                        target.AddDoT(ab.Name, CalculateDamageWithoutArmor(ab), ab.Duration);
-                        break;
-                    case "resurrect":
-                        target.Resurrect();
-                        break;
-                    case "stun":
-                        target.Stun(CalculateDamageWithoutArmor(ab), ab.Duration);
-                        break;
-                    case "buff":
-                        target.AddBuff(ab.Name, ab.Modifier, ab.ModifiedAmount, ab.Duration);
-                        break;
-                    case "debuff":
-                        target.AddBuff(ab.Name, ab.Modifier, ab.ModifiedAmount, ab.Duration);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
-        //Cast a ability at the target
-        public void CastAbility(Ability ab, Character target)
-        {
-            CurrentResource -= ab.Cost;
             switch (ab.AbilityType)
             {
                 case "attack":
@@ -254,6 +214,23 @@ namespace Portals_of_Madness
                 default:
                     break;
             }
+        }
+
+        //Cast a ability at the targets
+        public void CastAbility(Ability ab, List<Character> targets)
+        {
+            CurrentResource -= ab.Cost;
+            foreach (Character target in targets)
+            {
+                SelectAbility(ab, target);
+            }
+        }
+
+        //Cast a ability at the target
+        public void CastAbility(Ability ab, Character target)
+        {
+            CurrentResource -= ab.Cost;
+            SelectAbility(ab, target);
         }
 
         public Character Summon(Ability ab)
@@ -338,7 +315,8 @@ namespace Portals_of_Madness
         //Used for both taking and healing damage
         private void HealthChange(double amount)
         {
-            if(Alive)
+            Console.WriteLine($"{Name} took {amount}");
+            if (Alive)
             {
                 if(CurrentHealth + amount <= 0)
                 {
@@ -375,6 +353,8 @@ namespace Portals_of_Madness
             }
             Buffs.Clear();
             CurrentResource = 0;
+
+            Console.WriteLine($"{Name} died");
         }
 
         //Resurrects characters to 20% of their maximum health

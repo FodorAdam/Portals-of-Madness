@@ -17,7 +17,7 @@ namespace Portals_of_Madness
         public bool PlayerTurn { get; set; }
         public Character CurrentCharacter { get; set; }
         public int CurrentID { get; set; }
-        public int Turn { get; set; }
+        public int TurnNumber { get; set; }
         public GameForm Form { get; set; }
         public XMLOperations XMLOps { get; set; }
 
@@ -72,10 +72,10 @@ namespace Portals_of_Madness
 
         public void InitializeStuff(GameForm f)
         {
-            InitiativeTeam = new List<Character>();
             Form = f;
             PlayerTurn = false;
             CurrentID = -1;
+            InitiativeTeam = new List<Character>();
             Setup();
         }
 
@@ -91,7 +91,7 @@ namespace Portals_of_Madness
 
         public void Setup()
         {
-            Turn = 0;
+            TurnNumber = 0;
             CurrentMission = new Mission(NextMap);
             Form.InitializeUI(CurrentMission.PlayerSide());
             Form.PlaceCharacters(PlayerTeam, CurrentMission.PlayerSide());
@@ -150,23 +150,27 @@ namespace Portals_of_Madness
 
         public void Manage()
         {
-            if(AreBothTeamsAlive() == 0)
+            Form.UpdateCharacterBars();
+            if (AreBothTeamsAlive() == 0)
             {
-                SelectCurrentCharacter();
+                bool currentCharacterSet = false;
+                while(!currentCharacterSet)
+                {
+                    currentCharacterSet = SelectCurrentCharacter();
+                }
+
                 if(!PlayerTurn)
                 {
-                    Form.AbilityFrame.Visible = false;
-                    Form.CharacterFrame.Visible = false;
+                    //Form.AbilityFrame.Visible = false;
+                    //Form.CharacterFrame.Visible = false;
                     CurrentCharacter.Act(PlayerTeam, EnemyTeam);
-                    Form.UpdateCharacterBars();
                     Manage();
                 }
                 else
                 {
-                    Form.AbilityFrame.Visible = true;
-                    Form.CharacterFrame.Visible = true;
+                    //Form.AbilityFrame.Visible = true;
+                    //Form.CharacterFrame.Visible = true;
                     Form.AbilityFrame.UpdateButtons(CurrentCharacter);
-                    Form.AssignAbilityButtonFunctions();
                     Form.CharacterFrame.UpdateFrame(CurrentCharacter);
                 }
             }
@@ -176,13 +180,15 @@ namespace Portals_of_Madness
             }
             else if (AreBothTeamsAlive() == 1)
             {
+                Console.WriteLine("----------------Enemies Defeated----------------");
                 NextFight();
             }
         }
 
         private void StartNewTurn()
         {
-            Turn++;
+            TurnNumber++;
+            Console.WriteLine($"----------------Turn {TurnNumber}----------------");
             foreach (Character c in InitiativeTeam)
             {
                 if (c.Alive)
@@ -272,7 +278,7 @@ namespace Portals_of_Madness
             }
         }
 
-        private void SelectCurrentCharacter()
+        private bool SelectCurrentCharacter()
         {
             ++CurrentID;
 
@@ -284,7 +290,7 @@ namespace Portals_of_Madness
 
             if (!InitiativeTeam[CurrentID].Alive)
             {
-                SelectCurrentCharacter();
+                return false;
             }
 
             if (InitiativeTeam[CurrentID].Stunned)
@@ -294,18 +300,18 @@ namespace Portals_of_Madness
                 {
                     InitiativeTeam[CurrentID].Stunned = false;
                 }
-                SelectCurrentCharacter();
+                return false;
             }
 
             CurrentCharacter = InitiativeTeam[CurrentID];
             PlayerTurn = false;
-            foreach (Character P in PlayerTeam)
+            if(CurrentCharacter.AIType == "none")
             {
-                if(P.Equals(CurrentCharacter))
-                {
-                    PlayerTurn = true;
-                }
+                PlayerTurn = true;
             }
+                
+            Console.WriteLine($"({CurrentID}) {CurrentCharacter.Name}");
+            return true;
         }
 
         //Determines wether both teams have at least one member alive, return 0 if yes,
@@ -343,21 +349,17 @@ namespace Portals_of_Madness
         {
             CurrentID = -1;
             InitiativeTeam.Clear();
-            InitiativeTeam.AddRange(PlayerTeam);
-            InitiativeTeam.AddRange(EnemyTeam);
-            Character tmp;
-            for (int i = 0; i < InitiativeTeam.Count() - 1; i++)
+            List<Character> tmpList = new List<Character>();
+            tmpList.AddRange(PlayerTeam);
+            tmpList.AddRange(EnemyTeam);
+            InitiativeTeam = tmpList.OrderBy(o => o.Speed).ToList();
+
+            Console.WriteLine("--------------Initiative Team Start--------------");
+            foreach (Character E in InitiativeTeam)
             {
-                for (int j = i + 1; j < InitiativeTeam.Count(); j++)
-                {
-                    if (InitiativeTeam[j].Speed <= InitiativeTeam[i].Speed)
-                    {
-                        tmp = InitiativeTeam[i];
-                        InitiativeTeam[i] = InitiativeTeam[j];
-                        InitiativeTeam[j] = tmp;
-                    }
-                }
+                Console.WriteLine($"{E.Name}");
             }
+            Console.WriteLine("---------------Initiative Team End---------------");
         }
     }
 }

@@ -67,13 +67,8 @@ namespace Portals_of_Madness
         //Initializes the UI
         public void InitializeUI(string side)
         {
-            AbilityFrame = new PlayerAbilityFrame(ScreenSize);
-            for (int i = 0; i < AbilityFrame.AbilityButtons.Count; i++)
-            {
-                Controls.Add(AbilityFrame.AbilityButtons[i]);
-            }
-            Controls.Add(AbilityFrame);
-            this.Side = side;
+            InitializeAbilityFrame();
+            Side = side;
             CharacterFrame = new PlayerCharacterFrame(ScreenSize, side);
             Controls.Add(CharacterFrame.characterImage);
             Controls.Add(CharacterFrame.healthLabel);
@@ -81,6 +76,18 @@ namespace Portals_of_Madness
             Controls.Add(CharacterFrame);
             //dialogBox = new DialogBox(screenSize);
             //Controls.Add(dialogBox);
+        }
+
+        public void InitializeAbilityFrame()
+        {
+            AbilityFrame = new PlayerAbilityFrame(ScreenSize);
+            for (int i = 0; i < AbilityFrame.AbilityButtons.Count; i++)
+            {
+                Controls.Add(AbilityFrame.AbilityButtons[i]);
+            }
+            Controls.Add(AbilityFrame);
+            AssignAbilityButtonClickFunctions();
+            AssignAbilityButtonHoverFunctions();
         }
 
         //Sets up the character pictures
@@ -185,7 +192,7 @@ namespace Portals_of_Madness
                         SelectedAbility.Target == "enemy" ? Engine.EnemyTeam : Engine.InitiativeTeam);
                     Engine.CurrentCharacter.CastAbility(SelectedAbility, targets);
                 }
-                UpdateCharacterBars();
+                Casting = false;
                 Engine.Manage();
             }
         }
@@ -250,14 +257,22 @@ namespace Portals_of_Madness
             return targets;
         }
 
-        //Assigns functions to the buttons: if the ability's type is anything but random, it makes the ability
-        //the current ability and if it is random, it chooses random targets to attack instantly
-        public void AssignAbilityButtonFunctions()
+        //Assigns mouseover function to the buttons
+        public void AssignAbilityButtonHoverFunctions()
         {
-            for(int i=0; i<AbilityFrame.AbilityButtons.Count; i++)
+            for (int i = 0; i < AbilityFrame.AbilityButtons.Count; i++)
             {
                 AbilityFrame.AbilityButtons[i].MouseEnter += AbilityButton_MouseEnter;
                 AbilityFrame.AbilityButtons[i].MouseLeave += AbilityButton_MouseLeave;
+            }
+        }
+
+        //Assigns click function to the buttons: if the ability's type is anything but random, it makes the ability
+        //the current ability and if it is random, it chooses random targets to attack instantly
+        public void AssignAbilityButtonClickFunctions()
+        {
+            for(int i=0; i<AbilityFrame.AbilityButtons.Count; i++)
+            {
                 AbilityFrame.AbilityButtons[i].Click += AbilityButton_Click;
             }
         }
@@ -279,37 +294,33 @@ namespace Portals_of_Madness
             AbilityButton abButton = (AbilityButton)sender;
             SelectedAbility = null;
             Ability ab = abButton.ability;
-            if (ab.AbilityType == "random" && Engine.CurrentCharacter.CanCast(ab))
+            if (Engine.CurrentCharacter.CanCast(ab))
             {
-                Casting = false;
-                for (int j = 0; j < ab.TargetCount; j++)
+                Console.WriteLine($"{ab.Name} was cast");
+                if (ab.AbilityType == "random")
                 {
-                    Engine.CurrentCharacter.CastAbility(ab,
-                        Engine.CurrentCharacter.SelectRandomTarget(
-                            ab.Target == "ally" ? Engine.PlayerTeam :
-                            ab.Target == "enemy" ? Engine.EnemyTeam : Engine.InitiativeTeam));
+                    Casting = false;
+                    for (int j = 0; j < ab.TargetCount; j++)
+                    {
+                        Engine.CurrentCharacter.CastAbility(ab,
+                            Engine.CurrentCharacter.SelectRandomTarget(
+                                ab.Target == "ally" ? Engine.PlayerTeam :
+                                ab.Target == "enemy" ? Engine.EnemyTeam : Engine.InitiativeTeam));
+                    }
+                    Engine.Manage();
                 }
-                UpdateCharacterBars();
-                Engine.Manage();
-            }
-            else
-            {
-                SelectedAbility = ab;
-                Cast();
+                else
+                {
+                    SelectedAbility = ab;
+                    Cast();
+                }
             }
         }
 
         private void Cast()
         {
-            if(Engine.CurrentCharacter.CanCast(SelectedAbility))
-            {
-                Casting = true;
-                //targetArrowsSetup();
-            }
-            else
-            {
-                //targetArrows = new ArrayList();
-            }
+            Casting = true;
+            //targetArrowsSetup();
         }
 
         public void ShowResultButton(bool res)

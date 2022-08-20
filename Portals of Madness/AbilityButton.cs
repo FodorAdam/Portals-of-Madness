@@ -16,7 +16,7 @@ namespace Portals_of_Madness
             BackColor = Color.Purple;
             FlatStyle = FlatStyle.Flat;
             FlatAppearance.BorderColor = Color.Black;
-            FlatAppearance.BorderSize = 1;
+            FlatAppearance.BorderSize = 3;
         }
 
         public void UpdateButton(Ability ab)
