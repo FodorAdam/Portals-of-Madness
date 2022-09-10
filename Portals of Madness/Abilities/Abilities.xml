@@ -4,8 +4,8 @@
         <name>Steady Shot</name>
         <cost>0</cost>
 		<cooldown>0</cooldown>
-		<physAttackDamage>0.8</physAttackDamage>
-		<magicAttackDamage>0.1</magicAttackDamage>
+		<physAttackDamage>1.2</physAttackDamage>
+		<magicAttackDamage>0</magicAttackDamage>
 		<damageType>bleed</damageType>
 		<target>enemy</target>
 		<duration>0</duration>
@@ -20,8 +20,8 @@
         <name>Piercing Shot</name>
         <cost>10</cost>
 		<cooldown>1</cooldown>
-		<physAttackDamage>0.7</physAttackDamage>
-		<magicAttackDamage>0.1</magicAttackDamage>
+		<physAttackDamage>0.8</physAttackDamage>
+		<magicAttackDamage>0</magicAttackDamage>
 		<damageType>bleed</damageType>
 		<target>enemy</target>
 		<duration>0</duration>
@@ -36,7 +36,7 @@
         <name>Aimed Shot</name>
         <cost>12</cost>
 		<cooldown>1</cooldown>
-		<physAttackDamage>1.2</physAttackDamage>
+		<physAttackDamage>2</physAttackDamage>
 		<magicAttackDamage>0.1</magicAttackDamage>
 		<damageType>bleed</damageType>
 		<target>enemy</target>
@@ -52,8 +52,8 @@
         <name>Slash</name>
         <cost>0</cost>
 		<cooldown>0</cooldown>
-		<physAttackDamage>0.8</physAttackDamage>
-		<magicAttackDamage>0.2</magicAttackDamage>
+		<physAttackDamage>1.2</physAttackDamage>
+		<magicAttackDamage>0</magicAttackDamage>
 		<damageType>bleed</damageType>
 		<target>enemy</target>
 		<duration>0</duration>
@@ -69,7 +69,7 @@
         <cost>6</cost>
 		<cooldown>2</cooldown>
 		<physAttackDamage>0.6</physAttackDamage>
-		<magicAttackDamage>0.2</magicAttackDamage>
+		<magicAttackDamage>0</magicAttackDamage>
 		<damageType>crushing</damageType>
 		<target>enemy</target>
 		<duration>1</duration>
@@ -101,7 +101,7 @@
         <cost>0</cost>
 		<cooldown>0</cooldown>
 		<physAttackDamage>0.5</physAttackDamage>
-		<magicAttackDamage>1</magicAttackDamage>
+		<magicAttackDamage>1.2</magicAttackDamage>
 		<damageType>poison</damageType>
 		<target>enemy</target>
 		<duration>0</duration>
@@ -148,8 +148,8 @@
         <name>Quickshot</name>
         <cost>0</cost>
 		<cooldown>0</cooldown>
-		<physAttackDamage>1</physAttackDamage>
-		<magicAttackDamage>0.1</magicAttackDamage>
+		<physAttackDamage>1.4</physAttackDamage>
+		<magicAttackDamage>0</magicAttackDamage>
 		<damageType>bleed</damageType>
 		<target>enemy</target>
 		<duration>0</duration>
@@ -164,8 +164,8 @@
         <name>Volley</name>
         <cost>15</cost>
 		<cooldown>1</cooldown>
-		<physAttackDamage>0.8</physAttackDamage>
-		<magicAttackDamage>0.6</magicAttackDamage>
+		<physAttackDamage>0.6</physAttackDamage>
+		<magicAttackDamage>0</magicAttackDamage>
 		<damageType>bleed</damageType>
 		<target>enemy</target>
 		<duration>0</duration>
@@ -196,7 +196,7 @@
         <name>Punch</name>
         <cost>0</cost>
 		<cooldown>0</cooldown>
-		<physAttackDamage>0.6</physAttackDamage>
+		<physAttackDamage>1</physAttackDamage>
 		<magicAttackDamage>0</magicAttackDamage>
 		<damageType>crushing</damageType>
 		<target>enemy</target>

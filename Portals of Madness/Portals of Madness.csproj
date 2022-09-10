@@ -63,10 +63,14 @@
     <Compile Include="CharacterPicture.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CharacterSelectionPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controller.cs" />
     <Compile Include="DialogBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DialogPanel.cs" />
     <Compile Include="GameEngine.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>
@@ -74,11 +78,15 @@
     <Compile Include="GameForm.Designer.cs">
       <DependentUpon>GameForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="InfoForm.cs">
-      <SubType>Form</SubType>
+    <Compile Include="GamePanel.cs" />
+    <Compile Include="InfoPanel.cs">
+      <SubType>Component</SubType>
     </Compile>
-    <Compile Include="InfoForm.Designer.cs">
-      <DependentUpon>InfoForm.cs</DependentUpon>
+    <Compile Include="MapSelectionPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MenuButtonsPanel.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="MenuForm.cs">
       <SubType>Form</SubType>
@@ -95,19 +103,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SelectionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SelectionForm.Designer.cs">
-      <DependentUpon>SelectionForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Sprite.cs" />
     <Compile Include="XMLOperations.cs" />
     <EmbeddedResource Include="GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="InfoForm.resx">
-      <DependentUpon>InfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MenuForm.resx">
       <DependentUpon>MenuForm.cs</DependentUpon>
@@ -120,10 +119,8 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="SelectionForm.resx">
-      <DependentUpon>SelectionForm.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -137,6 +134,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\Backgrounds\title_screen.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

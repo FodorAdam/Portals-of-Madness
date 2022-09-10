@@ -1,67 +1,87 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Portals_of_Madness
 {
     public partial class MenuForm : Form
     {
-        Controller controller;
+        readonly Controller Controller;
+        readonly MapSelectionPanel MapSelection;
+        readonly CharacterSelectionPanel CharacterSelection;
+        readonly MenuButtonsPanel Buttons;
+        readonly InfoPanel Info;
+        public int MissionNumber { get; set; }
+        public int EncounterNumber { get; set; }
 
-        public MenuForm()
+        public MenuForm(Controller c)
         {
             InitializeComponent();
 
-            controller = new Controller();
-            Size tmpSize = controller.Resolution(this);
-            int w = tmpSize.Width;
-            int h = tmpSize.Height;
+            Controller = c;
+            Controller.SetFormResolution(this);
+            MissionNumber = 0;
+            EncounterNumber = 0;
 
-            //Set the size of the buttons
-            int buttonWidth = w / 5;
-            int buttonHeight = h / 10;
+            MapSelection = new MapSelectionPanel(Controller);
+            MapSelection.Hide();
+            Controls.Add(MapSelection);
+            MapSelection.ButtonStartMission.Click += ButtonMission_Click;
+            MapSelection.ButtonReturn.Click += BackToMenu_Click;
 
-            buttonNewGame.Size = new Size(buttonWidth, buttonHeight);
-            buttonNewGame.Location = new Point
-                (w / 2 - buttonNewGame.Width / 2, h / 2 - buttonNewGame.Height / 2 - (3 * buttonHeight / 5));
+            CharacterSelection = new CharacterSelectionPanel(Controller);
+            CharacterSelection.Hide();
+            Controls.Add(CharacterSelection);
+            CharacterSelection.ButtonReturn.Click += BackToMenu_Click;
 
-            buttonContinue.Size = new Size(buttonWidth, buttonHeight);
-            buttonContinue.Location = new Point
-                (w / 2 - buttonContinue.Width / 2, h / 2 - buttonContinue.Height / 2 + (3 * buttonHeight / 5));
-            //TODO: If there is no saved game, hide the continue
-            /*if (true)
-            {
-                buttonContinue.Visible = false;
-            }*/
+            Buttons = new MenuButtonsPanel(Controller);
+            Controls.Add(Buttons);
+            Buttons.ButtonNewGame.Click += ButtonNewGame_Click;
+            Buttons.ButtonContinue.Click += ButtonContinue_Click;
+            Buttons.ButtonInfo.Click += ButtonInfo_Click;
 
-            buttonInfo.Size = new Size(buttonWidth, buttonHeight);
-            buttonInfo.Location = new Point
-                (w / 2 - buttonInfo.Width / 2, h / 2 - buttonInfo.Height / 2 + 3 * (3 * buttonHeight / 5));
+            Info = new InfoPanel(Controller);
+            Info.Hide();
+            Controls.Add(Info);
+            Info.ButtonBack.Click += BackToMenu_Click;
         }
 
         //Start a new game by starting the tutorial mission
-        private void buttonNewGame_Click(object sender, EventArgs e)
+        private void ButtonNewGame_Click(object sender, EventArgs e)
         {
-            controller.NextMap(0);
-            controller.ShowOtherForm("g");
+            Controller.SetNextMap(0);
+            Controller.ShowOtherForm("g");
         }
 
         //Continue the game
-        private void buttonContinue_Click(object sender, EventArgs e)
+        private void ButtonContinue_Click(object sender, EventArgs e)
         {
-            controller.ShowOtherForm("s");
+            Buttons.Hide();
+            MapSelection.Show();
+        }
+
+        //Continue the game
+        private void ButtonMission_Click(object sender, EventArgs e)
+        {
+            MissionNumber = MapSelection.GetMissionNumber();
+            EncounterNumber = MapSelection.GetEncounterNumber();
+            MapSelection.Hide();
+            CharacterSelection.Show();
         }
 
         //Show the how to play form
-        private void buttonInfo_Click(object sender, EventArgs e)
+        private void ButtonInfo_Click(object sender, EventArgs e)
         {
-            controller.ShowOtherForm("i");
+            Buttons.Hide();
+            Info.Show();
+        }
+
+        private void BackToMenu_Click(object sender, EventArgs e)
+        {
+            MapSelection.Hide();
+            CharacterSelection.Hide();
+            Info.Hide();
+            Buttons.Show();
         }
     }
 }

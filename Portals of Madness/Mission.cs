@@ -20,14 +20,14 @@ namespace Portals_of_Madness
             Enemies = new List<Character>();
             XMLOps = new XMLOperations();
 
-            string path = $@"../../Missions/Mission{number}.xml";
+            string path = $@"../../Missions/{number}.xml";
             try
             {
                 EncounterContainer = XMLOps.MissionDeserializer(path);
             }
             catch
             {
-                Console.WriteLine($"Mission{number}.xml not found!");
+                Console.WriteLine($"{number}.xml not found!");
             }
 
             EveryAbility = new List<Ability>();

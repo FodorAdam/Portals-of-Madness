@@ -1,36 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Portals_of_Madness
 {
     public class Controller
     {
-        public GameForm gameForm { get; set; }
-        public SelectionForm selectionForm { get; set; }
-        public InfoForm infoForm { get; set; }
-        public int nextMap { get; set; }
-        public List<Character> playerTeam { get; set; }
+        public GameForm GameForm { get; set; }
+        public int NextMap { get; set; }
+        public List<Character> PlayerTeam { get; set; }
+        public XMLOperations XMLOperations { get; set; }
 
-        public Controller() { }
-
-        public Controller(List<Character> pT, int nM)
+        public Controller()
         {
-            nextMap = nM;
-            playerTeam = pT;
+            XMLOperations = new XMLOperations();
         }
 
         //Set the size of the form to the resolution, then maximize it
-        public Size Resolution(Form f)
+        public Size SetFormResolution(Form f)
         {
             f.Location = new Point(0, 0);
             Size tmpSize = new Size(Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height);
             f.ClientSize = tmpSize;
             f.WindowState = FormWindowState.Maximized;
+
+            return tmpSize;
+        }
+
+        public Size SetPanelResolution(Panel p)
+        {
+            p.Location = new Point(0, 0);
+            Size tmpSize = new Size(Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height);
+            p.ClientSize = tmpSize;
 
             return tmpSize;
         }
@@ -47,21 +48,13 @@ namespace Portals_of_Madness
         {
             switch (formChar)
             {
-                case ("s"):
-                    selectionForm = new SelectionForm();
-                    selectionForm.ShowDialog();
-                    break;
                 case ("g"):
-                    gameForm = new GameForm();
-                    gameForm.ShowDialog();
+                    GameForm = new GameForm(this);
+                    GameForm.ShowDialog();
                     break;
                 case ("g+"):
-                    gameForm = new GameForm(nextMap, playerTeam);
-                    gameForm.ShowDialog();
-                    break;
-                case ("i"):
-                    infoForm = new InfoForm();
-                    infoForm.ShowDialog();
+                    GameForm = new GameForm(this, NextMap, PlayerTeam);
+                    GameForm.ShowDialog();
                     break;
                 default:
                     break;
@@ -69,9 +62,9 @@ namespace Portals_of_Madness
         }
 
         //Sets the next map to get loaded
-        public void NextMap(int n)
+        public void SetNextMap(int n)
         {
-            nextMap = n;
+            NextMap = n;
         }
     }
 }

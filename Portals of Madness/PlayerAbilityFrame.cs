@@ -49,7 +49,15 @@ namespace Portals_of_Madness
                     AbilityButtons[i].FlatAppearance.BorderColor = Color.Red;
                 }
             }
-            
+        }
+
+        public void SetVisibility(bool b)
+        {
+            Visible = b;
+            foreach(AbilityButton button in AbilityButtons)
+            {
+                button.Visible = b;
+            }
         }
     }
 }

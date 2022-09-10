@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Portals_of_Madness
@@ -16,7 +13,8 @@ namespace Portals_of_Madness
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MenuForm());
+            Controller Controller = new Controller();
+            Application.Run(new MenuForm(Controller));
         }
     }
 }

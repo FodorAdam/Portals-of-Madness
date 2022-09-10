@@ -6,17 +6,19 @@ namespace Portals_of_Madness
 {
     public class PlayerCharacterFrame : Panel
     {
-        public PictureBox characterImage { get; set; }
-        public Label healthLabel { get; set; }
-        public Label resourceLabel { get; set; }
+        public PictureBox CharacterImage { get; set; }
+        public Label HealthLabel { get; set; }
+        public Label ResourceLabel { get; set; }
+        public string Side { get; set; }
 
         public PlayerCharacterFrame(Size screensize, string side)
         {
             BackColor = Color.DarkGray;
+            Side = side;
             Height = screensize.Height / 4;
             Width = screensize.Width / 8;
 
-            characterImage = new PictureBox
+            CharacterImage = new PictureBox
             {
                 Width = Width - Width / 5,
                 Height = Height - Height / 4,
@@ -24,7 +26,7 @@ namespace Portals_of_Madness
                 BackColor = Color.DarkGray
             };
 
-            healthLabel = new Label
+            HealthLabel = new Label
             {
                 ForeColor = Color.Red,
                 Width = Width - Width / 5,
@@ -33,7 +35,7 @@ namespace Portals_of_Madness
                 TextAlign = ContentAlignment.MiddleCenter
             };
 
-            resourceLabel = new Label
+            ResourceLabel = new Label
             {
                 Width = Width - Width / 5,
                 Height = Height - Height * 7 / 8,
@@ -41,7 +43,7 @@ namespace Portals_of_Madness
                 TextAlign = ContentAlignment.MiddleCenter
             };
 
-            Height = Height / 4 + characterImage.Height + healthLabel.Height + resourceLabel.Height;
+            Height = Height / 4 + CharacterImage.Height + HealthLabel.Height + ResourceLabel.Height;
 
             int xCoord = 0;
             if (side == "right")
@@ -52,30 +54,35 @@ namespace Portals_of_Madness
 
             Location = new Point(xCoord, yCoord);
 
-            characterImage.Location = new Point(xCoord + Width / 10,
+            CharacterImage.Location = new Point(xCoord + Width / 10,
                 yCoord + Height / 10);
-            healthLabel.Location = new Point(xCoord + Width / 10,
-                characterImage.Location.Y + characterImage.Height);
-            resourceLabel.Location = new Point(xCoord + Width / 10,
-                healthLabel.Location.Y + healthLabel.Height);
+            HealthLabel.Location = new Point(xCoord + Width / 10,
+                CharacterImage.Location.Y + CharacterImage.Height);
+            ResourceLabel.Location = new Point(xCoord + Width / 10,
+                HealthLabel.Location.Y + HealthLabel.Height);
         }
 
         public void UpdateFrame(Character c)
         {
-            characterImage.Image = ImageConverter(c.BaseImage);
-            healthLabel.Text = $"{c.CurrentHealth}/{c.MaxHealth}";
-            resourceLabel.Text = $"{c.CurrentResource}/{c.MaxResource}";
+            CharacterImage.Image = ImageConverter(c.BaseImage);
+            if (Side == "right")
+            {
+                CharacterImage.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            }
+
+            HealthLabel.Text = $"{c.CurrentHealth}/{c.MaxHealth}";
+            ResourceLabel.Text = $"{c.CurrentResource}/{c.MaxResource}";
             if (c.ResourceName == "focus")
             {
-                resourceLabel.ForeColor = Color.FromArgb(252, 76, 2);
+                ResourceLabel.ForeColor = Color.FromArgb(252, 76, 2);
             }
             else if (c.ResourceName == "rage")
             {
-                resourceLabel.ForeColor = Color.FromArgb(159, 29, 53);
+                ResourceLabel.ForeColor = Color.FromArgb(159, 29, 53);
             }
             else
             {
-                resourceLabel.ForeColor = Color.Blue;
+                ResourceLabel.ForeColor = Color.Blue;
             }
         }
 

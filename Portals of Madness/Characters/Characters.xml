@@ -14,7 +14,7 @@
 		<physAttackMult>1.12</physAttackMult>
 		<baseMagicAttack>2</baseMagicAttack>
 		<magicAttackMult>1.09</magicAttackMult>
-		<basePhysArmor>16</basePhysArmor>
+		<basePhysArmor>8</basePhysArmor>
 		<physArmorMult>1.1</physArmorMult>
 		<baseMagicArmor>0</baseMagicArmor>
 		<magicArmorMult>0</magicArmorMult>
@@ -42,9 +42,9 @@
 		<physAttackMult>1.1</physAttackMult>
 		<baseMagicAttack>8</baseMagicAttack>
 		<magicAttackMult>1.09</magicAttackMult>
-		<basePhysArmor>28</basePhysArmor>
+		<basePhysArmor>14</basePhysArmor>
 		<physArmorMult>1.12</physArmorMult>
-		<baseMagicArmor>6</baseMagicArmor>
+		<baseMagicArmor>3</baseMagicArmor>
 		<magicArmorMult>1.1</magicArmorMult>
 		<weaknesses>bleed</weaknesses>
 		<ability1Name>Slash</ability1Name>
@@ -70,9 +70,9 @@
 		<physAttackMult>1.09</physAttackMult>
 		<baseMagicAttack>22</baseMagicAttack>
 		<magicAttackMult>1.12</magicAttackMult>
-		<basePhysArmor>8</basePhysArmor>
+		<basePhysArmor>4</basePhysArmor>
 		<physArmorMult>1.1</physArmorMult>
-		<baseMagicArmor>20</baseMagicArmor>
+		<baseMagicArmor>10</baseMagicArmor>
 		<magicArmorMult>1.12</magicArmorMult>
 		<weaknesses>fire</weaknesses>
 		<ability1Name>Nature Bolt</ability1Name>
@@ -88,7 +88,7 @@
 		<id>clumsyPl</id>
 		<imageSet>clumsy</imageSet>
 		<name>Clumsy</name>
-		<level>4</level>
+		<level>1</level>
 		<characterClass>Hunter</characterClass>
 		<baseHealth>82</baseHealth>
 		<healthMult>1.11</healthMult>
@@ -116,7 +116,7 @@
 		<id>clumsyEn</id>
 		<imageSet>clumsy</imageSet>
 		<name>Clumsy</name>
-		<level>4</level>
+		<level>1</level>
 		<characterClass>miniboss</characterClass>
 		<baseHealth>82</baseHealth>
 		<healthMult>1.11</healthMult>
@@ -141,7 +141,7 @@
 		<collectable>false</collectable>
 	</XMLCharacter>
 	<XMLCharacter>
-		<id>prisonerM</id>
+		<id>prisoner1</id>
 		<imageSet>prisoner1</imageSet>
 		<name>Crazed Prisoner</name>
 		<level>1</level>
@@ -150,12 +150,12 @@
 		<healthMult>1.09</healthMult>
 		<resourceName>rage</resourceName>
 		<maxResource>20</maxResource>
-		<basePhysAttack>12</basePhysAttack>
+		<basePhysAttack>20</basePhysAttack>
 		<physAttackMult>1.1</physAttackMult>
 		<baseMagicAttack>0</baseMagicAttack>
 		<magicAttackMult>0</magicAttackMult>
-		<basePhysArmor>10</basePhysArmor>
-		<physArmorMult>1.1</physArmorMult>
+		<basePhysArmor>0</basePhysArmor>
+		<physArmorMult>0</physArmorMult>
 		<baseMagicArmor>0</baseMagicArmor>
 		<magicArmorMult>0</magicArmorMult>
 		<weaknesses>bleed</weaknesses>
@@ -169,7 +169,7 @@
 		<collectable>false</collectable>
 	</XMLCharacter>
 	<XMLCharacter>
-		<id>prisonerF</id>
+		<id>prisoner2</id>
 		<imageSet>prisoner2</imageSet>
 		<name>Crazed Prisoner</name>
 		<level>1</level>
@@ -178,12 +178,12 @@
 		<healthMult>1.09</healthMult>
 		<resourceName>rage</resourceName>
 		<maxResource>20</maxResource>
-		<basePhysAttack>12</basePhysAttack>
+		<basePhysAttack>20</basePhysAttack>
 		<physAttackMult>1.1</physAttackMult>
 		<baseMagicAttack>0</baseMagicAttack>
 		<magicAttackMult>0</magicAttackMult>
-		<basePhysArmor>10</basePhysArmor>
-		<physArmorMult>1.1</physArmorMult>
+		<basePhysArmor>0</basePhysArmor>
+		<physArmorMult>0</physArmorMult>
 		<baseMagicArmor>0</baseMagicArmor>
 		<magicArmorMult>0</magicArmorMult>
 		<weaknesses>bleed</weaknesses>
@@ -197,7 +197,7 @@
 		<collectable>false</collectable>
 	</XMLCharacter>
 	<XMLCharacter>
-		<id>prisonerR</id>
+		<id>prisoner3</id>
 		<imageSet>prisoner3</imageSet>
 		<name>Crazed Prisoner</name>
 		<level>1</level>
@@ -206,12 +206,12 @@
 		<healthMult>1.09</healthMult>
 		<resourceName>rage</resourceName>
 		<maxResource>20</maxResource>
-		<basePhysAttack>12</basePhysAttack>
+		<basePhysAttack>20</basePhysAttack>
 		<physAttackMult>1.1</physAttackMult>
 		<baseMagicAttack>4</baseMagicAttack>
 		<magicAttackMult>1.1</magicAttackMult>
-		<basePhysArmor>10</basePhysArmor>
-		<physArmorMult>1.1</physArmorMult>
+		<basePhysArmor>0</basePhysArmor>
+		<physArmorMult>0</physArmorMult>
 		<baseMagicArmor>4</baseMagicArmor>
 		<magicArmorMult>1.1</magicArmorMult>
 		<weaknesses>bleed</weaknesses>

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -19,6 +16,12 @@ namespace Portals_of_Madness
             foreach(XMLAbility xab in xabs.xmlAbility)
             {
                 AllAbilities.Add(ConvertToAbility(xab));
+            }
+            Console.WriteLine("---------------Abilities---------------");
+            foreach (Ability ab in AllAbilities)
+            {
+                Console.WriteLine(ab);
+                Console.WriteLine("---------------------------------------");
             }
         }
 
@@ -94,7 +97,7 @@ namespace Portals_of_Madness
         {
             return new Character(x.imageSet, x.id, x.level, x.name, x.characterClass, x.baseHealth, x.healthMult,
                 x.resourceName, x.maxResource, x.basePhysAttack, x.physAttackMult, x.baseMagicAttack,
-                x.magicAttackMult, x.basePhysAttack, x.physAttackMult, x.baseMagicArmor,
+                x.magicAttackMult, x.basePhysArmor, x.physArmorMult, x.baseMagicArmor,
                 x.magicArmorMult, x.weaknesses,
                 GetAblilityByName(x.ability1Name), GetAblilityByName(x.ability2Name), GetAblilityByName(x.ability3Name),
                 x.baseSpeed, x.rarity, x.collectable, x.aiName);
@@ -251,6 +254,12 @@ namespace Portals_of_Madness
     [XmlRoot("Encounters")]
     public class Encounters
     {
+        [XmlElement("id")]
+        public int id { get; set; }
+
+        [XmlElement("name")]
+        public string name { get; set; }
+
         [XmlElement("side")]
         public string side { get; set; }
 

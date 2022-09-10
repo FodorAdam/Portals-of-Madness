@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
+using System.Threading;
 
 namespace Portals_of_Madness
 {
@@ -137,7 +138,6 @@ namespace Portals_of_Madness
             }
             else
             {
-                CurrentMission.IncrementEncounterNumber();
                 ShowResult(true);
             }
         }
@@ -161,14 +161,15 @@ namespace Portals_of_Madness
 
                 if(!PlayerTurn)
                 {
-                    //Form.AbilityFrame.Visible = false;
+                    Form.AbilityFrame.SetVisibility(false);
                     //Form.CharacterFrame.Visible = false;
                     CurrentCharacter.Act(PlayerTeam, EnemyTeam);
+                    Thread.Sleep(new TimeSpan(0, 0, 1));
                     Manage();
                 }
                 else
                 {
-                    //Form.AbilityFrame.Visible = true;
+                    Form.AbilityFrame.SetVisibility(true);
                     //Form.CharacterFrame.Visible = true;
                     Form.AbilityFrame.UpdateButtons(CurrentCharacter);
                     Form.CharacterFrame.UpdateFrame(CurrentCharacter);

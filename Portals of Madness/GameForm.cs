@@ -21,26 +21,26 @@ namespace Portals_of_Madness
         public string Side { get; set; }
         public Button ResultButton { get; set; }
 
-        public GameForm()
+        public GameForm(Controller c)
         {
             InitializeComponent();
-            Setup();
+            Setup(c);
             Engine = new GameEngine(this);
         }
 
-        public GameForm(int mapNumber, List<Character> pT)
+        public GameForm(Controller c, int mapNumber, List<Character> pT)
         {
             InitializeComponent();
-            Setup();
+            Setup(c);
             Engine = new GameEngine(this, pT, mapNumber);
         }
 
         //Sets up all the global variables
-        public void Setup()
+        public void Setup(Controller c)
         {
+            Controller = c;
             Casting = false;
-            Controller = new Controller();
-            ScreenSize = Controller.Resolution(this);
+            ScreenSize = Controller.SetFormResolution(this);
 
             LeftSide = new List<CharacterPicture>();
             RightSide = new List<CharacterPicture>();
@@ -70,9 +70,9 @@ namespace Portals_of_Madness
             InitializeAbilityFrame();
             Side = side;
             CharacterFrame = new PlayerCharacterFrame(ScreenSize, side);
-            Controls.Add(CharacterFrame.characterImage);
-            Controls.Add(CharacterFrame.healthLabel);
-            Controls.Add(CharacterFrame.resourceLabel);
+            Controls.Add(CharacterFrame.CharacterImage);
+            Controls.Add(CharacterFrame.HealthLabel);
+            Controls.Add(CharacterFrame.ResourceLabel);
             Controls.Add(CharacterFrame);
             //dialogBox = new DialogBox(screenSize);
             //Controls.Add(dialogBox);
@@ -326,32 +326,15 @@ namespace Portals_of_Madness
         public void ShowResultButton(bool res)
         {
             ResultButton.Visible = true;
+            ResultButton.Click += ToSelectionForm;
             if (res)
             {
-                if(Engine.CurrentMission.EncounterNumber == Engine.CurrentMission.EncounterContainer.encounter.Length - 1)
-                {
-                    ResultButton.Text = "Victory!";
-                    ResultButton.Click += ToSelectionForm;
-                }
-                else
-                {
-                    ResultButton.Text = "To the next encounter.";
-                    ResultButton.Visible = false;
-                    ResultButton.Click += ContinueTheMission;
-                }
+                ResultButton.Text = "Victory!";
             }
             else
             {
-                {
-                    ResultButton.Text = "You lost.";
-                    ResultButton.Click += ToSelectionForm;
-                }
+                ResultButton.Text = "You lost.";
             }
-        }
-
-        private void ContinueTheMission(object sender, EventArgs e)
-        {
-            Engine.Manage();
         }
 
         private void ToSelectionForm(object sender, EventArgs e)

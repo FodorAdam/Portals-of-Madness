@@ -59,7 +59,7 @@ namespace Portals_of_Madness
             Cost = co;
             Cooldown = cd;
             PhysicalAttackDamage = fAD;
-            PhysicalAttackDamage = mAD;
+            MagicAttackDamage = mAD;
             Duration = dur;
             DamageType = aT;
             Target = tT;

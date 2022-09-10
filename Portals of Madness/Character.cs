@@ -188,22 +188,22 @@ namespace Portals_of_Madness
             switch (ab.AbilityType)
             {
                 case "attack":
-                    target.HealthChange(CalculateDamageWithArmor(ab));
+                    target.HealthChange(CalculateDamageWithArmor(ab, target) * -1);
                     break;
                 case "heal":
-                    target.HealthChange(CalculateDamageWithoutArmor(ab));
+                    target.HealthChange(CalculateDamageWithoutArmor(ab, target));
                     break;
                 case "DoT":
-                    target.AddDoT(ab.Name, CalculateDamageWithoutArmor(ab), ab.Duration);
+                    target.AddDoT(ab.Name, CalculateDamageWithoutArmor(ab, target) * -1, ab.Duration);
                     break;
                 case "HoT":
-                    target.AddDoT(ab.Name, CalculateDamageWithoutArmor(ab), ab.Duration);
+                    target.AddDoT(ab.Name, CalculateDamageWithoutArmor(ab, target), ab.Duration);
                     break;
                 case "resurrect":
                     target.Resurrect();
                     break;
                 case "stun":
-                    target.Stun(CalculateDamageWithoutArmor(ab), ab.Duration);
+                    target.Stun(CalculateDamageWithoutArmor(ab, target), ab.Duration);
                     break;
                 case "buff":
                     target.AddBuff(ab.Name, ab.Modifier, ab.ModifiedAmount, ab.Duration);
@@ -271,24 +271,37 @@ namespace Portals_of_Madness
             MagicArmor = CalculateStat(Level, BaseMagicArmor, MagicArmorMultiplier);
         }
 
-        private double CalculateDamageWithArmor(Ability ab) 
+        private double CalculateDamageWithArmor(Ability ab, Character target) 
         {
             int mult = 1;
-            if (WeakTo(ab)) 
+            if(target.WeakTo(ab))
             { 
                 mult = 2;
             }
-            return ((ab.PhysicalAttackDamage * PhysicalAttack - PhysicalArmor)
-                + (ab.MagicAttackDamage * MagicAttack - MagicArmor)) * mult;
+
+            double pdamage = ((ab.PhysicalAttackDamage * PhysicalAttack - target.PhysicalArmor) * mult) > 0 ?
+                ((ab.PhysicalAttackDamage * PhysicalAttack - target.PhysicalArmor) * mult) : 0;
+
+            double mdamage = ((ab.MagicAttackDamage * MagicAttack - target.MagicArmor) * mult) > 0 ?
+                ((ab.MagicAttackDamage * MagicAttack - target.MagicArmor) * mult) : 0;
+
+            double damage = pdamage + mdamage;
+
+            return damage;
         }
-        private double CalculateDamageWithoutArmor(Ability ab)
+
+        private double CalculateDamageWithoutArmor(Ability ab, Character attacker)
         {
             int mult = 1;
             if(WeakTo(ab))
             {
                 mult = 2;
             }
-            return (ab.PhysicalAttackDamage * PhysicalAttack + ab.MagicAttackDamage * MagicAttack) * mult;
+
+            double damage = ((ab.PhysicalAttackDamage * attacker.PhysicalAttack) +
+                (ab.MagicAttackDamage * attacker.MagicAttack)) * mult;
+
+            return damage;
         }
 
         private bool WeakTo(Ability ab)
@@ -297,6 +310,7 @@ namespace Portals_of_Madness
             {
                 if (weakness == ab.DamageType)
                 {
+                    Console.WriteLine($"{Name} is weak to this ability!");
                     return true;
                 }
             }
@@ -516,6 +530,19 @@ namespace Portals_of_Madness
                         break;
                 }
             }
+        }
+
+        public override string ToString()
+        {
+            string result = $"{Name}\nLevel: {Level}\nClass: {CharacterClass}\nRarity: {Rarity}\n" +
+                $"Speed: {Speed}\nMax Health: {MaxHealth}\nResource: {MaxResource} {ResourceName}\n" +
+                $"Attack Power: {PhysicalAttack} physical, {MagicAttack} magical\n" +
+                $"Armor: {PhysicalArmor} physical, {MagicArmor} magical\nWeakness(es): {Weaknesses[0]}";
+            for(int i=1; i < Weaknesses.Count; i++)
+            {
+                result += $", {Weaknesses[i]}";
+            }
+            return result;
         }
     }
 }
