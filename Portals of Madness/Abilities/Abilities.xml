@@ -13,7 +13,7 @@
 		<abilityType>attack</abilityType>
 		<modifier>aimed</modifier>
 		<modifiedAmount>0</modifiedAmount>
-		<imageIcon>steadyshotIcon</imageIcon>
+		<imageIcon>steady_shot</imageIcon>
 		<sprite>arrow</sprite>
 	</XMLAbility>
 	<XMLAbility>
@@ -29,7 +29,7 @@
 		<abilityType>attack</abilityType>
 		<modifier>aimed</modifier>
 		<modifiedAmount>0</modifiedAmount>
-		<imageIcon>piercingshotIcon</imageIcon>
+		<imageIcon>piercing_shot</imageIcon>
 		<sprite>arrow</sprite>
 	</XMLAbility>
 	<XMLAbility>
@@ -45,7 +45,7 @@
 		<abilityType>attack</abilityType>
 		<modifier>aimed</modifier>
 		<modifiedAmount>0</modifiedAmount>
-		<imageIcon>aimedshotIcon</imageIcon>
+		<imageIcon>aimed_shot</imageIcon>
 		<sprite>arrow</sprite>
 	</XMLAbility>
 	<XMLAbility>
@@ -61,23 +61,23 @@
 		<abilityType>attack</abilityType>
 		<modifier>aimed</modifier>
 		<modifiedAmount>0</modifiedAmount>
-		<imageIcon>slashIcon</imageIcon>
+		<imageIcon>slash</imageIcon>
 		<sprite>slash</sprite>
 	</XMLAbility>
 	<XMLAbility>
         <name>Slam</name>
-        <cost>6</cost>
+		<cost>0</cost>
 		<cooldown>2</cooldown>
-		<physAttackDamage>0.6</physAttackDamage>
+		<physAttackDamage>1</physAttackDamage>
 		<magicAttackDamage>0</magicAttackDamage>
 		<damageType>crushing</damageType>
 		<target>enemy</target>
-		<duration>1</duration>
+		<duration>0</duration>
 		<targetCount>1</targetCount>
-		<abilityType>stun</abilityType>
+		<abilityType>attack</abilityType>
 		<modifier>aimed</modifier>
 		<modifiedAmount>0</modifiedAmount>
-		<imageIcon>slamIcon</imageIcon>
+		<imageIcon>bash</imageIcon>
 		<sprite>slash</sprite>
 	</XMLAbility>
 	<XMLAbility>
@@ -93,7 +93,7 @@
 		<abilityType>buff</abilityType>
 		<modifier>armor</modifier>
 		<modifiedAmount>1.3</modifiedAmount>
-		<imageIcon>protectionauraIcon</imageIcon>
+		<imageIcon>protection_aura</imageIcon>
 		<sprite>holy</sprite>
 	</XMLAbility>
 	<XMLAbility>
@@ -109,15 +109,15 @@
 		<abilityType>attack</abilityType>
 		<modifier>aimed</modifier>
 		<modifiedAmount>0</modifiedAmount>
-		<imageIcon>natureboltIcon</imageIcon>
-		<sprite>naturebolt</sprite>
+		<imageIcon>nature_bolt</imageIcon>
+		<sprite>nature</sprite>
 	</XMLAbility>
 	<XMLAbility>
         <name>Heal</name>
-        <cost>0</cost>
+        <cost>6</cost>
 		<cooldown>0</cooldown>
 		<physAttackDamage>0</physAttackDamage>
-		<magicAttackDamage>1</magicAttackDamage>
+		<magicAttackDamage>2</magicAttackDamage>
 		<damageType>none</damageType>
 		<target>ally</target>
 		<duration>0</duration>
@@ -125,7 +125,7 @@
 		<abilityType>heal</abilityType>
 		<modifier>aimed</modifier>
 		<modifiedAmount>0</modifiedAmount>
-		<imageIcon>healIcon</imageIcon>
+		<imageIcon>heal</imageIcon>
 		<sprite>holy</sprite>
 	</XMLAbility>
 	<XMLAbility>
@@ -133,15 +133,15 @@
         <cost>12</cost>
 		<cooldown>2</cooldown>
 		<physAttackDamage>0</physAttackDamage>
-		<magicAttackDamage>0.9</magicAttackDamage>
+		<magicAttackDamage>1.6</magicAttackDamage>
 		<damageType>none</damageType>
 		<target>ally</target>
 		<duration>0</duration>
 		<targetCount>10</targetCount>
 		<abilityType>heal</abilityType>
-		<modifier>random</modifier>
+		<modifier>aimed</modifier>
 		<modifiedAmount>0</modifiedAmount>
-		<imageIcon>masshealIcon</imageIcon>
+		<imageIcon>mass_heal</imageIcon>
 		<sprite>holy</sprite>
 	</XMLAbility>
 	<XMLAbility>
@@ -157,7 +157,7 @@
 		<abilityType>attack</abilityType>
 		<modifier>random</modifier>
 		<modifiedAmount>0</modifiedAmount>
-		<imageIcon>quickshotIcon</imageIcon>
+		<imageIcon>quick_shot</imageIcon>
 		<sprite>arrow</sprite>
 	</XMLAbility>
 	<XMLAbility>
@@ -171,9 +171,9 @@
 		<duration>0</duration>
 		<targetCount>10</targetCount>
 		<abilityType>attack</abilityType>
-		<modifier>random</modifier>
+		<modifier>aimed</modifier>
 		<modifiedAmount>0</modifiedAmount>
-		<imageIcon>volleyIcon</imageIcon>
+		<imageIcon>volley</imageIcon>
 		<sprite>arrow</sprite>
 	</XMLAbility>
 	<XMLAbility>
@@ -189,7 +189,7 @@
 		<abilityType>stun</abilityType>
 		<modifier>random</modifier>
 		<modifiedAmount>0</modifiedAmount>
-		<imageIcon>scattershotIcon</imageIcon>
+		<imageIcon>scatter_shot</imageIcon>
 		<sprite>arrow</sprite>
 	</XMLAbility>
 	<XMLAbility>
@@ -205,7 +205,7 @@
 		<abilityType>attack</abilityType>
 		<modifier>aimed</modifier>
 		<modifiedAmount>0</modifiedAmount>
-		<imageIcon>punchIcon</imageIcon>
+		<imageIcon>punch</imageIcon>
 		<sprite>slash</sprite>
 	</XMLAbility>
 	<XMLAbility>
@@ -216,12 +216,28 @@
 		<magicAttackDamage>0.4</magicAttackDamage>
 		<damageType>crushing</damageType>
 		<target>enemy</target>
-		<duration>0</duration>
+		<duration>1</duration>
 		<targetCount>1</targetCount>
 		<abilityType>stun</abilityType>
 		<modifier>aimed</modifier>
 		<modifiedAmount>0</modifiedAmount>
-		<imageIcon>bashIcon</imageIcon>
+		<imageIcon>bash</imageIcon>
+		<sprite>slash</sprite>
+	</XMLAbility>
+	<XMLAbility>
+        <name>Light Bash</name>
+        <cost>0</cost>
+		<cooldown>1</cooldown>
+		<physAttackDamage>0.3</physAttackDamage>
+		<magicAttackDamage>0</magicAttackDamage>
+		<damageType>crushing</damageType>
+		<target>enemy</target>
+		<duration>1</duration>
+		<targetCount>1</targetCount>
+		<abilityType>stun</abilityType>
+		<modifier>aimed</modifier>
+		<modifiedAmount>0</modifiedAmount>
+		<imageIcon>bash</imageIcon>
 		<sprite>slash</sprite>
 	</XMLAbility>
 	<XMLAbility>
@@ -237,7 +253,7 @@
 		<abilityType>attack</abilityType>
 		<modifier>random</modifier>
 		<modifiedAmount>0</modifiedAmount>
-		<imageIcon>cleaveIcon</imageIcon>
+		<imageIcon>cleave</imageIcon>
 		<sprite>slash</sprite>
 	</XMLAbility>
 	<XMLAbility>
@@ -253,7 +269,7 @@
 		<abilityType>buff</abilityType>
 		<modifier>pArmor</modifier>
 		<modifiedAmount>1.5</modifiedAmount>
-		<imageIcon>raiseshieldIcon</imageIcon>
+		<imageIcon>raise_shield</imageIcon>
 		<sprite>slash</sprite>
 	</XMLAbility>
 </XMLAbilities>

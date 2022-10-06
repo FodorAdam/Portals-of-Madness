@@ -7,13 +7,13 @@ namespace Portals_of_Madness
 {
     public class XMLOperations
     {
-        readonly List<Ability> AllAbilities;
+        public readonly List<Ability> AllAbilities;
 
         public XMLOperations()
         {
             AllAbilities = new List<Ability>();
             XMLAbilities xabs = AbilityDeserializer($@"../../Abilities/Abilities.xml");
-            foreach(XMLAbility xab in xabs.xmlAbility)
+            foreach(XMLAbility xab in xabs.XmlAbility)
             {
                 AllAbilities.Add(ConvertToAbility(xab));
             }
@@ -59,7 +59,7 @@ namespace Portals_of_Madness
             return obj;
         }
 
-        //Deserializes the mission XML file
+        //Deserializes a Mission XML file
         public Encounters MissionDeserializer(string path)
         {
             Encounters obj = new Encounters();
@@ -68,6 +68,21 @@ namespace Portals_of_Madness
             {
                 TextReader sr = new StreamReader(path);
                 obj = (Encounters)des.Deserialize(sr);
+                sr.Close();
+            }
+            catch { }
+            return obj;
+        }
+
+        //Deserializes a Dialog XML file
+        public Dialogs DialogDeserializer(string path)
+        {
+            Dialogs obj = new Dialogs();
+            XmlSerializer des = new XmlSerializer(typeof(Dialogs));
+            try
+            {
+                TextReader sr = new StreamReader(path);
+                obj = (Dialogs)des.Deserialize(sr);
                 sr.Close();
             }
             catch { }
@@ -88,19 +103,19 @@ namespace Portals_of_Madness
 
         public Ability ConvertToAbility(XMLAbility x)
         {
-            return new Ability(x.name, x.cost, x.cooldown, x.physAttackDamage, x.magicAttackDamage,
-                x.duration, x.damageType, x.target, x.targetCount, x.abilityType, x.modifier, x.modifiedAmount,
-                x.imageIcon, x.sprite);
+            return new Ability(x.Name, x.Cost, x.Cooldown, x.PhysAttackDamage, x.MagicAttackDamage,
+                x.Duration, x.DamageType, x.Target, x.TargetCount, x.AbilityType, x.Modifier, x.ModifiedAmount,
+                x.ImageIcon, x.Sprite);
         }
 
         public Character ConvertToCharacter(XMLCharacter x)
         {
-            return new Character(x.imageSet, x.id, x.level, x.name, x.characterClass, x.baseHealth, x.healthMult,
-                x.resourceName, x.maxResource, x.basePhysAttack, x.physAttackMult, x.baseMagicAttack,
-                x.magicAttackMult, x.basePhysArmor, x.physArmorMult, x.baseMagicArmor,
-                x.magicArmorMult, x.weaknesses,
-                GetAblilityByName(x.ability1Name), GetAblilityByName(x.ability2Name), GetAblilityByName(x.ability3Name),
-                x.baseSpeed, x.rarity, x.collectable, x.aiName);
+            return new Character(x.ImageSet, x.Id, x.Level, x.Name, x.CharacterClass, x.BaseHealth, x.HealthMult,
+                x.ResourceName, x.MaxResource, x.BasePhysAttack, x.PhysAttackMult, x.BaseMagicAttack,
+                x.MagicAttackMult, x.BasePhysArmor, x.PhysArmorMult, x.BaseMagicArmor,
+                x.MagicArmorMult, x.Weaknesses,
+                GetAblilityByName(x.Ability1Name), GetAblilityByName(x.Ability2Name), GetAblilityByName(x.Ability3Name),
+                x.BaseSpeed, x.Rarity, x.Collectable, x.AIName);
         }
     }
 
@@ -108,210 +123,245 @@ namespace Portals_of_Madness
     public class XMLAbilities
     {
         [XmlElement("XMLAbility")]
-        public XMLAbility[] xmlAbility { get; set; }
+        public XMLAbility[] XmlAbility { get; set; }
     }
 
     public class XMLAbility
     {
         [XmlElement("name")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [XmlElement("cost")]
-        public int cost { get; set; }
+        public int Cost { get; set; }
 
         [XmlElement("cooldown")]
-        public int cooldown { get; set; }
+        public int Cooldown { get; set; }
 
 
         [XmlElement("physAttackDamage")]
-        public double physAttackDamage { get; set; }
+        public double PhysAttackDamage { get; set; }
 
 
         [XmlElement("magicAttackDamage")]
-        public double magicAttackDamage { get; set; }
+        public double MagicAttackDamage { get; set; }
 
 
         [XmlElement("damageType")]
-        public string damageType { get; set; }
+        public string DamageType { get; set; }
 
 
         [XmlElement("target")]
-        public string target { get; set; }
+        public string Target { get; set; }
 
 
         [XmlElement("duration")]
-        public int duration { get; set; }
+        public int Duration { get; set; }
 
 
         [XmlElement("targetCount")]
-        public int targetCount { get; set; }
+        public int TargetCount { get; set; }
 
 
         [XmlElement("abilityType")]
-        public string abilityType { get; set; }
+        public string AbilityType { get; set; }
 
         [XmlElement("modifier")]
-        public string modifier { get; set; }
+        public string Modifier { get; set; }
 
         [XmlElement("modifiedAmount")]
-        public double modifiedAmount { get; set; }
+        public double ModifiedAmount { get; set; }
 
         [XmlElement("imageIcon")]
-        public string imageIcon { get; set; }
+        public string ImageIcon { get; set; }
 
         [XmlElement("sprite")]
-        public string sprite { get; set; }
+        public string Sprite { get; set; }
     }
 
     [XmlRoot("XMLCharacters")]
     public class XMLCharacters
     {
         [XmlElement("XMLCharacter")]
-        public XMLCharacter[] xmlCharacter { get; set; }
+        public XMLCharacter[] XmlCharacter { get; set; }
     }
 
     public class XMLCharacter
     {
         [XmlElement("id")]
-        public string id { get; set; }
+        public string Id { get; set; }
 
         [XmlElement("imageSet")]
-        public string imageSet { get; set; }
+        public string ImageSet { get; set; }
 
         [XmlElement("name")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [XmlElement("level")]
-        public int level { get; set; }
+        public int Level { get; set; }
 
         [XmlElement("characterClass")]
-        public string characterClass { get; set; }
+        public string CharacterClass { get; set; }
 
         [XmlElement("baseHealth")]
-        public double baseHealth { get; set; }
+        public double BaseHealth { get; set; }
 
         [XmlElement("healthMult")]
-        public double healthMult { get; set; }
+        public double HealthMult { get; set; }
 
         [XmlElement("resourceName")]
-        public string resourceName { get; set; }
+        public string ResourceName { get; set; }
 
         [XmlElement("maxResource")]
-        public int maxResource { get; set; }
+        public int MaxResource { get; set; }
 
         [XmlElement("basePhysAttack")]
-        public double basePhysAttack { get; set; }
+        public double BasePhysAttack { get; set; }
 
         [XmlElement("physAttackMult")]
-        public double physAttackMult { get; set; }
+        public double PhysAttackMult { get; set; }
 
         [XmlElement("baseMagicAttack")]
-        public double baseMagicAttack { get; set; }
+        public double BaseMagicAttack { get; set; }
 
         [XmlElement("magicAttackMult")]
-        public double magicAttackMult { get; set; }
+        public double MagicAttackMult { get; set; }
 
         [XmlElement("basePhysArmor")]
-        public double basePhysArmor { get; set; }
+        public double BasePhysArmor { get; set; }
 
         [XmlElement("physArmorMult")]
-        public double physArmorMult { get; set; }
+        public double PhysArmorMult { get; set; }
 
         [XmlElement("baseMagicArmor")]
-        public double baseMagicArmor { get; set; }
+        public double BaseMagicArmor { get; set; }
 
         [XmlElement("magicArmorMult")]
-        public double magicArmorMult { get; set; }
+        public double MagicArmorMult { get; set; }
 
         [XmlElement("weaknesses")]
-        public string weaknesses { get; set; }
+        public string Weaknesses { get; set; }
 
         [XmlElement("ability1Name")]
-        public string ability1Name { get; set; }
+        public string Ability1Name { get; set; }
 
         [XmlElement("ability2Name")]
-        public string ability2Name { get; set; }
+        public string Ability2Name { get; set; }
 
         [XmlElement("ability3Name")]
-        public string ability3Name { get; set; }
+        public string Ability3Name { get; set; }
 
         [XmlElement("baseSpeed")]
-        public int baseSpeed { get; set; }
+        public int BaseSpeed { get; set; }
 
         [XmlElement("rarity")]
-        public string rarity { get; set; }
+        public string Rarity { get; set; }
 
         [XmlElement("acquired")]
-        public bool acquired { get; set; }
+        public bool Acquired { get; set; }
 
         [XmlElement("aiName")]
-        public string aiName { get; set; }
+        public string AIName { get; set; }
 
         [XmlElement("collectable")]
-        public bool collectable { get; set; }
+        public bool Collectable { get; set; }
     }
 
     [XmlRoot("Encounters")]
     public class Encounters
     {
         [XmlElement("id")]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [XmlElement("name")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [XmlElement("side")]
-        public string side { get; set; }
+        public string Side { get; set; }
 
         [XmlElement("Encounter")]
-        public Encounter[] encounter { get; set; }
+        public Encounter[] Encounter { get; set; }
     }
 
     public class Encounter
     {
         [XmlElement("id")]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [XmlElement("name")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [XmlElement("background1")]
-        public string background1 { get; set; }
+        public string Background1 { get; set; }
 
         [XmlElement("optional")]
-        public bool optional { get; set; }
-
-        [XmlElement("startdialog")]
-        public string startdialog { get; set; }
+        public bool Optional { get; set; }
 
         [XmlElement("Fights")]
-        public Fights fights { get; set; }
-
-        [XmlElement("enddialog")]
-        public string enddialog { get; set; }
+        public Fights Fights { get; set; }
     }
 
     public class Fights
     {
         [XmlElement("Fight")]
-        public Fight[] fight { get; set; }
+        public Fight[] Fight { get; set; }
     }
 
     public class Fight
     {
         [XmlElement("id")]
-        public int id { get; set; }
-
-        [XmlElement("dialog")]
-        public string dialog { get; set; }
+        public int Id { get; set; }
 
         [XmlElement("enemies")]
-        public string enemies { get; set; }
+        public string Enemies { get; set; }
 
         [XmlElement("amount")]
-        public int amount { get; set; }
+        public int Amount { get; set; }
 
         [XmlElement("type")]
-        public string type { get; set; }
+        public string Type { get; set; }
+    }
+
+    [XmlRoot("Dialogs")]
+    public class Dialogs
+    {
+        [XmlElement("id")]
+        public int Id { get; set; }
+
+
+        [XmlElement("Dialog")]
+        public Dialog[] Dialog { get; set; }
+    }
+
+    public class Dialog
+    {
+        [XmlElement("id")]
+        public string Id { get; set; }
+
+        [XmlElement("type")]
+        public string Type { get; set; }
+
+        [XmlElement("image")]
+        public string Image { get; set; }
+
+        [XmlElement("Lines")]
+        public Lines Lines { get; set; }
+    }
+
+    public class Lines
+    {
+        [XmlElement("Line")]
+        public Line[] Line { get; set; }
+    }
+
+    public class Line
+    {
+        [XmlElement("speaker")]
+        public string Speaker { get; set; }
+
+        [XmlElement("side")]
+        public string Side { get; set; }
+
+        [XmlElement("str")]
+        public string Str { get; set; }
     }
 }

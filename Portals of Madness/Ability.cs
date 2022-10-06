@@ -69,7 +69,7 @@ namespace Portals_of_Madness
             ModifiedAmount = mA;
             try
             {
-                IconImage = Image.FromFile($@"../../Art/Sprites/Spells/{iI}.jpg");
+                IconImage = Image.FromFile($@"../../Art/Sprites/Spells/{iI}.png");
             }
             catch
             {

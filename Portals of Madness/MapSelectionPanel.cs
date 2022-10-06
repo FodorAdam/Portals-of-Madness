@@ -14,6 +14,7 @@ namespace Portals_of_Madness
         ListBox EncounterSelector { get; set; }
         List<Encounters> AllEncounters { get; set; }
         public int SelectedMission { get; set; }
+        public int MaxEncounters { get; set; }
         public int SelectedEncounter { get; set; }
 
         public MapSelectionPanel(Controller c)
@@ -78,13 +79,13 @@ namespace Portals_of_Madness
             Controls.Add(EncounterSelector);
 
             string dirPath = $@"../../Missions/";
-            int amount = Directory.GetFiles(dirPath).Length;
+            int amount = Directory.GetDirectories(dirPath).Length;
             AllEncounters = new List<Encounters>();
             for (int i = 0; i < amount; i++)
             {
-                string path = $@"../../Missions/{i}.xml";
+                string path = $@"../../Missions/{i}/Mission.xml";
                 AllEncounters.Add(c.XMLOperations.MissionDeserializer(path));
-                MissionSelector.Items.Add(AllEncounters[i].name);
+                MissionSelector.Items.Add(AllEncounters[i].Name);
             }
 
             MissionSelector.MouseClick += SelectMission;
@@ -105,6 +106,11 @@ namespace Portals_of_Madness
             return SelectedMission;
         }
 
+        public int GetMaxEncounterNumber()
+        {
+            return MaxEncounters;
+        }
+
         public int GetEncounterNumber()
         {
             return SelectedEncounter;
@@ -112,14 +118,16 @@ namespace Portals_of_Madness
 
         private void SelectMission(object sender, MouseEventArgs e)
         {
+            MaxEncounters = 0;
             int index = MissionSelector.IndexFromPoint(e.Location);
             EncounterSelector.Items.Clear();
             if (index != ListBox.NoMatches)
             {
                 SelectedMission = index;
-                foreach(var encounter in AllEncounters[index].encounter)
+                foreach(var encounter in AllEncounters[index].Encounter)
                 {
-                    EncounterSelector.Items.Add(encounter.name);
+                    EncounterSelector.Items.Add(encounter.Name);
+                    ++MaxEncounters;
                 }
             }
         }

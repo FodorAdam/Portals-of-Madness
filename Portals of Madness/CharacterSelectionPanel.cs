@@ -14,7 +14,7 @@ namespace Portals_of_Madness
         public Button ButtonRemove { get; set; }
         public ListBox CharacterSelector { get; set; }
         public ListBox CharacterSelected { get; set; }
-        public PictureBox CharacterPicture { get; set; }
+        public PictureBox CharacterPictureBox { get; set; }
         public RichTextBox CharacterDesc { get; set; }
         List<Character> CharacterList { get; set; }
         List<Character> SelectedCharacterList { get; set; }
@@ -75,7 +75,7 @@ namespace Portals_of_Madness
             };
             Controls.Add(ButtonRemove);
 
-            CharacterPicture = new PictureBox
+            CharacterPictureBox = new PictureBox
             {
                 Size = new Size(buttonHeight, buttonHeight),
                 Location = new Point(w / 2 - buttonHeight / 2, h - buttonHeight * 2),
@@ -84,7 +84,7 @@ namespace Portals_of_Madness
                 TabIndex = 4,
                 TabStop = false
             };
-            Controls.Add(CharacterPicture);
+            Controls.Add(CharacterPictureBox);
 
             CharacterSelector = new ListBox
             {
@@ -96,14 +96,14 @@ namespace Portals_of_Madness
             Controls.Add(CharacterSelector);
 
             var XMLCharacterList = c.XMLOperations.CharacterDeserializer($@"../../Characters/Characters.xml");
-            var cEnum = XMLCharacterList.xmlCharacter.Where(a => a.collectable == true).Select(a => a);
+            var cEnum = XMLCharacterList.XmlCharacter.Where(a => a.Collectable == true).Select(a => a);
             List<XMLCharacter> XCList = new List<XMLCharacter>();
             XCList.AddRange(cEnum);
 
             foreach (XMLCharacter ch in XCList)
             {
                 CharacterList.Add(c.XMLOperations.ConvertToCharacter(ch));
-                CharacterSelector.Items.Add(ch.name);
+                CharacterSelector.Items.Add(ch.Name);
             }
 
             CharacterSelected = new ListBox
@@ -186,10 +186,9 @@ namespace Portals_of_Madness
             if (index != ListBox.NoMatches)
             {
                 tmpChar = CharacterList.Where(a => a.Name == (string)CharacterSelector.SelectedItem).Select(a => a).First();
+                CharacterPictureBox.Image = ImageConverter(tmpChar.BaseImage);
+                CharacterDesc.Text = tmpChar.ToString();
             }
-
-            CharacterPicture.Image = tmpChar.Image;
-            CharacterDesc.Text = tmpChar.ToString();
         }
 
         private void ShowCharacterStats2(object sender, MouseEventArgs e)
@@ -200,10 +199,28 @@ namespace Portals_of_Madness
             if (index != ListBox.NoMatches)
             {
                 tmpChar = CharacterList.Where(a => a.Name == (string)CharacterSelected.SelectedItem).Select(a => a).First();
+                CharacterPictureBox.Image = ImageConverter(tmpChar.BaseImage);
+                CharacterDesc.Text = tmpChar.ToString();
             }
+        }
 
-            CharacterPicture.Image = tmpChar.Image;
-            CharacterDesc.Text = tmpChar.ToString();
+        public Image ImageConverter(string name)
+        {
+            Image image = null;
+            try
+            {
+                image = Image.FromFile($@"../../Art/Sprites/Characters/{name}/profile.png");
+            }
+            catch
+            {
+                Console.WriteLine($"{name}/profile missing");
+            }
+            return image;
+        }
+
+        public List<Character> GetSelectedCharacterList()
+        {
+            return SelectedCharacterList;
         }
     }
 }

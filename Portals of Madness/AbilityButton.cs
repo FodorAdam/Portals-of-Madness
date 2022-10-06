@@ -17,6 +17,7 @@ namespace Portals_of_Madness
             FlatStyle = FlatStyle.Flat;
             FlatAppearance.BorderColor = Color.Black;
             FlatAppearance.BorderSize = 3;
+            BackgroundImageLayout = ImageLayout.Stretch;
         }
 
         public void UpdateButton(Ability ab)

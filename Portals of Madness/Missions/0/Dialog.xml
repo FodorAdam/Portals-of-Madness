@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<Dialogs>
+	<id>0</id>
+	<Dialog>
+		<id>0</id>
+		<type>Pre</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>right</side>
+				<str>You felt that? I wonder what it was.</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>right</side>
+				<str>Making up excuses now Shortie? If you can't open it, just say it. We won't think any less of you for it. Cuz you know, we can't.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>right</side>
+				<str>Don't make me shove the lockpick up your nose fatass!</str>
+			</Line>
+			<Line>
+				<speaker>sam</speaker>
+				<side>right</side>
+				<str>Just shut up you two!</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>right</side>
+				<str>Aaaand... open sesame. I can't wait to be rid of you two. Let's go!</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>0</id>
+		<type>Combat</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>lance</speaker>
+				<side>right</side>
+				<str>Hey, we don't want trouble, just let us pass!</str>
+			</Line>
+			<Line>
+				<speaker>prisoner1</speaker>
+				<side>left</side>
+				<str>grrrrr</str>
+			</Line>
+			<Line>
+				<speaker>sam</speaker>
+				<side>right</side>
+				<str>I guess they want trouble.</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>right</side>
+				<str>Let's give it to them, then!</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>1</id>
+		<type>Pre</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>right</side>
+				<str>And here I was, thinking we could just make a smooth escape.</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>right</side>
+				<str>The whole yard is up in arms...</str>
+			</Line>
+			<Line>
+				<speaker>sam</speaker>
+				<side>right</side>
+				<str>Well, I guess we will have to fight our way through them as well. You two are pretty good at that anyway.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>2</id>
+		<type>Combat</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>right</side>
+				<str>Once we get over the bridge, we can finally escape for real.</str>
+			</Line>
+			<Line>
+				<speaker>cityguard</speaker>
+				<side>left</side>
+				<str>grrrr... rar... grrrr...</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>right</side>
+				<str>Something is wrong, we need to figure out what's going on.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>right</side>
+				<str>Aw, gimme a break!</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>2</id>
+		<type>Post</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>right</side>
+				<str>Okay, I want my guns back and I guess you want your stuff too. Let's rob the armory!</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>right</side>
+				<str>No time, the tower in front of us houses the city council. Maybe they didn't go crazy, maybe they have answers.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>right</side>
+				<str>Or maybe they would just shove us back into prison if they see 3 escaped convicts run in there.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>3</id>
+		<type>Pre</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>sam</speaker>
+				<side>right</side>
+				<str>I have to agree with Eddie here. If we want to escape alive, we need our equipment first.</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>right</side>
+				<str>Okay, but we still go to the tower after.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>3</id>
+		<type>Combat</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>clumsyEn</speaker>
+				<side>left</side>
+				<str>No, you not take Clumsy, guards! Guards!</str>
+			</Line>
+			<Line>
+				<speaker>sam</speaker>
+				<side>right</side>
+				<str>Wait... damn!</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>3</id>
+		<type>Post</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>clumsyEn</speaker>
+				<side>left</side>
+				<str>Hehhhh... hehhhh... hhheeeee... you no take Clumsy's gear, crazy rodents!</str>
+			</Line>
+			<Line>
+				<speaker>sam</speaker>
+				<side>right</side>
+				<str>Calm down, it was our gear originally anyway.</str>
+			</Line>
+			<Line>
+				<speaker>clumsyEn</speaker>
+				<side>left</side>
+				<str>Mouse lady can speak full sentence? Clumsy sorry! Clumsy was scared in all this madness.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>right</side>
+				<str>So scared, you went ahead and robbed a highly protected armory?</str>
+			</Line>
+			<Line>
+				<speaker>clumsyEn</speaker>
+				<side>left</side>
+				<str>Clumsy want shiny armor to protect Clumsy!</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>right</side>
+				<str>It's okay Clumsy, I'm sure this piece of lard will let you keep his armor.</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>right</side>
+				<str>Over my dead body.</str>
+			</Line>
+			<Line>
+				<speaker>clumsyEn</speaker>
+				<side>left</side>
+				<str>Clumsy could also just take jacket.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>right</side>
+				<str>Um, no.</str>
+			</Line>
+			<Line>
+				<speaker>clumsyEn</speaker>
+				<side>left</side>
+				<str>Clumsy will surely perish alone.</str>
+			</Line>
+			<Line>
+				<speaker>sam</speaker>
+				<side>right</side>
+				<str>You can tag along if you want to.</str>
+			</Line>
+			<Line>
+				<speaker>clumsyEn</speaker>
+				<side>left</side>
+				<str>Yay, Clumsy thanks you, mouse lady.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>4</id>
+		<type>Combat</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>lance</speaker>
+				<side>right</side>
+				<str>To the tower!</str>
+			</Line>
+			<Line>
+				<speaker>cityguard</speaker>
+				<side>left</side>
+				<str>Stop right there!</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>right</side>
+				<str>Finally, some sane guards! Please, let us through, we need to talk to the council!</str>
+			</Line>
+			<Line>
+				<speaker>cityguard</speaker>
+				<side>left</side>
+				<str>The council does not wish to talk to escaped convicts.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>right</side>
+				<str>What a surprise.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>A5</id>
+		<type>Pre</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>godfrey</speaker>
+				<side>left</side>
+				<str>What is the meaning of this intrusion? Lancelot? You traitorous scum, how dare you barge in here with your gang? Explain yourself!</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>right</side>
+				<str>I'm sorry, High Abbot, but I never betrayed anyone, I did what I felt was right. As for why I am here, people are going crazy around here. Care to explain why?</str>
+			</Line>
+			<Line>
+				<speaker>godfrey</speaker>
+				<side>left</side>
+				<str>The council does not to talk to escaped convicts. Maxwell, let us disperse this rabble.</str>
+			</Line>
+			<Line>
+				<speaker>maxwellEn</speaker>
+				<side>left</side>
+				<str>Right away, sir! I'm sorry Lance, but you forced my hand by barging into the armory and attacking my guards.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>B5</id>
+		<type>Pre</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>godfrey</speaker>
+				<side>left</side>
+				<str>What is the meaning of this intrusion? Lancelot? You traitorous scum, how dare you barge in here with your gang? Explain yourself!</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>right</side>
+				<str>I'm sorry, High Abbot, but I never betrayed anyone, I did what I felt was right. As for why I am here, people are going crazy around here. Care to explain why?</str>
+			</Line>
+			<Line>
+				<speaker>godfrey</speaker>
+				<side>left</side>
+				<str>The council does not to talk to escaped convicts. Maxwell, let us disperse this rabble.</str>
+			</Line>
+			<Line>
+				<speaker>maxwellEn</speaker>
+				<side>right</side>
+				<str>No can do, sir! Lance and his people might still be needed.</str>
+			</Line>
+			<Line>
+				<speaker>godfrey</speaker>
+				<side>left</side>
+				<str>Is that your last word Maxwell? Have you gone mad too? Very well then, I'll have your head too.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>5</id>
+		<type>Post</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>godfrey</speaker>
+				<side>left</side>
+				<str>Stand down, you win, I'll give you what you want. One moment everything was fine, then we felt a small shockwave and the whole city went up in flames. We tried to contain this madness, to no success, so we barricaded ourselves in here.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>right</side>
+				<str>So that's what I felt before we escaped.</str>
+			</Line>
+			<Line>
+				<speaker>godfrey</speaker>
+				<side>left</side>
+				<str>We need your help Lancelot. Everyone outside seemed to have gone mad, we only have a few troops left.</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>right</side>
+				<str>Alright, what do you need us to do?</str>
+			</Line>
+			<Line>
+				<speaker>godfrey</speaker>
+				<side>left</side>
+				<str>I'll give you a few soldiers and I need you to reach a seeker. There are two seekers nearby, I need you to locate one of them, they will know what is really happening. Do this, and you will all recieve a full pardon.</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>right</side>
+				<str>Will do, High Abbot!</str>
+			</Line>
+			<Line>
+				<speaker>godfrey</speaker>
+				<side>left</side>
+				<str>Good luck, Lancelot! You will need it.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+</Dialogs>

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Portals_of_Madness
 {
     public class GameEngine
     {
         public int NextMap { get; set; }
+        public int NextEncounter { get; set; }
         public List<Character> PlayerTeam { get; set; }
         public List<Character> EnemyTeam { get; set; }
         public Mission CurrentMission { get; set; }
@@ -19,61 +21,85 @@ namespace Portals_of_Madness
         public Character CurrentCharacter { get; set; }
         public int CurrentID { get; set; }
         public int TurnNumber { get; set; }
-        public GameForm Form { get; set; }
-        public XMLOperations XMLOps { get; set; }
+        public GamePanel Panel { get; set; }
+        public Controller Controller { get; set; }
+        public List<string> DialogIndex { get; set; }
+        public Dialogs DialogContainer { get; set; }
+        public bool EndRun { get; set; }
 
         //When called by GameForm after starting a new game
-        public GameEngine(GameForm f)
+        public GameEngine(Controller c, GamePanel p, int nM, int nE)
         {
-            NextMap = 0;
+            Controller = c;
+            NextMap = nM;
+            NextEncounter = nE;
             DeXMLify();
             TutorialPTeamSetup();
-            InitializeStuff(f);
+            InitializeStuff(p);
         }
 
         //When called by GameForm after selecting a mission
-        public GameEngine(GameForm f, List<Character> pT, int nM)
+        public GameEngine(Controller c, GamePanel p, int nM, int nE, List<Character> pT)
         {
+            Controller = c;
             NextMap = nM;
+            NextEncounter = nE;
             DeXMLify();
             PlayerTeam = pT;
-            InitializeStuff(f);
+            InitializeStuff(p);
         }
 
         public void DeXMLify()
         {
-            XMLOps = new XMLOperations();
-            AllAbilities = new List<Ability>();
-            try
-            {
-                XMLAbilities xabs = XMLOps.AbilityDeserializer($@"../../Abilities/Abilities.xml");
-                foreach (XMLAbility xab in xabs.xmlAbility)
-                {
-                    AllAbilities.Add(XMLOps.ConvertToAbility(xab));
-                }
-            }
-            catch
-            {
-                Console.WriteLine("Abilities.xml not found.");
-            }
+            AllAbilities = Controller.XMLOperations.AllAbilities;
             AllCharacters = new List<Character>();
             try
             {
-                XMLCharacters xchs = XMLOps.CharacterDeserializer($@"../../Characters/Characters.xml");
-                foreach(XMLCharacter xch in xchs.xmlCharacter)
+                XMLCharacters xchs = Controller.XMLOperations.CharacterDeserializer($@"../../Characters/Characters.xml");
+                foreach(XMLCharacter xch in xchs.XmlCharacter)
                 {
-                    AllCharacters.Add(XMLOps.ConvertToCharacter(xch));
+                    AllCharacters.Add(Controller.XMLOperations.ConvertToCharacter(xch));
                 }
             }
             catch
             {
                 Console.WriteLine("Characters.xml not found.");
             }
+
+            string path = $@"../../Missions/{NextMap}/Dialog.xml";
+            try
+            {
+                DialogContainer = Controller.XMLOperations.DialogDeserializer(path);
+            }
+            catch
+            {
+                Console.WriteLine($"{NextMap}/Dialog.xml not found!");
+            }
         }
 
-        public void InitializeStuff(GameForm f)
+        public void InitializeStuff(GamePanel p)
         {
-            Form = f;
+            /*for (int i = 0; i < DialogContainer.Dialog.Length; i++)
+            {
+                int ID;
+                if (int.TryParse(DialogContainer.Dialog[i].Id, out _))
+                {
+                    ID = int.Parse(DialogContainer.Dialog[i].Id);
+                }
+                else
+                {
+                    string tmp = DialogContainer.Dialog[i].Id.Substring(1);
+                    ID = int.Parse(tmp);
+                }
+
+                if (ID == NextEncounter)
+                {
+                    DialogIndex.Add(DialogContainer.Dialog[i].Id);
+                }
+            }*/
+
+            EndRun = false;
+            Panel = p;
             PlayerTurn = false;
             CurrentID = -1;
             InitiativeTeam = new List<Character>();
@@ -93,9 +119,9 @@ namespace Portals_of_Madness
         public void Setup()
         {
             TurnNumber = 0;
-            CurrentMission = new Mission(NextMap);
-            Form.InitializeUI(CurrentMission.PlayerSide());
-            Form.PlaceCharacters(PlayerTeam, CurrentMission.PlayerSide());
+            CurrentMission = new Mission(Controller, NextMap, NextEncounter);
+            Panel.InitializeUI(CurrentMission.PlayerSide());
+            Panel.PlaceCharacters(PlayerTeam, CurrentMission.PlayerSide());
             if (CurrentMission.IsEncounter())
             {
                 EncounterSetup();
@@ -117,15 +143,16 @@ namespace Portals_of_Madness
             }
             try
             {
-                Form.BackgroundImage =
-                    Image.FromFile($@"../../Art/Backgrounds/{CurrentMission.EncounterContainer.encounter[CurrentMission.EncounterNumber].background1}.jpg");
+                Panel.BackgroundImage =
+                    Image.FromFile($@"../../Art/Backgrounds/{CurrentMission.EncounterContainer.Encounter[CurrentMission.EncounterNumber].Background1}.png");
+                Panel.BackgroundImageLayout = ImageLayout.Stretch;
             }
             catch
             {
-                Console.WriteLine($"{CurrentMission.EncounterContainer.encounter[CurrentMission.EncounterNumber].background1} not found!");
+                Console.WriteLine($"{CurrentMission.EncounterContainer.Encounter[CurrentMission.EncounterNumber].Background1} not found!");
             }
             string enemySide = (CurrentMission.PlayerSide().Equals("left") ? "right" : "left");
-            Form.PlaceCharacters(EnemyTeam, enemySide);
+            Panel.PlaceCharacters(EnemyTeam, enemySide);
             CreateInitiative();
             Manage();
         }
@@ -145,12 +172,12 @@ namespace Portals_of_Madness
         //End screen after either winning or losing
         private void ShowResult(bool res)
         {
-            Form.ShowResultButton(res);
+            Panel.ShowResultButton(res);
         }
 
         public void Manage()
         {
-            Form.UpdateCharacterBars();
+            Panel.UpdateCharacterBars();
             if (AreBothTeamsAlive() == 0)
             {
                 bool currentCharacterSet = false;
@@ -161,18 +188,15 @@ namespace Portals_of_Madness
 
                 if(!PlayerTurn)
                 {
-                    Form.AbilityFrame.SetVisibility(false);
-                    //Form.CharacterFrame.Visible = false;
-                    CurrentCharacter.Act(PlayerTeam, EnemyTeam);
-                    Thread.Sleep(new TimeSpan(0, 0, 1));
+                    Panel.AbilityFrame.SetVisibility(false);
+                    ActionLabel(CurrentCharacter.Act(PlayerTeam, EnemyTeam));
                     Manage();
                 }
                 else
                 {
-                    Form.AbilityFrame.SetVisibility(true);
-                    //Form.CharacterFrame.Visible = true;
-                    Form.AbilityFrame.UpdateButtons(CurrentCharacter);
-                    Form.CharacterFrame.UpdateFrame(CurrentCharacter);
+                    Panel.AbilityFrame.SetVisibility(true);
+                    Panel.AbilityFrame.UpdateButtons(CurrentCharacter);
+                    Panel.CharacterFrame.UpdateFrame(CurrentCharacter);
                 }
             }
             else if (AreBothTeamsAlive() == -1)
@@ -182,6 +206,7 @@ namespace Portals_of_Madness
             else if (AreBothTeamsAlive() == 1)
             {
                 Console.WriteLine("----------------Enemies Defeated----------------");
+                StartNewTurn();
                 NextFight();
             }
         }
@@ -189,6 +214,7 @@ namespace Portals_of_Madness
         private void StartNewTurn()
         {
             TurnNumber++;
+            Panel.UpdateCharacterBars();
             Console.WriteLine($"----------------Turn {TurnNumber}----------------");
             foreach (Character c in InitiativeTeam)
             {
@@ -294,12 +320,22 @@ namespace Portals_of_Madness
                 return false;
             }
 
+            if (InitiativeTeam[CurrentID].WasStunned)
+            {
+                InitiativeTeam[CurrentID].WasStunned = false;
+                ActionLabel($"{InitiativeTeam[CurrentID].Name} is no longer winded");
+                Panel.UpdateCharacterBars();
+            }
+
             if (InitiativeTeam[CurrentID].Stunned)
             {
                 --InitiativeTeam[CurrentID].StunLength;
                 if(InitiativeTeam[CurrentID].StunLength <= 0)
                 {
                     InitiativeTeam[CurrentID].Stunned = false;
+                    InitiativeTeam[CurrentID].WasStunned = true;
+                    ActionLabel($"{InitiativeTeam[CurrentID].Name} is no longer stunned");
+                    Panel.UpdateCharacterBars();
                 }
                 return false;
             }
@@ -314,6 +350,16 @@ namespace Portals_of_Madness
             Console.WriteLine($"({CurrentID}) {CurrentCharacter.Name}");
             return true;
         }
+
+        private void ActionLabel(string msg)
+        {
+            Panel.ActionLabel.Visible = true;
+            Panel.ActionLabel.Text = msg;
+            Application.DoEvents();
+            Thread.Sleep(new TimeSpan(0, 0, 1));
+            Panel.ActionLabel.Visible = false;
+            Application.DoEvents();
+        } 
 
         //Determines wether both teams have at least one member alive, return 0 if yes,
         //returns 1 if all enemies are dead, -1 if the player is dead
@@ -343,6 +389,7 @@ namespace Portals_of_Madness
             {
                 return 1;
             }
+            EndRun = true;
             return -1;
         }
 

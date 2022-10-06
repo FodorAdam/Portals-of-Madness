@@ -12,13 +12,13 @@ namespace Portals_of_Madness
     {
         public List<AbilityButton> AbilityButtons { get; set; }
 
-        public PlayerAbilityFrame(Size screensize)
+        public PlayerAbilityFrame(Size ScreenSize)
         {
-            Height = screensize.Height / 10;
+            Height = ScreenSize.Height / 10;
             int buttonLength = Height - Height / 5;
             Width = Height *3;
             BackColor = Color.Black;
-            Location = new Point((screensize.Width - Width) / 2, screensize.Height - Height * 2);
+            Location = new Point((ScreenSize.Width - Width) / 2, ScreenSize.Height - Height * 2);
             AbilityButtons = new List<AbilityButton>
             {
                 new AbilityButton(),
@@ -40,7 +40,7 @@ namespace Portals_of_Madness
             for(int i=0; i < AbilityButtons.Count; i++)
             {
                 AbilityButtons[i].UpdateButton(ch.Abilities[i]);
-                if(ch.CurrentResource >= ch.Abilities[i].Cost)
+                if(ch.CurrentResource >= ch.Abilities[i].Cost || ch.Abilities[i].Cost == 0)
                 {
                     AbilityButtons[i].FlatAppearance.BorderColor = Color.Green;
                 }

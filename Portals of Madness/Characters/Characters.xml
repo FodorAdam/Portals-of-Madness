@@ -14,7 +14,7 @@
 		<physAttackMult>1.12</physAttackMult>
 		<baseMagicAttack>2</baseMagicAttack>
 		<magicAttackMult>1.09</magicAttackMult>
-		<basePhysArmor>8</basePhysArmor>
+		<basePhysArmor>7</basePhysArmor>
 		<physArmorMult>1.1</physArmorMult>
 		<baseMagicArmor>0</baseMagicArmor>
 		<magicArmorMult>0</magicArmorMult>
@@ -36,13 +36,13 @@
 		<characterClass>Knight</characterClass>
 		<baseHealth>110</baseHealth>
 		<healthMult>1.12</healthMult>
-		<resourceName>rage</resourceName>
+		<resourceName>mana</resourceName>
 		<maxResource>20</maxResource>
 		<basePhysAttack>16</basePhysAttack>
 		<physAttackMult>1.1</physAttackMult>
 		<baseMagicAttack>8</baseMagicAttack>
 		<magicAttackMult>1.09</magicAttackMult>
-		<basePhysArmor>14</basePhysArmor>
+		<basePhysArmor>8</basePhysArmor>
 		<physArmorMult>1.12</physArmorMult>
 		<baseMagicArmor>3</baseMagicArmor>
 		<magicArmorMult>1.1</magicArmorMult>
@@ -98,7 +98,7 @@
 		<physAttackMult>1.12</physAttackMult>
 		<baseMagicAttack>10</baseMagicAttack>
 		<magicAttackMult>1.09</magicAttackMult>
-		<basePhysArmor>10</basePhysArmor>
+		<basePhysArmor>6</basePhysArmor>
 		<physArmorMult>1.12</physArmorMult>
 		<baseMagicArmor>6</baseMagicArmor>
 		<magicArmorMult>1.12</magicArmorMult>
@@ -126,7 +126,7 @@
 		<physAttackMult>1.12</physAttackMult>
 		<baseMagicAttack>10</baseMagicAttack>
 		<magicAttackMult>1.09</magicAttackMult>
-		<basePhysArmor>10</basePhysArmor>
+		<basePhysArmor>6</basePhysArmor>
 		<physArmorMult>1.12</physArmorMult>
 		<baseMagicArmor>6</baseMagicArmor>
 		<magicArmorMult>1.12</magicArmorMult>
@@ -150,7 +150,7 @@
 		<healthMult>1.09</healthMult>
 		<resourceName>rage</resourceName>
 		<maxResource>20</maxResource>
-		<basePhysAttack>20</basePhysAttack>
+		<basePhysAttack>22</basePhysAttack>
 		<physAttackMult>1.1</physAttackMult>
 		<baseMagicAttack>0</baseMagicAttack>
 		<magicAttackMult>0</magicAttackMult>
@@ -178,18 +178,18 @@
 		<healthMult>1.09</healthMult>
 		<resourceName>rage</resourceName>
 		<maxResource>20</maxResource>
-		<basePhysAttack>20</basePhysAttack>
+		<basePhysAttack>19</basePhysAttack>
 		<physAttackMult>1.1</physAttackMult>
 		<baseMagicAttack>0</baseMagicAttack>
 		<magicAttackMult>0</magicAttackMult>
-		<basePhysArmor>0</basePhysArmor>
-		<physArmorMult>0</physArmorMult>
+		<basePhysArmor>4</basePhysArmor>
+		<physArmorMult>1.1</physArmorMult>
 		<baseMagicArmor>0</baseMagicArmor>
 		<magicArmorMult>0</magicArmorMult>
 		<weaknesses>bleed</weaknesses>
-		<ability1Name>Punch</ability1Name>
-		<ability2Name>Punch</ability2Name>
-		<ability3Name>Punch</ability3Name>
+		<ability1Name>Light Bash</ability1Name>
+		<ability2Name>Light Bash</ability2Name>
+		<ability3Name>Light Bash</ability3Name>
 		<baseSpeed>9</baseSpeed>
 		<rarity>normal</rarity>
 		<acquired>false</acquired>
@@ -210,8 +210,8 @@
 		<physAttackMult>1.1</physAttackMult>
 		<baseMagicAttack>4</baseMagicAttack>
 		<magicAttackMult>1.1</magicAttackMult>
-		<basePhysArmor>0</basePhysArmor>
-		<physArmorMult>0</physArmorMult>
+		<basePhysArmor>6</basePhysArmor>
+		<physArmorMult>1.1</physArmorMult>
 		<baseMagicArmor>4</baseMagicArmor>
 		<magicArmorMult>1.1</magicArmorMult>
 		<weaknesses>bleed</weaknesses>
@@ -230,7 +230,7 @@
 		<name>The Warden</name>
 		<level>1</level>
 		<characterClass>miniboss</characterClass>
-		<baseHealth>300</baseHealth>
+		<baseHealth>220</baseHealth>
 		<healthMult>1.1</healthMult>
 		<resourceName>focus</resourceName>
 		<maxResource>20</maxResource>
@@ -238,7 +238,7 @@
 		<physAttackMult>1.1</physAttackMult>
 		<baseMagicAttack>0</baseMagicAttack>
 		<magicAttackMult>0</magicAttackMult>
-		<basePhysArmor>20</basePhysArmor>
+		<basePhysArmor>8</basePhysArmor>
 		<physArmorMult>1.1</physArmorMult>
 		<baseMagicArmor>0</baseMagicArmor>
 		<magicArmorMult>0</magicArmorMult>
@@ -258,7 +258,7 @@
 		<name>City Guard</name>
 		<level>1</level>
 		<characterClass>normal</characterClass>
-		<baseHealth>80</baseHealth>
+		<baseHealth>45</baseHealth>
 		<healthMult>1.1</healthMult>
 		<resourceName>focus</resourceName>
 		<maxResource>20</maxResource>
@@ -266,16 +266,100 @@
 		<physAttackMult>1.1</physAttackMult>
 		<baseMagicAttack>0</baseMagicAttack>
 		<magicAttackMult>0</magicAttackMult>
-		<basePhysArmor>20</basePhysArmor>
+		<basePhysArmor>8</basePhysArmor>
 		<physArmorMult>1.1</physArmorMult>
 		<baseMagicArmor>0</baseMagicArmor>
 		<magicArmorMult>0</magicArmorMult>
 		<weaknesses>bleed</weaknesses>
-		<ability1Name>Bash</ability1Name>
-		<ability2Name>Cleave</ability2Name>
+		<ability1Name>Slam</ability1Name>
+		<ability2Name>Bash</ability2Name>
 		<ability3Name>Raise Shield</ability3Name>
 		<baseSpeed>8</baseSpeed>
 		<rarity>normal</rarity>
+		<acquired>false</acquired>
+		<aiName>advanced</aiName>
+		<collectable>false</collectable>
+	</XMLCharacter>
+	<XMLCharacter>
+		<id>maxwellEn</id>
+		<imageSet>maxwell</imageSet>
+		<name>Maxwell</name>
+		<level>1</level>
+		<characterClass>miniboss</characterClass>
+		<baseHealth>130</baseHealth>
+		<healthMult>1.12</healthMult>
+		<resourceName>mana</resourceName>
+		<maxResource>20</maxResource>
+		<basePhysAttack>16</basePhysAttack>
+		<physAttackMult>1.1</physAttackMult>
+		<baseMagicAttack>8</baseMagicAttack>
+		<magicAttackMult>1.09</magicAttackMult>
+		<basePhysArmor>8</basePhysArmor>
+		<physArmorMult>1.12</physArmorMult>
+		<baseMagicArmor>3</baseMagicArmor>
+		<magicArmorMult>1.1</magicArmorMult>
+		<weaknesses>bleed</weaknesses>
+		<ability1Name>Slash</ability1Name>
+		<ability2Name>Heal</ability2Name>
+		<ability3Name>Protection Aura</ability3Name>
+		<baseSpeed>8</baseSpeed>
+		<rarity>epic</rarity>
+		<acquired>false</acquired>
+		<aiName>healer</aiName>
+		<collectable>false</collectable>
+	</XMLCharacter>
+	<XMLCharacter>
+		<id>maxwellAl</id>
+		<imageSet>maxwell</imageSet>
+		<name>Maxwell</name>
+		<level>1</level>
+		<characterClass>Knight</characterClass>
+		<baseHealth>130</baseHealth>
+		<healthMult>1.12</healthMult>
+		<resourceName>mana</resourceName>
+		<maxResource>20</maxResource>
+		<basePhysAttack>16</basePhysAttack>
+		<physAttackMult>1.1</physAttackMult>
+		<baseMagicAttack>8</baseMagicAttack>
+		<magicAttackMult>1.09</magicAttackMult>
+		<basePhysArmor>8</basePhysArmor>
+		<physArmorMult>1.12</physArmorMult>
+		<baseMagicArmor>3</baseMagicArmor>
+		<magicArmorMult>1.1</magicArmorMult>
+		<weaknesses>bleed</weaknesses>
+		<ability1Name>Slash</ability1Name>
+		<ability2Name>Heal</ability2Name>
+		<ability3Name>Protection Aura</ability3Name>
+		<baseSpeed>8</baseSpeed>
+		<rarity>epic</rarity>
+		<acquired>false</acquired>
+		<aiName>none</aiName>
+		<collectable>true</collectable>
+	</XMLCharacter>
+	<XMLCharacter>
+		<id>godfrey</id>
+		<imageSet>godfrey</imageSet>
+		<name>High Abbot Godfrey</name>
+		<level>1</level>
+		<characterClass>miniboss</characterClass>
+		<baseHealth>160</baseHealth>
+		<healthMult>1.12</healthMult>
+		<resourceName>mana</resourceName>
+		<maxResource>20</maxResource>
+		<basePhysAttack>16</basePhysAttack>
+		<physAttackMult>1.1</physAttackMult>
+		<baseMagicAttack>8</baseMagicAttack>
+		<magicAttackMult>1.09</magicAttackMult>
+		<basePhysArmor>8</basePhysArmor>
+		<physArmorMult>1.12</physArmorMult>
+		<baseMagicArmor>3</baseMagicArmor>
+		<magicArmorMult>1.1</magicArmorMult>
+		<weaknesses>bleed</weaknesses>
+		<ability1Name>Nature Bolt</ability1Name>
+		<ability2Name>Heal</ability2Name>
+		<ability3Name>Protection Aura</ability3Name>
+		<baseSpeed>8</baseSpeed>
+		<rarity>epic</rarity>
 		<acquired>false</acquired>
 		<aiName>advanced</aiName>
 		<collectable>false</collectable>

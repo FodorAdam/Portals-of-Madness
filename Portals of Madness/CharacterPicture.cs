@@ -10,12 +10,9 @@ namespace Portals_of_Madness
         public Panel HealthBar { get; set; }
         public Panel ResourceBar { get; set; }
 
-        public CharacterPicture() { }
-
-        public CharacterPicture(Character c)
+        public CharacterPicture()
         {
-            Character = c;
-            InitializeBars();
+
         }
 
         public void InitializeBars()
@@ -41,7 +38,7 @@ namespace Portals_of_Madness
                 ResourceBar.BackColor = Color.Blue;
             }
             UpdatePanelLocations();
-            UpdatePanelWidth();
+            UpdateBars();
         }
 
         public void UpdatePanelLocations()
@@ -50,8 +47,20 @@ namespace Portals_of_Madness
             ResourceBar.Location = new Point(Location.X, Location.Y + Height + HealthBar.Height + 2);
         }
 
-        public void UpdatePanelWidth()
+        public void UpdateBars()
         {
+            if (Character.Stunned)
+            {
+                HealthBar.BackColor = Color.Purple;
+            }
+            else if (Character.WasStunned)
+            {
+                HealthBar.BackColor = Color.MediumVioletRed;
+            }
+            else
+            {
+                HealthBar.BackColor = Color.Red;
+            }
             HealthBar.Width = (int)(Character.CurrentHealth / Character.MaxHealth * BaseBarWidth);
             ResourceBar.Width = (int)(Character.CurrentResource / (double)Character.MaxResource * BaseBarWidth);
         }

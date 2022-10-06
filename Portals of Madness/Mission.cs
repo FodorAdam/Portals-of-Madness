@@ -15,26 +15,26 @@ namespace Portals_of_Madness
         public XMLOperations XMLOps { get; set; }
         private static readonly Random Rand = new Random();
 
-        public Mission(int number)
+        public Mission(Controller c, int mission, int encounter)
         {
             Enemies = new List<Character>();
-            XMLOps = new XMLOperations();
+            XMLOps = c.XMLOperations;
 
-            string path = $@"../../Missions/{number}.xml";
+            string path = $@"../../Missions/{mission}/Mission.xml";
             try
             {
                 EncounterContainer = XMLOps.MissionDeserializer(path);
             }
             catch
             {
-                Console.WriteLine($"{number}.xml not found!");
+                Console.WriteLine($"{mission}/Mission.xml not found!");
             }
 
             EveryAbility = new List<Ability>();
             try
             {
                 XMLAbilities xabs = XMLOps.AbilityDeserializer($@"../../Abilities/Abilities.xml");
-                foreach (XMLAbility xab in xabs.xmlAbility)
+                foreach (XMLAbility xab in xabs.XmlAbility)
                 {
                     EveryAbility.Add(ConvertToAbility(xab));
                 }
@@ -53,23 +53,23 @@ namespace Portals_of_Madness
                 Console.WriteLine($"Characters.xml not found!");
             }
 
-            EncounterNumber = 0;
+            EncounterNumber = encounter;
             FightNumber = 0;
         }
 
         public Ability ConvertToAbility(XMLAbility x)
         {
-            return new Ability(x.name, x.cost, x.cooldown, x.physAttackDamage, x.magicAttackDamage,
-                x.duration, x.damageType, x.target, x.targetCount, x.abilityType, x.modifier, x.modifiedAmount,
-                x.imageIcon, x.sprite);
+            return new Ability(x.Name, x.Cost, x.Cooldown, x.PhysAttackDamage, x.MagicAttackDamage,
+                x.Duration, x.DamageType, x.Target, x.TargetCount, x.AbilityType, x.Modifier, x.ModifiedAmount,
+                x.ImageIcon, x.Sprite);
         }
 
         public void LoadNextEnemies()
         {
             Enemies.Clear();
-            if (EncounterContainer.encounter[EncounterNumber].fights.fight[FightNumber].type.Equals("normal"))
+            if (EncounterContainer.Encounter[EncounterNumber].Fights.Fight[FightNumber].Type.Equals("normal"))
             {
-                for (int i = 0; i < EncounterContainer.encounter[EncounterNumber].fights.fight[FightNumber].amount; i++)
+                for (int i = 0; i < EncounterContainer.Encounter[EncounterNumber].Fights.Fight[FightNumber].Amount; i++)
                 {
                     Enemies.Add(SelectAICharacter());
                 }
@@ -83,7 +83,7 @@ namespace Portals_of_Madness
 
         public Character SelectCharacter(string n)
         {
-            var cEnum = XMLCharacterList.xmlCharacter.Where(a => a.id.Contains(n)).Select(a => a);
+            var cEnum = XMLCharacterList.XmlCharacter.Where(a => a.Id.Contains(n)).Select(a => a);
             List<XMLCharacter> cList = new List<XMLCharacter>();
             cList.AddRange(cEnum);
             int i = Rand.Next(0, cList.Count());
@@ -92,7 +92,7 @@ namespace Portals_of_Madness
 
         public Character SelectAICharacter()
         {
-            switch (EncounterContainer.encounter[EncounterNumber].fights.fight[FightNumber].enemies)
+            switch (EncounterContainer.Encounter[EncounterNumber].Fights.Fight[FightNumber].Enemies)
             {
                 case "prisonPack":
                     return SelectCharacter("prisoner");
@@ -109,16 +109,21 @@ namespace Portals_of_Madness
         public List<Character> SelectBossFight()
         {
             List<Character> characters = new List<Character>();
-            switch (EncounterContainer.encounter[EncounterNumber].fights.fight[FightNumber].enemies)
+            switch (EncounterContainer.Encounter[EncounterNumber].Fights.Fight[FightNumber].Enemies)
             {
                 case "prisonBoss":
-                    characters.Add(SelectCharacter("prisoner"));
+                    characters.Add(SelectCharacter("cityguard"));
                     characters.Add(SelectCharacter("warden"));
-                    characters.Add(SelectCharacter("prisoner"));
+                    characters.Add(SelectCharacter("cityguard"));
                     break;
                 case "ratThief":
+                    characters.Add(SelectCharacter("clumsyEn"));
                     break;
                 case "townCouncil":
+                    characters.Add(SelectCharacter("cityguard"));
+                    characters.Add(SelectCharacter("maxwellEn"));
+                    characters.Add(SelectCharacter("godfrey"));
+                    characters.Add(SelectCharacter("cityguard"));
                     break;
                 default:
                     break;
@@ -130,17 +135,17 @@ namespace Portals_of_Madness
         public bool IsEncounter()
         {
             Enemies.Clear();
-            if(EncounterContainer.encounter.Length - 1 < EncounterNumber)
+            if(EncounterContainer.Encounter.Length - 1 < EncounterNumber)
             {
                 return false;
             }
-            return FightNumber < EncounterContainer.encounter[EncounterNumber].fights.fight.Length;
+            return FightNumber < EncounterContainer.Encounter[EncounterNumber].Fights.Fight.Length;
         }
 
         //Returns the side the player is on
         public string PlayerSide()
         {
-            return EncounterContainer.side;
+            return EncounterContainer.Side;
         }
 
         public void IncrementEncounterNumber()

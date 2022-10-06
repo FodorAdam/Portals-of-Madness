@@ -14,6 +14,7 @@ namespace Portals_of_Madness
         public PlayerCharacterFrame(Size screensize, string side)
         {
             BackColor = Color.DarkGray;
+            BorderStyle = BorderStyle.Fixed3D;
             Side = side;
             Height = screensize.Height / 4;
             Width = screensize.Width / 8;
@@ -23,6 +24,7 @@ namespace Portals_of_Madness
                 Width = Width - Width / 5,
                 Height = Height - Height / 4,
                 SizeMode = PictureBoxSizeMode.StretchImage,
+                BorderStyle = BorderStyle.Fixed3D,
                 BackColor = Color.DarkGray
             };
 
@@ -65,10 +67,6 @@ namespace Portals_of_Madness
         public void UpdateFrame(Character c)
         {
             CharacterImage.Image = ImageConverter(c.BaseImage);
-            if (Side == "right")
-            {
-                CharacterImage.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
-            }
 
             HealthLabel.Text = $"{c.CurrentHealth}/{c.MaxHealth}";
             ResourceLabel.Text = $"{c.CurrentResource}/{c.MaxResource}";

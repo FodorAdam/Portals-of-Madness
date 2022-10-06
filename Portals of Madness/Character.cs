@@ -80,12 +80,12 @@ namespace Portals_of_Madness
 
         public bool Alive { get; set; }
         public bool Stunned { get; set; }
+        public bool WasStunned { get; set; }
         public int StunLength { get; set; }
         public List<DoT> DoTs { get; set; }
         public List<Buff> Buffs { get; set; }
 
         public string Rarity { get; }
-        public bool Selected { get; set; }
         public bool Collectable { get; set; }
         public string CharacterClass { get; }
         public string AIType { get; }
@@ -99,7 +99,7 @@ namespace Portals_of_Madness
             Ability ab1, Ability ab2, Ability ab3, 
             int ini, string rar, bool coll, string ai) : base(im)
         {
-            this.ID = id;
+            ID = id;
             Name = n;
 
             if(l < 1)
@@ -129,18 +129,7 @@ namespace Portals_of_Madness
             ResourceName = rN;
             MaxResource = mR;
 
-            if(ResourceName == "rage")
-            {
-                CurrentResource = 0;
-            }
-            else if(ResourceName == "focus")
-            {
-                CurrentResource = MaxResource;
-            }
-            else
-            {
-                CurrentResource = MaxResource / 2;
-            }
+            ResetResource();
 
             BasePhysicalAttack = pAt;
             PhysicalAttackMultiplier = pAtM;
@@ -172,11 +161,28 @@ namespace Portals_of_Madness
             Buffs = new List<Buff>();
             Alive = true;
             Stunned = false;
+            WasStunned = false;
+        }
+
+        public void ResetResource()
+        {
+            if (ResourceName == "rage")
+            {
+                CurrentResource = MaxResource / 5;
+            }
+            else if (ResourceName == "focus")
+            {
+                CurrentResource = MaxResource;
+            }
+            else
+            {
+                CurrentResource = MaxResource / 2;
+            }
         }
 
         public bool CanCast(Ability ab)
         {
-            if (CurrentResource >= ab.Cost)
+            if (CurrentResource >= ab.Cost || ab.Cost == 0)
             {
                 return true;
             }
@@ -191,19 +197,19 @@ namespace Portals_of_Madness
                     target.HealthChange(CalculateDamageWithArmor(ab, target) * -1);
                     break;
                 case "heal":
-                    target.HealthChange(CalculateDamageWithoutArmor(ab, target));
+                    target.HealthChange(CalculateDamageWithoutArmor(ab));
                     break;
                 case "DoT":
-                    target.AddDoT(ab.Name, CalculateDamageWithoutArmor(ab, target) * -1, ab.Duration);
+                    target.AddDoT(ab.Name, CalculateDamageWithoutArmor(ab) * -1, ab.Duration);
                     break;
                 case "HoT":
-                    target.AddDoT(ab.Name, CalculateDamageWithoutArmor(ab, target), ab.Duration);
+                    target.AddDoT(ab.Name, CalculateDamageWithoutArmor(ab), ab.Duration);
                     break;
                 case "resurrect":
                     target.Resurrect();
                     break;
                 case "stun":
-                    target.Stun(CalculateDamageWithoutArmor(ab, target), ab.Duration);
+                    target.Stun(CalculateDamageWithoutArmor(ab) * -1, ab.Duration);
                     break;
                 case "buff":
                     target.AddBuff(ab.Name, ab.Modifier, ab.ModifiedAmount, ab.Duration);
@@ -273,10 +279,10 @@ namespace Portals_of_Madness
 
         private double CalculateDamageWithArmor(Ability ab, Character target) 
         {
-            int mult = 1;
+            double mult = 1;
             if(target.WeakTo(ab))
             { 
-                mult = 2;
+                mult = 1.3;
             }
 
             double pdamage = ((ab.PhysicalAttackDamage * PhysicalAttack - target.PhysicalArmor) * mult) > 0 ?
@@ -290,16 +296,16 @@ namespace Portals_of_Madness
             return damage;
         }
 
-        private double CalculateDamageWithoutArmor(Ability ab, Character attacker)
+        private double CalculateDamageWithoutArmor(Ability ab)
         {
-            int mult = 1;
+            double mult = 1;
             if(WeakTo(ab))
             {
-                mult = 2;
+                mult = 1.3;
             }
 
-            double damage = ((ab.PhysicalAttackDamage * attacker.PhysicalAttack) +
-                (ab.MagicAttackDamage * attacker.MagicAttack)) * mult;
+            double damage = ((ab.PhysicalAttackDamage * PhysicalAttack) +
+                (ab.MagicAttackDamage * MagicAttack)) * mult;
 
             return damage;
         }
@@ -354,12 +360,29 @@ namespace Portals_of_Madness
             }
         }
 
+        //The character resets to base state
+        public void Reset()
+        {
+            CurrentHealth = MaxHealth;
+            Alive = true;
+            Stunned = false;
+            WasStunned = false;
+            DoTs.Clear();
+            foreach (Buff buff in Buffs)
+            {
+                RemoveBuffEffects(buff);
+            }
+            Buffs.Clear();
+            ResetResource();
+        }
+
         //The character dies
         public void Die()
         {
             CurrentHealth = 0;
             Alive = false;
             Stunned = false;
+            WasStunned = false;
             DoTs.Clear();
             foreach (Buff buff in Buffs)
             {
@@ -386,9 +409,12 @@ namespace Portals_of_Madness
         {
             if(Alive)
             {
-                Stunned = true;
+                if (!WasStunned)
+                {
+                    Stunned = true;
+                    StunLength = length;
+                }
                 HealthChange(amount);
-                StunLength = length;
             }
         }
 
@@ -502,34 +528,175 @@ namespace Portals_of_Madness
             int target = rand.Next(0, team.Count);
             if (!team[target].Alive)
             {
-                return SelectRandomTarget(team);
+                return SelectNewTarget(team, target, 0);
             }
             return team[target];
         }
 
-        public void Act(List<Character> playerTeam, List<Character> AITeam)
+        public Character SelectNewTarget(List<Character> team, int num, int counter)
+        {
+            counter++;
+            if(counter < team.Count)
+            {
+                num++;
+                if (num >= team.Count)
+                {
+                    num = 0;
+                }
+                if (!team[num].Alive)
+                {
+                    return SelectNewTarget(team, num, counter);
+                }
+                return team[num];
+            }
+            else
+            {
+                return team[num];
+            }
+        }
+
+        public string Act(List<Character> playerTeam, List<Character> AITeam)
         {
             if (Alive)
             {
-                List<Character> targets = new List<Character>();
                 switch (AIType)
                 {
                     case "basic":
                         if (CanCast(Abilities[0]))
                         {
-                            for (int i = 0; i < Abilities[0].TargetCount; i++)
-                            {
-                                targets.Add(SelectRandomTarget(playerTeam));
-                            }
-                            CastAbility(Abilities[0], targets);
+                            return RandomAttackAct(0, playerTeam);
                         }
                         break;
                     case "advanced":
+                        Random rand = new Random();
+                        int r = rand.Next(0, 100);
+                        if (r > 40 && CanCast(Abilities[1]) && Abilities[1].AbilityType != "heal"
+                            && Abilities[1].AbilityType != "HoT")
+                        {
+                            r = rand.Next(0, 100);
+                            if (r > 30 && Abilities[1].TargetCount == 1)
+                            {
+                                return SnipeAct(1, playerTeam);
+                            }
+                            else
+                            {
+                                return RandomAttackAct(1, playerTeam);
+                            }
+                        }
+                        else if (CanCast(Abilities[0]))
+                        {
+                            r = rand.Next(0, 100);
+                            if (r > 30 && Abilities[0].TargetCount == 1)
+                            {
+                                return SnipeAct(0, playerTeam);
+                            }
+                            else
+                            {
+                                return RandomAttackAct(0, playerTeam);
+                            }
+                        }
+                        break;
+                    case "healer":
+                        if (CanCast(Abilities[2]) && Abilities[2].AbilityType == "heal")
+                        {
+                            int healTargets = 0;
+                            foreach(Character c in AITeam)
+                            {
+                                if(c.Alive && c.CurrentHealth < c.MaxHealth)
+                                {
+                                    healTargets++;
+                                }
+                            }
+                            if( healTargets > 1 )
+                            {
+                                return HealAct(2, AITeam);
+                            }
+                        }
+                        else if(CanCast(Abilities[1]) && Abilities[1].AbilityType == "heal")
+                        {
+                            return HealAct(1, AITeam);
+                        }
+                        else
+                        {
+                            return RandomAttackAct(0, playerTeam);
+                        }
+                        break;
+                    case "sniper":
+                        if (CanCast(Abilities[0]) && Abilities[0].TargetCount == 1)
+                        {
+                            return SnipeAct(0, playerTeam);
+                        }
                         break;
                     default:
                         break;
                 }
+                return $"{Name} did nothing";
             }
+            return $"{Name} is dead";
+        }
+
+        private string RandomAttackAct(int abilityNum, List<Character> playerTeam)
+        {
+            List<Character> targets = new List<Character>();
+            for (int i = 0; i < Abilities[abilityNum].TargetCount; i++)
+            {
+                targets.Add(SelectRandomTarget(playerTeam));
+            }
+            CastAbility(Abilities[abilityNum], targets);
+            string action = $"{Name} used {Abilities[abilityNum].Name} on {targets[0].Name}";
+            for (int i = 1; i < targets.Count; i++)
+            {
+                action += $", {targets[i]}";
+            }
+            return action;
+        }
+
+        private string SnipeAct(int abilityNum, List<Character> playerTeam)
+        {
+            Character target;
+            target = playerTeam[0];
+            for (int i = 1; i < playerTeam.Count; i++)
+            {
+                if (playerTeam[i].Alive && target.CurrentHealth > playerTeam[i].CurrentHealth)
+                {
+                    target = playerTeam[i];
+                }
+                else if (playerTeam[i].Alive && !target.Alive)
+                {
+                    target = playerTeam[i];
+                }
+            }
+            CastAbility(Abilities[abilityNum], target);
+            return $"{Name} used {Abilities[abilityNum].Name} on {target.Name}";
+        }
+
+        private string HealAct(int abilityNum, List<Character> AITeam)
+        {
+            List<Character> targets = new List<Character>();
+            Character target;
+            target = AITeam[0];
+            for (int j = 0; j < Abilities[abilityNum].TargetCount; j++)
+            {
+                for (int i = 1; i < AITeam.Count; i++)
+                {
+                    if (AITeam[i].Alive && target.CurrentHealth < AITeam[i].CurrentHealth)
+                    {
+                        target = AITeam[i];
+                    }
+                    else if (AITeam[i].Alive && !target.Alive)
+                    {
+                        target = AITeam[i];
+                    }
+                }
+                CastAbility(Abilities[abilityNum], target);
+                targets.Add(target);
+            }
+            string action = $"{Name} used {Abilities[abilityNum].Name} on {targets[0].Name}";
+            for (int i = 1; i < targets.Count; i++)
+            {
+                action += $", {targets[i]}";
+            }
+            return action;
         }
 
         public override string ToString()
