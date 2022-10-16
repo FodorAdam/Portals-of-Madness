@@ -30,15 +30,6 @@ namespace Portals_of_Madness
             BackColor = Color.Transparent;
             Controller = c;
 
-            try
-            {
-                XMLCharacterList = c.XMLOperations.CharacterDeserializer($@"../../Characters/Characters.xml");
-            }
-            catch
-            {
-                Console.WriteLine($"Characters.xml not found!");
-            }
-
             Size tmpSize = c.SetPanelResolution(this);
             int w = tmpSize.Width;
             int h = tmpSize.Height;
@@ -141,6 +132,18 @@ namespace Portals_of_Madness
             Controls.Add(RightCharacter);
         }
 
+        public void FillUpCharacters()
+        {
+            try
+            {
+                XMLCharacterList = (XMLCharacters)Controller.XMLOperations.GenericDeserializer<XMLCharacters>($@"../../Characters/Characters.xml");
+            }
+            catch
+            {
+                Console.WriteLine($"Characters.xml not found!");
+            }
+        }
+
         public bool SetupDialog(int MissionNumber, int EncounterNumber, string part, string alternative)
         {
             LineIndex = 0;
@@ -152,7 +155,7 @@ namespace Portals_of_Madness
             string path = $@"../../Missions/{MissionNumber}/Dialog.xml";
             try
             {
-                DialogContainer = Controller.XMLOperations.DialogDeserializer(path);
+                DialogContainer = (Dialogs)Controller.XMLOperations.GenericDeserializer<Dialogs>(path);
             }
             catch
             {
@@ -199,11 +202,11 @@ namespace Portals_of_Madness
 
             if (DialogContainer.Dialog[DialogIndex].Lines.Line[LineIndex].Side == "left")
             {
-                LeftCharacter.Image = ImageConverter(speaker.BaseImage);
+                LeftCharacter.Image = Controller.ImageConverter(speaker.BaseImage, "profile");
             }
             else
             {
-                RightCharacter.Image = ImageConverter(speaker.BaseImage);
+                RightCharacter.Image = Controller.ImageConverter(speaker.BaseImage, "profile");
                 RightCharacter.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
             }
 
@@ -241,20 +244,6 @@ namespace Portals_of_Madness
                     ButtonStart.Show();
                 }
             }
-        }
-
-        public Image ImageConverter(string name)
-        {
-            Image image = null;
-            try
-            {
-                image = Image.FromFile($@"../../Art/Sprites/Characters/{name}/profile.png");
-            }
-            catch
-            {
-                Console.WriteLine($"{name}/profile missing");
-            }
-            return image;
         }
 
         public void StartFirst(bool b)

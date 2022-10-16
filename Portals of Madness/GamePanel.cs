@@ -21,25 +21,52 @@ namespace Portals_of_Madness
         public Button ResultButton { get; set; }
         public ToolTip ToolTip { get; set; }
         public Label ActionLabel { get; set; }
+        public Dialogs DialogContainer { get; set; }
+        public int DialogIndex { get; set; }
+        public int LineIndex { get; set; }
+        public int MaxLines { get; set; }
+        public Button ButtonNext { get; set; }
+        public Button ButtonStart { get; set; }
+        public RichTextBox DialogRTBox { get; set; }
+        public PictureBox LeftCharacter { get; set; }
+        public PictureBox RightCharacter { get; set; }
+        public XMLCharacters XMLCharacterList { get; set; }
 
         public GamePanel(Controller c, int mapNumber, int encounterNumber)
         {
-            Setup(c);
+            Setup(c, mapNumber, encounterNumber);
             Engine = new GameEngine(Controller, this, mapNumber, encounterNumber);
         }
 
         public GamePanel(Controller c, int mapNumber, int encounterNumber, List<Character> pT)
         {
-            Setup(c);
+            Setup(c, mapNumber, encounterNumber);
             Engine = new GameEngine(Controller, this, mapNumber, encounterNumber, pT);
         }
 
         //Sets up all the global variables
-        public void Setup(Controller c)
+        public void Setup(Controller c, int NextMap, int NextEncounter)
         {
             Controller = c;
-            Casting = false;
+
+            FillUpCharacters();
+
+            string path = $@"../../Missions/{NextMap}/Dialog.xml";
+            try
+            {
+                DialogContainer = (Dialogs)Controller.XMLOperations.GenericDeserializer<Dialogs>(path);
+            }
+            catch
+            {
+                Console.WriteLine($"{NextMap}/Dialog.xml not found!");
+            }
+
             ScreenSize = Controller.SetPanelResolution(this);
+
+            AbilityFrame = new PlayerAbilityFrame(new Size(ScreenSize.Width / 5, ScreenSize.Height / 10));
+            SetupCombatDialog(NextEncounter);
+
+            Casting = false;
             ActionLabel = new Label
             {
                 Location = new Point(ScreenSize.Width / 2 - ScreenSize.Width / 6, ScreenSize.Height * 2 / 15),
@@ -67,14 +94,171 @@ namespace Portals_of_Madness
 
             ResultButton = new Button
             {
-                Location = new Point((ScreenSize.Width - ScreenSize.Height * 3 / 10) / 2,
-                    ScreenSize.Height - ScreenSize.Height / 10 * 2),
-                Size = new Size(ScreenSize.Height * 3 / 10, ScreenSize.Height / 10),
+                Location = new Point(ScreenSize.Width / 2 - AbilityFrame.Width / 2,
+                ScreenSize.Height - AbilityFrame.Height * 2),
+                Size = new Size(ScreenSize.Width / 5, ScreenSize.Height / 10),
                 Visible = false
             };
             Controls.Add(ResultButton);
 
             ToolTip = new ToolTip();
+        }
+
+        private void SetupCombatDialog(int NextEncounter)
+        {
+            int w = ScreenSize.Width;
+            int h = ScreenSize.Height;
+
+            //Set the size of the buttons
+            int buttonWidth = w / 5;
+            int buttonHeight = h / 10;
+
+            ButtonNext = new Button
+            {
+                Size = new Size(buttonWidth, buttonHeight),
+                Location = new Point(w / 2 - buttonWidth / 2, h - 2 * buttonHeight),
+                Text = "Continue",
+                TabIndex = 0,
+                AutoSize = true,
+                UseVisualStyleBackColor = true,
+                Visible = false
+            };
+            Controls.Add(ButtonNext);
+
+            ButtonStart = new Button
+            {
+                Size = new Size(buttonWidth, buttonHeight),
+                Location = new Point(w / 2 - buttonWidth / 2, h - 2 * buttonHeight),
+                Text = "End Dialog",
+                TabIndex = 1,
+                AutoSize = true,
+                UseVisualStyleBackColor = true,
+                Visible = false
+            };
+            Controls.Add(ButtonStart);
+
+            DialogRTBox = new RichTextBox
+            {
+                Location = new Point(w * 5 / 18, h / 3),
+                Size = new Size(w * 8 / 18, h / 6),
+                TabIndex = 4,
+                Text = "",
+                ReadOnly = true,
+                SelectionFont = new Font("Tahoma", 20, FontStyle.Bold),
+            };
+            Controls.Add(DialogRTBox);
+
+            LeftCharacter = new PictureBox
+            {
+                Size = new Size(w / 6, h / 3),
+                Location = new Point(w / 18, h / 6),
+                BackColor = Color.Gray,
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                TabIndex = 5,
+                TabStop = false
+            };
+            Controls.Add(LeftCharacter);
+
+            RightCharacter = new PictureBox
+            {
+                Size = new Size(w / 6, h / 3),
+                Location = new Point(w - w * 4 / 18, h / 6),
+                BackColor = Color.Gray,
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                TabIndex = 6,
+                TabStop = false
+            };
+            Controls.Add(RightCharacter);
+
+            DialogIndex = -1;
+            for (int i = 0; i < DialogContainer.Dialog.Length; i++)
+            {
+                int ID;
+                if (int.TryParse(DialogContainer.Dialog[i].Id, out _))
+                {
+                    ID = int.Parse(DialogContainer.Dialog[i].Id);
+                }
+                else
+                {
+                    string tmp = DialogContainer.Dialog[i].Id.Substring(1);
+                    ID = int.Parse(tmp);
+                }
+
+                if (ID == NextEncounter && DialogContainer.Dialog[i].Type == "Combat")
+                {
+                    DialogIndex = i;
+                    MaxLines = DialogContainer.Dialog[DialogIndex].Lines.Line.Length;
+                    Console.WriteLine("Dialog index: " + DialogIndex);
+                }
+            }
+
+            if(DialogIndex == -1)
+            {
+                LeftCharacter.Hide();
+                RightCharacter.Hide();
+                DialogRTBox.Hide();
+            }
+            else
+            {
+                AbilityFrame.Hide();
+                UpdateDialog();
+            }
+        }
+
+        private void ButtonStart_Click(object sender, EventArgs e)
+        {
+            LeftCharacter.Hide();
+            RightCharacter.Hide();
+            DialogRTBox.Hide();
+            ButtonStart.Hide();
+            AbilityFrame.Show();
+        }
+
+        public void FillUpCharacters()
+        {
+            try
+            {
+                XMLCharacterList = (XMLCharacters)Controller.XMLOperations.GenericDeserializer<XMLCharacters>($@"../../Characters/Characters.xml");
+            }
+            catch
+            {
+                Console.WriteLine($"Characters.xml not found!");
+            }
+        }
+
+        public void UpdateDialog()
+        {
+            string stringid = DialogContainer.Dialog[DialogIndex].Lines.Line[LineIndex].Speaker;
+            var cEnum = XMLCharacterList.XmlCharacter.Where(a => a.Id.Contains(stringid)).Select(a => a).First();
+            Character speaker = Controller.XMLOperations.ConvertToCharacter(cEnum);
+
+            if (DialogContainer.Dialog[DialogIndex].Lines.Line[LineIndex].Side == "left")
+            {
+                LeftCharacter.Image = Controller.ImageConverter(speaker.BaseImage, "profile");
+            }
+            else
+            {
+                RightCharacter.Image = Controller.ImageConverter(speaker.BaseImage, "profile");
+                RightCharacter.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            }
+
+            DialogRTBox.Text = $"{speaker.Name}: {DialogContainer.Dialog[DialogIndex].Lines.Line[LineIndex].Str}";
+        }
+
+        private void ButtonNext_Click(object sender, EventArgs e)
+        {
+            ++LineIndex;
+            Console.WriteLine($"{LineIndex} / {MaxLines}");
+            if (LineIndex + 1 < MaxLines)
+            {
+                UpdateDialog();
+            }
+            else
+            {
+                UpdateDialog();
+                ButtonNext.Hide();
+                ButtonStart.Show();
+            }
         }
 
         //Initializes the UI
@@ -87,14 +271,26 @@ namespace Portals_of_Madness
             Controls.Add(CharacterFrame.HealthLabel);
             Controls.Add(CharacterFrame.ResourceLabel);
             Controls.Add(CharacterFrame);
+            if(DialogIndex != -1)
+            {
+                AbilityFrame.Hide();
+                ButtonNext.Show();
+            }
+            ButtonNext.Click += ButtonNext_Click;
+            ButtonStart.Click += ButtonStart_Click;
         }
 
         public void InitializeAbilityFrame()
         {
-            AbilityFrame = new PlayerAbilityFrame(ScreenSize);
+            AbilityFrame.Location = new Point(ScreenSize.Width / 2 - AbilityFrame.Width / 2,
+                ScreenSize.Height - AbilityFrame.Height * 2);
             for (int i = 0; i < AbilityFrame.AbilityButtons.Count; i++)
             {
                 Controls.Add(AbilityFrame.AbilityButtons[i]);
+                int extra = AbilityFrame.Height / 3;
+                AbilityFrame.AbilityButtons[i].Location =
+                    new Point(AbilityFrame.Location.X + i * AbilityFrame.AbilityButtons[i].Width + (i + 1) * extra,
+                    AbilityFrame.Location.Y + AbilityFrame.Height / 10);
             }
             Controls.Add(AbilityFrame);
             AssignAbilityButtonClickFunctions();
@@ -195,6 +391,7 @@ namespace Portals_of_Madness
                 if (SelectedAbility.TargetCount == 1)
                 {
                     Engine.CurrentCharacter.CastAbility(SelectedAbility, target);
+                    Engine.ActionEventHandler($"{Engine.CurrentCharacter.Name} used {SelectedAbility.Name} on {target.Name}", Engine.CurrentCharacter);
                 }
                 else
                 {
@@ -202,6 +399,7 @@ namespace Portals_of_Madness
                     targets = SelectAimedTargets(target, SelectedAbility.Target == "ally" ? Engine.PlayerTeam :
                         SelectedAbility.Target == "enemy" ? Engine.EnemyTeam : Engine.InitiativeTeam);
                     Engine.CurrentCharacter.CastAbility(SelectedAbility, targets);
+                    Engine.ActionEventHandler($"{Engine.CurrentCharacter.Name} used {SelectedAbility.Name} on multiple targets", Engine.CurrentCharacter);
                 }
                 Casting = false;
                 Engine.Manage();
@@ -222,6 +420,25 @@ namespace Portals_of_Madness
                 if (Pic.Character != null)
                 {
                     Pic.UpdateBars();
+                }
+            }
+        }
+
+        public void UpdateCharacterImages(Character c)
+        {
+            foreach (CharacterPicture Pic in LeftSide)
+            {
+                if (Pic.Character == c)
+                {
+                    Pic.Image = c.Image;
+                }
+            }
+            foreach (CharacterPicture Pic in RightSide)
+            {
+                if (Pic.Character == c)
+                {
+                    Pic.Image = c.Image;
+                    Pic.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
                 }
             }
         }
@@ -275,7 +492,7 @@ namespace Portals_of_Madness
         private void AbilityButton_MouseEnter(object sender, EventArgs e)
         {
             AbilityButton abButton = (AbilityButton)sender;
-            ToolTip.Show(abButton.ability.ToString(), abButton);
+            ToolTip.Show(abButton.Ab.ToString(), abButton);
         }
 
         private void AbilityButton_MouseLeave(object sender, EventArgs e)
@@ -288,7 +505,7 @@ namespace Portals_of_Madness
         {
             AbilityButton abButton = (AbilityButton)sender;
             SelectedAbility = null;
-            Ability ab = abButton.ability;
+            Ability ab = abButton.Ab;
             if (Engine.CurrentCharacter.CanCast(ab))
             {
                 Console.WriteLine($"{ab.Name} was cast");
@@ -303,6 +520,14 @@ namespace Portals_of_Madness
                                 ab.Target == "enemy" ? Engine.EnemyTeam : Engine.InitiativeTeam));
                     }
                     Engine.CurrentCharacter.CastAbility(ab, targets);
+                    if (targets.Count > 1)
+                    {
+                        Engine.ActionEventHandler($"{Engine.CurrentCharacter.Name} used {ab.Name} on multiple targets", Engine.CurrentCharacter);
+                    }
+                    else
+                    {
+                        Engine.ActionEventHandler($"{Engine.CurrentCharacter.Name} used {ab.Name} on {targets[0].Name}", Engine.CurrentCharacter);
+                    }
                     Engine.Manage();
                 }
                 else
@@ -313,6 +538,9 @@ namespace Portals_of_Madness
             }
         }
 
+        /// <summary>
+        /// Sets the Casting variable to True to allow manual casting of the ability pressed on targets, also TODO: set up arrow setup
+        /// </summary>
         private void Cast()
         {
             Casting = true;

@@ -33,18 +33,20 @@ namespace Portals_of_Madness
 
             Label labelTitle = new Label
             {
-                Location = new Point(w / 4, 10),
+                Location = new Point(w / 2 - buttonWidth / 2, buttonHeight / 2),
                 Text = "How to play",
-                AutoSize = true,
-                Font = new Font("Microsoft Sans Serif", 20F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(238))),
-                Size = new Size(179, 31),
-                TabIndex = 2,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Tahoma", 24, FontStyle.Bold),
+                Size = new Size(buttonWidth, buttonHeight),
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.Fixed3D,
+                TabIndex = 2
             };
             Controls.Add(labelTitle);
 
             Label labelExplanation = new Label
             {
-                Location = new Point(w / 4, h / 15),
+                Location = new Point(w / 4, buttonHeight * 2),
                 MaximumSize = new Size(w / 2, 0),
                 Text = "The game is divided into several turns. Every living character on the " +
                 "field gets to use an ability. Every character has at most 3 abilities. The first one is " +
@@ -58,9 +60,11 @@ namespace Portals_of_Madness
                 "multiple enemies. You can hover over all of them to see what they do. " +
                 "Every character has a speed stat. You can see who will act next on the top of the screen.",
                 AutoSize = true,
-                Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(238))),
+                Font = new Font("Tahoma", 12, FontStyle.Bold),
                 Size = new Size(35, 20),
                 TabIndex = 3,
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.Fixed3D
             };
             Controls.Add(labelExplanation);
         }

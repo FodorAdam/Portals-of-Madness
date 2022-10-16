@@ -4,7 +4,10 @@
 		<id>eddie</id>
 		<imageSet>eddie</imageSet>
 		<name>Eddie</name>
+		<story>Chief Eddie
+A city rat abandoned by his kin due his small, sickly stature. He was taken in by the bandit lord of the Mountain Clan, where he quickly rose up the ranks until he eventually became a Warchief of his very own band. He was well known as a highly effective but reasonable bandit, always trying to stop unnecessary bloodshed whenever possible. After his latest heist, some paladins of The Order attacked him and his band, only for both bands to be ambushed by elementals.</story>
 		<level>1</level>
+		<xp>0</xp>
 		<characterClass>Hunter</characterClass>
 		<baseHealth>80</baseHealth>
 		<healthMult>1.1</healthMult>
@@ -32,7 +35,10 @@
 		<id>lance</id>
 		<imageSet>lance</imageSet>
 		<name>Lance</name>
+		<story>Sir Lancelot
+Rescued from a burning building during the Steelgate Riots, the young orphan was accepted into the ranks of The Order of the Rodent. He became a paladin and swore an oath to protect his people from the bandits. During one of his first missions, he ran into a group of Mountain Clan bandits returning from their latest heist. During their scuffle some rogue elementals stumbled into them and killed everyone, but him and a rat.</story>
 		<level>1</level>
+		<xp>0</xp>
 		<characterClass>Knight</characterClass>
 		<baseHealth>110</baseHealth>
 		<healthMult>1.12</healthMult>
@@ -48,7 +54,7 @@
 		<magicArmorMult>1.1</magicArmorMult>
 		<weaknesses>bleed</weaknesses>
 		<ability1Name>Slash</ability1Name>
-		<ability2Name>Bash</ability2Name>
+		<ability2Name>Heal</ability2Name>
 		<ability3Name>Protection Aura</ability3Name>
 		<baseSpeed>8</baseSpeed>
 		<rarity>epic</rarity>
@@ -60,7 +66,10 @@
 		<id>sam</id>
 		<imageSet>sam</imageSet>
 		<name>Sam</name>
+		<story>Samantha, the Druid
+A young forest mouse, Sam was always more interested in healing wounds than causing them. She became a druid in her ancestral home and left to help others who might need it. One day, she stumbled onto some elemetals about to kill a paladin and a bandit. She helped them banish the evil spirits and tended to the wounds of her new acquiantances. Unfortunately for them, a nearby Steelgate patrol spotted them and took all of them to be bandits or bandit symphatizers and arrested them.</story>
 		<level>1</level>
+		<xp>0</xp>
 		<characterClass>Druid</characterClass>
 		<baseHealth>75</baseHealth>
 		<healthMult>1.09</healthMult>
@@ -88,7 +97,10 @@
 		<id>clumsyPl</id>
 		<imageSet>clumsy</imageSet>
 		<name>Clumsy</name>
+		<story>Clumsy, the clumsy
+Thief, bandit, fearsome. All things Clumsy wishes he would be associated with, but he isn't. After all his trials, all his training, all his hard work and thievery, the only thing people remember about him is his clumsiness. From his birth, he was always unbalanced, but he never gave up, he kept trying. He was laughed out of every army, law enforcement and criminal underground he wished to join, but he will never stop trying to find his people.</story>
 		<level>1</level>
+		<xp>0</xp>
 		<characterClass>Hunter</characterClass>
 		<baseHealth>82</baseHealth>
 		<healthMult>1.11</healthMult>
@@ -116,7 +128,9 @@
 		<id>clumsyEn</id>
 		<imageSet>clumsy</imageSet>
 		<name>Clumsy</name>
+		<story></story>
 		<level>1</level>
+		<xp>0</xp>
 		<characterClass>miniboss</characterClass>
 		<baseHealth>82</baseHealth>
 		<healthMult>1.11</healthMult>
@@ -144,7 +158,9 @@
 		<id>prisoner1</id>
 		<imageSet>prisoner1</imageSet>
 		<name>Crazed Prisoner</name>
+		<story></story>
 		<level>1</level>
+		<xp>0</xp>
 		<characterClass>normal</characterClass>
 		<baseHealth>40</baseHealth>
 		<healthMult>1.09</healthMult>
@@ -172,7 +188,9 @@
 		<id>prisoner2</id>
 		<imageSet>prisoner2</imageSet>
 		<name>Crazed Prisoner</name>
+		<story></story>
 		<level>1</level>
+		<xp>0</xp>
 		<characterClass>normal</characterClass>
 		<baseHealth>40</baseHealth>
 		<healthMult>1.09</healthMult>
@@ -200,7 +218,9 @@
 		<id>prisoner3</id>
 		<imageSet>prisoner3</imageSet>
 		<name>Crazed Prisoner</name>
+		<story></story>
 		<level>1</level>
+		<xp>0</xp>
 		<characterClass>normal</characterClass>
 		<baseHealth>40</baseHealth>
 		<healthMult>1.09</healthMult>
@@ -228,7 +248,9 @@
 		<id>warden</id>
 		<imageSet>warden</imageSet>
 		<name>The Warden</name>
+		<story></story>
 		<level>1</level>
+		<xp>0</xp>
 		<characterClass>miniboss</characterClass>
 		<baseHealth>220</baseHealth>
 		<healthMult>1.1</healthMult>
@@ -253,10 +275,12 @@
 		<collectable>false</collectable>
 	</XMLCharacter>
 	<XMLCharacter>
-		<id>cityguard</id>
-		<imageSet>cityguard</imageSet>
+		<id>cityguardmelee</id>
+		<imageSet>cityguard1</imageSet>
 		<name>City Guard</name>
+		<story></story>
 		<level>1</level>
+		<xp>0</xp>
 		<characterClass>normal</characterClass>
 		<baseHealth>45</baseHealth>
 		<healthMult>1.1</healthMult>
@@ -281,15 +305,77 @@
 		<collectable>false</collectable>
 	</XMLCharacter>
 	<XMLCharacter>
+		<id>cityguardranged</id>
+		<imageSet>cityguard2</imageSet>
+		<name>City Guard</name>
+		<story></story>
+		<level>1</level>
+		<xp>0</xp>
+		<characterClass>normal</characterClass>
+		<baseHealth>40</baseHealth>
+		<healthMult>1.1</healthMult>
+		<resourceName>focus</resourceName>
+		<maxResource>20</maxResource>
+		<basePhysAttack>20</basePhysAttack>
+		<physAttackMult>1.1</physAttackMult>
+		<baseMagicAttack>0</baseMagicAttack>
+		<magicAttackMult>0</magicAttackMult>
+		<basePhysArmor>6</basePhysArmor>
+		<physArmorMult>1.1</physArmorMult>
+		<baseMagicArmor>0</baseMagicArmor>
+		<magicArmorMult>0</magicArmorMult>
+		<weaknesses>bleed,poison</weaknesses>
+		<ability1Name>Steady Shot</ability1Name>
+		<ability2Name>Steady Shot</ability2Name>
+		<ability3Name>Steady Shot</ability3Name>
+		<baseSpeed>8</baseSpeed>
+		<rarity>normal</rarity>
+		<acquired>false</acquired>
+		<aiName>sniper</aiName>
+		<collectable>false</collectable>
+	</XMLCharacter>
+		<XMLCharacter>
+		<id>paladin</id>
+		<imageSet>paladin</imageSet>
+		<name>Paladin</name>
+		<story></story>
+		<level>1</level>
+		<xp>0</xp>
+		<characterClass>normal</characterClass>
+		<baseHealth>70</baseHealth>
+		<healthMult>1.1</healthMult>
+		<resourceName>mana</resourceName>
+		<maxResource>25</maxResource>
+		<basePhysAttack>14</basePhysAttack>
+		<physAttackMult>1.1</physAttackMult>
+		<baseMagicAttack>6</baseMagicAttack>
+		<magicAttackMult>1.1</magicAttackMult>
+		<basePhysArmor>8</basePhysArmor>
+		<physArmorMult>1.1</physArmorMult>
+		<baseMagicArmor>3</baseMagicArmor>
+		<magicArmorMult>1.1</magicArmorMult>
+		<weaknesses>bleed</weaknesses>
+		<ability1Name>Slash</ability1Name>
+		<ability2Name>Heal</ability2Name>
+		<ability3Name>Mass Heal</ability3Name>
+		<baseSpeed>8</baseSpeed>
+		<rarity>normal</rarity>
+		<acquired>false</acquired>
+		<aiName>healer</aiName>
+		<collectable>false</collectable>
+	</XMLCharacter>
+	<XMLCharacter>
 		<id>maxwellEn</id>
 		<imageSet>maxwell</imageSet>
 		<name>Maxwell</name>
+		<story></story>
 		<level>1</level>
+		<xp>0</xp>
 		<characterClass>miniboss</characterClass>
 		<baseHealth>130</baseHealth>
 		<healthMult>1.12</healthMult>
 		<resourceName>mana</resourceName>
-		<maxResource>20</maxResource>
+		<maxResource>25</maxResource>
 		<basePhysAttack>16</basePhysAttack>
 		<physAttackMult>1.1</physAttackMult>
 		<baseMagicAttack>8</baseMagicAttack>
@@ -300,19 +386,22 @@
 		<magicArmorMult>1.1</magicArmorMult>
 		<weaknesses>bleed</weaknesses>
 		<ability1Name>Slash</ability1Name>
-		<ability2Name>Heal</ability2Name>
+		<ability2Name>Bash</ability2Name>
 		<ability3Name>Protection Aura</ability3Name>
 		<baseSpeed>8</baseSpeed>
 		<rarity>epic</rarity>
 		<acquired>false</acquired>
-		<aiName>healer</aiName>
+		<aiName>advanced</aiName>
 		<collectable>false</collectable>
 	</XMLCharacter>
 	<XMLCharacter>
-		<id>maxwellAl</id>
+		<id>maxwellPl</id>
 		<imageSet>maxwell</imageSet>
 		<name>Maxwell</name>
+		<story>Lord Protector Maxwell
+The young Maxwell was assigned to guard Steelgate officials during the riots. It was during this assignment when he was attacked by some rioters and his eye was damaged. Instead of running to a nearby cleric to heal his eye, he instead ran bravely into a burning house, where he found and rescued a young boar. This act of courage earned him the title of Lord Protector of Steelgate.</story>
 		<level>1</level>
+		<xp>0</xp>
 		<characterClass>Knight</characterClass>
 		<baseHealth>130</baseHealth>
 		<healthMult>1.12</healthMult>
@@ -328,7 +417,7 @@
 		<magicArmorMult>1.1</magicArmorMult>
 		<weaknesses>bleed</weaknesses>
 		<ability1Name>Slash</ability1Name>
-		<ability2Name>Heal</ability2Name>
+		<ability2Name>Bash</ability2Name>
 		<ability3Name>Protection Aura</ability3Name>
 		<baseSpeed>8</baseSpeed>
 		<rarity>epic</rarity>
@@ -340,7 +429,9 @@
 		<id>godfrey</id>
 		<imageSet>godfrey</imageSet>
 		<name>High Abbot Godfrey</name>
+		<story></story>
 		<level>1</level>
+		<xp>0</xp>
 		<characterClass>miniboss</characterClass>
 		<baseHealth>160</baseHealth>
 		<healthMult>1.12</healthMult>
@@ -361,7 +452,7 @@
 		<baseSpeed>8</baseSpeed>
 		<rarity>epic</rarity>
 		<acquired>false</acquired>
-		<aiName>advanced</aiName>
+		<aiName>healer</aiName>
 		<collectable>false</collectable>
 	</XMLCharacter>
 </XMLCharacters>

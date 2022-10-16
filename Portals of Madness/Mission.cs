@@ -23,7 +23,7 @@ namespace Portals_of_Madness
             string path = $@"../../Missions/{mission}/Mission.xml";
             try
             {
-                EncounterContainer = XMLOps.MissionDeserializer(path);
+                EncounterContainer = (Encounters)XMLOps.GenericDeserializer<Encounters>(path);
             }
             catch
             {
@@ -33,7 +33,7 @@ namespace Portals_of_Madness
             EveryAbility = new List<Ability>();
             try
             {
-                XMLAbilities xabs = XMLOps.AbilityDeserializer($@"../../Abilities/Abilities.xml");
+                XMLAbilities xabs = (XMLAbilities)XMLOps.GenericDeserializer<XMLAbilities>($@"../../Abilities/Abilities.xml");
                 foreach (XMLAbility xab in xabs.XmlAbility)
                 {
                     EveryAbility.Add(ConvertToAbility(xab));
@@ -46,7 +46,7 @@ namespace Portals_of_Madness
 
             try
             {
-                XMLCharacterList = XMLOps.CharacterDeserializer($@"../../Characters/Characters.xml");
+                XMLCharacterList = (XMLCharacters)XMLOps.GenericDeserializer<XMLCharacters>($@"../../Characters/Characters.xml");
             }
             catch
             {
@@ -96,10 +96,15 @@ namespace Portals_of_Madness
             {
                 case "prisonPack":
                     return SelectCharacter("prisoner");
-                case "crazedCitizenPack":
-                    break;
                 case "guardPack":
                     return SelectCharacter("cityguard");
+                case "councilGuardPack":
+                    int r = Rand.Next(0, 10);
+                    if(r < 5)
+                    {
+                        return SelectCharacter("cityguard");
+                    }
+                    return SelectCharacter("paladin");
                 default:
                     break;
             }
@@ -120,10 +125,10 @@ namespace Portals_of_Madness
                     characters.Add(SelectCharacter("clumsyEn"));
                     break;
                 case "townCouncil":
-                    characters.Add(SelectCharacter("cityguard"));
+                    characters.Add(SelectCharacter("paladin"));
                     characters.Add(SelectCharacter("maxwellEn"));
                     characters.Add(SelectCharacter("godfrey"));
-                    characters.Add(SelectCharacter("cityguard"));
+                    characters.Add(SelectCharacter("paladin"));
                     break;
                 default:
                     break;

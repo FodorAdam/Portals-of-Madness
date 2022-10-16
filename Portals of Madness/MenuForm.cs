@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Portals_of_Madness
@@ -16,7 +17,8 @@ namespace Portals_of_Madness
         public int MissionNumber { get; set; }
         public int MaxEncounterNumber { get; set; }
         public int EncounterNumber { get; set; }
-        public bool NewGame { get; set; }
+        public bool HasCharacters { get; set; }
+        public bool ShowContinue { get; set; }
 
         public MenuForm(Controller c)
         {
@@ -26,7 +28,9 @@ namespace Portals_of_Madness
             Controller.SetFormResolution(this);
             MissionNumber = 0;
             EncounterNumber = 0;
-            NewGame = false;
+            HasCharacters = false;
+            ShowContinue = File.Exists($@"../../Missions/0/Mission.xml");
+            CopyFiles(false);
 
             MapSelection = new MapSelectionPanel(Controller);
             MapSelection.Hide();
@@ -50,6 +54,7 @@ namespace Portals_of_Madness
 
             Buttons = new MenuButtonsPanel(Controller);
             Controls.Add(Buttons);
+            Buttons.ButtonContinue.Visible = ShowContinue;
             Buttons.ButtonNewGame.Click += ButtonNewGame_Click;
             Buttons.ButtonContinue.Click += ButtonContinue_Click;
             Buttons.ButtonInfo.Click += ButtonInfo_Click;
@@ -60,12 +65,44 @@ namespace Portals_of_Madness
             Info.ButtonBack.Click += BackToMenu_Click;
         }
 
+        private void CopyFiles(bool b)
+        {
+            try
+            {
+                File.Copy($@"../../Backups/Abilities.xml", $@"../../Abilities/Abilities.xml", b);
+            }
+            catch {}
+            try
+            {
+                File.Copy($@"../../Backups/Characters.xml", $@"../../Characters/Characters.xml", b);
+            }
+            catch { }
+            string dirPath = $@"../../Backups/";
+            int amount = Directory.GetDirectories(dirPath).Length;
+            for (int i = 0; i < amount; i++)
+            {
+                try
+                {
+                    File.Copy($@"../../Backups/{i}/Mission.xml", $@"../../Missions/{i}/Mission.xml", b);
+                }
+                catch { }
+                try
+                {
+                    File.Copy($@"../../Backups/{i}/Dialog.xml", $@"../../Missions/{i}/Dialog.xml", b);
+                }
+                catch { }
+            }
+        }
+
         //Start a new game, show dialog
         private void ButtonNewGame_Click(object sender, EventArgs e)
         {
             Buttons.Hide();
+            CopyFiles(true);
             MaxEncounterNumber = 6;
-            NewGame = true;
+            HasCharacters = true;
+            ShowContinue = true;
+            DialogP.FillUpCharacters();
             DialogP.StartFirst(true);
             if (DialogP.SetupDialog(0, 0, "Pre", ""))
             {
@@ -88,6 +125,7 @@ namespace Portals_of_Madness
             if (CharacterSelection.GetSelectedCharacterList().Count > 0)
             {
                 CharacterSelection.Hide();
+                DialogP.FillUpCharacters();
                 if (DialogP.SetupDialog(MissionNumber, EncounterNumber, "Pre", ""))
                 {
                     DialogP.Show();
@@ -111,7 +149,7 @@ namespace Portals_of_Madness
         {
             DialogP.Hide();
             List<Character> Characters = CharacterSelection.GetSelectedCharacterList();
-            if(NewGame)
+            if(HasCharacters)
             {
                 Characters = Game.GetRefreshedPlayerCharacters();
             }
@@ -127,17 +165,17 @@ namespace Portals_of_Madness
         //Continue the game from save
         private void ButtonContinue_Click(object sender, EventArgs e)
         {
-            NewGame = false;
+            HasCharacters = false;
             Buttons.Hide();
-            MapSelection.Show();
+            ShowAndUpdateMaps();
         }
 
         //Continue the game from save
         private void ButtonMapsFromEnd_Click(object sender, EventArgs e)
         {
-            NewGame = false;
+            HasCharacters = false;
             DialogP.Hide();
-            MapSelection.Show();
+            ShowAndUpdateMaps();
         }
 
         //Select the mission
@@ -146,9 +184,9 @@ namespace Portals_of_Madness
             MissionNumber = MapSelection.GetMissionNumber();
             MaxEncounterNumber = MapSelection.GetMaxEncounterNumber();
             EncounterNumber = MapSelection.GetEncounterNumber();
-            NewGame = false;
+            HasCharacters = false;
             MapSelection.Hide();
-            CharacterSelection.Show();
+            ShowAndUpdateCharacters();
         }
 
         //Show the how to play form
@@ -166,12 +204,14 @@ namespace Portals_of_Madness
             CharacterSelection.Hide();
             Info.Hide();
             Buttons.Show();
+            Buttons.ButtonContinue.Visible = true;
         }
 
         //Start next mission if one is still availabe, return to mapselection if not or if the player died
         private void BackToMenuFromGame_Click(object sender, EventArgs e)
         {
             Game.Hide();
+            HasCharacters = true;
             if (!Game.Engine.EndRun)
             {
                 if (DialogP.SetupDialog(MissionNumber, EncounterNumber, "Post", ""))
@@ -205,13 +245,25 @@ namespace Portals_of_Madness
                 }
                 else
                 {
-                    MapSelection.Show();
+                    ShowAndUpdateMaps();
                 }
             }
             else
             {
-                MapSelection.Show();
+                ShowAndUpdateMaps();
             }
+        }
+
+        private void ShowAndUpdateCharacters()
+        {
+            CharacterSelection.UpdateAllAvailableCharacters();
+            CharacterSelection.Show();
+        }
+
+        private void ShowAndUpdateMaps()
+        {
+            MapSelection.UpdateAllAvailableMissions();
+            MapSelection.Show();
         }
 
         private void ContinueIfLastHadEndingDialog_Click(object sender, EventArgs e)
@@ -235,7 +287,7 @@ namespace Portals_of_Madness
             }
             else
             {
-                MapSelection.Show();
+                ShowAndUpdateMaps();
             }
         }
 

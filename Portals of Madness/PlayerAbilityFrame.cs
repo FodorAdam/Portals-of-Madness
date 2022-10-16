@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Portals_of_Madness
@@ -12,13 +8,11 @@ namespace Portals_of_Madness
     {
         public List<AbilityButton> AbilityButtons { get; set; }
 
-        public PlayerAbilityFrame(Size ScreenSize)
+        public PlayerAbilityFrame(Size FrameSize)
         {
-            Height = ScreenSize.Height / 10;
+            Size = FrameSize;
             int buttonLength = Height - Height / 5;
-            Width = Height *3;
             BackColor = Color.Black;
-            Location = new Point((ScreenSize.Width - Width) / 2, ScreenSize.Height - Height * 2);
             AbilityButtons = new List<AbilityButton>
             {
                 new AbilityButton(),
@@ -29,9 +23,6 @@ namespace Portals_of_Madness
             {
                 AbilityButtons[i].Height = buttonLength;
                 AbilityButtons[i].Width = buttonLength;
-                int extra = Height / 10;
-                AbilityButtons[i].Location = new Point(Location.X + i * buttonLength + (i + 1) * extra,
-                    Location.Y + Height / 10);
             }
         }
 

@@ -20,7 +20,7 @@
         <name>Piercing Shot</name>
         <cost>10</cost>
 		<cooldown>1</cooldown>
-		<physAttackDamage>0.8</physAttackDamage>
+		<physAttackDamage>0.85</physAttackDamage>
 		<magicAttackDamage>0</magicAttackDamage>
 		<damageType>bleed</damageType>
 		<target>enemy</target>
@@ -164,7 +164,7 @@
         <name>Volley</name>
         <cost>15</cost>
 		<cooldown>1</cooldown>
-		<physAttackDamage>0.6</physAttackDamage>
+		<physAttackDamage>0.75</physAttackDamage>
 		<magicAttackDamage>0</magicAttackDamage>
 		<damageType>bleed</damageType>
 		<target>enemy</target>

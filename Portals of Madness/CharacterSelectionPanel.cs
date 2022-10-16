@@ -16,11 +16,14 @@ namespace Portals_of_Madness
         public ListBox CharacterSelected { get; set; }
         public PictureBox CharacterPictureBox { get; set; }
         public RichTextBox CharacterDesc { get; set; }
+        public RichTextBox CharacterStory { get; set; }
         List<Character> CharacterList { get; set; }
         List<Character> SelectedCharacterList { get; set; }
+        public Controller Controller { get; set; }
 
         public CharacterSelectionPanel(Controller c)
         {
+            Controller = c;
             BackColor = Color.Transparent;
             CharacterList = new List<Character>();
             SelectedCharacterList = new List<Character>();
@@ -31,6 +34,7 @@ namespace Portals_of_Madness
 
             //Set the size of the buttons
             int buttonWidth = w / 5;
+            int pictureSize = w / 7;
             int buttonHeight = h / 10;
             int buttonWidthSmall = w / 20;
             int buttonHeightSmall = h / 20;
@@ -58,7 +62,7 @@ namespace Portals_of_Madness
             ButtonAdd = new Button
             {
                 Size = new Size(buttonWidthSmall, buttonHeightSmall),
-                Location = new Point(15 + buttonWidth / 2 + (int)(buttonWidthSmall * 0.5), buttonHeightSmall),
+                Location = new Point(buttonHeight / 2 + pictureSize + (int)(buttonWidthSmall * 0.5), buttonHeightSmall),
                 TabIndex = 2,
                 Text = "Add",
                 UseVisualStyleBackColor = true
@@ -68,7 +72,7 @@ namespace Portals_of_Madness
             ButtonRemove = new Button
             {
                 Size = new Size(buttonWidthSmall, buttonHeightSmall),
-                Location = new Point(15 + buttonWidth / 2 + (int)(buttonWidthSmall * 0.5), buttonHeightSmall * 2),
+                Location = new Point(buttonHeight / 2 + pictureSize + (int)(buttonWidthSmall * 0.5), buttonHeightSmall * 2),
                 TabIndex = 3,
                 Text = "Remove",
                 UseVisualStyleBackColor = true
@@ -77,8 +81,8 @@ namespace Portals_of_Madness
 
             CharacterPictureBox = new PictureBox
             {
-                Size = new Size(buttonHeight, buttonHeight),
-                Location = new Point(w / 2 - buttonHeight / 2, h - buttonHeight * 2),
+                Size = new Size(pictureSize, pictureSize),
+                Location = new Point(w / 2 - pictureSize / 2, buttonHeight / 2),
                 BackColor = Color.Gray,
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 TabIndex = 4,
@@ -89,28 +93,19 @@ namespace Portals_of_Madness
             CharacterSelector = new ListBox
             {
                 FormattingEnabled = true,
-                Size = new Size(buttonWidth / 2, buttonWidth / 2),
-                Location = new Point(15, 15),
+                Size = new Size(pictureSize, buttonHeight * 37 / 8 + pictureSize),
+                Location = new Point(buttonHeight / 2, buttonHeight / 2),
+                Font = new Font("Tahoma", 12, FontStyle.Bold),
                 TabIndex = 5
             };
             Controls.Add(CharacterSelector);
 
-            var XMLCharacterList = c.XMLOperations.CharacterDeserializer($@"../../Characters/Characters.xml");
-            var cEnum = XMLCharacterList.XmlCharacter.Where(a => a.Collectable == true).Select(a => a);
-            List<XMLCharacter> XCList = new List<XMLCharacter>();
-            XCList.AddRange(cEnum);
-
-            foreach (XMLCharacter ch in XCList)
-            {
-                CharacterList.Add(c.XMLOperations.ConvertToCharacter(ch));
-                CharacterSelector.Items.Add(ch.Name);
-            }
-
             CharacterSelected = new ListBox
             {
                 FormattingEnabled = true,
-                Size = new Size(buttonWidth / 2, buttonWidth / 2),
-                Location = new Point(15 + buttonWidth, 15),
+                Size = new Size(pictureSize, buttonHeight * 37 / 8 + pictureSize),
+                Location = new Point((w - pictureSize * 3 - buttonHeight / 2) / 2, buttonHeight / 2),
+                Font = new Font("Tahoma", 12, FontStyle.Bold),
                 TabIndex = 6
             };
             Controls.Add(CharacterSelected);
@@ -124,12 +119,39 @@ namespace Portals_of_Madness
 
             CharacterDesc = new RichTextBox
             {
-                Location = new Point(12, 208),
-                Size = new Size(468, 96),
+                Location = new Point(w / 2 + buttonWidth / 2, buttonHeight / 2),
+                Size = new Size(w / 2 - buttonWidth + buttonHeight, pictureSize),
                 TabIndex = 8,
-                Text = ""
+                Text = "",
+                Font = new Font("Tahoma", 12, FontStyle.Bold),
+                ReadOnly = true
             };
             Controls.Add(CharacterDesc);
+
+            CharacterStory = new RichTextBox
+            {
+                Location = new Point(w / 2 - pictureSize / 2, buttonHeight + pictureSize),
+                Size = new Size(CharacterDesc.Width + CharacterDesc.Location.X - CharacterPictureBox.Location.X, buttonHeight * 4),
+                TabIndex = 9,
+                Text = "",
+                Font = new Font("Tahoma", 10, FontStyle.Bold),
+                ReadOnly = true
+            };
+            Controls.Add(CharacterStory);
+        }
+
+        public void UpdateAllAvailableCharacters()
+        {
+            var XMLCharacterList = (XMLCharacters)Controller.XMLOperations.GenericDeserializer<XMLCharacters>($@"../../Characters/Characters.xml");
+            var cEnum = XMLCharacterList.XmlCharacter.Where(a => a.Collectable == true).Select(a => a);
+            List<XMLCharacter> XCList = new List<XMLCharacter>();
+            XCList.AddRange(cEnum);
+
+            foreach (XMLCharacter ch in XCList)
+            {
+                CharacterList.Add(Controller.XMLOperations.ConvertToCharacter(ch));
+                CharacterSelector.Items.Add(ch.Name);
+            }
         }
 
         private void SelectCharacter(object sender, MouseEventArgs e)
@@ -186,8 +208,9 @@ namespace Portals_of_Madness
             if (index != ListBox.NoMatches)
             {
                 tmpChar = CharacterList.Where(a => a.Name == (string)CharacterSelector.SelectedItem).Select(a => a).First();
-                CharacterPictureBox.Image = ImageConverter(tmpChar.BaseImage);
+                CharacterPictureBox.Image = Controller.ImageConverter(tmpChar.BaseImage, "profile");
                 CharacterDesc.Text = tmpChar.ToString();
+                CharacterStory.Text = tmpChar.Story;
             }
         }
 
@@ -199,23 +222,10 @@ namespace Portals_of_Madness
             if (index != ListBox.NoMatches)
             {
                 tmpChar = CharacterList.Where(a => a.Name == (string)CharacterSelected.SelectedItem).Select(a => a).First();
-                CharacterPictureBox.Image = ImageConverter(tmpChar.BaseImage);
+                CharacterPictureBox.Image = Controller.ImageConverter(tmpChar.BaseImage, "profile");
                 CharacterDesc.Text = tmpChar.ToString();
+                CharacterStory.Text = tmpChar.Story;
             }
-        }
-
-        public Image ImageConverter(string name)
-        {
-            Image image = null;
-            try
-            {
-                image = Image.FromFile($@"../../Art/Sprites/Characters/{name}/profile.png");
-            }
-            catch
-            {
-                Console.WriteLine($"{name}/profile missing");
-            }
-            return image;
         }
 
         public List<Character> GetSelectedCharacterList()

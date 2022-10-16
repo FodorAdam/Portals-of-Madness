@@ -2,11 +2,18 @@
 <Encounters>
 	<id>0</id>
 	<name>Madness</name>
+	<lore>Having been (mostly) mistakenly captured by Steelgate law enforcement, our heroes find themselves having to bust out of prison if they wish to be free ever again. As they are breaking out, they feel a strange shockwave pass through...</lore>
+	<unlocked>true</unlocked>
+	<previous>0</previous>
 	<side>right</side>
 	<Encounter>
 		<id>0</id>
 		<name>Escape!</name>
 		<background1>prison</background1>
+		<background2></background2>
+		<background2movement></background2movement>
+		<foreground></foreground>
+		<foregroundmovement></foregroundmovement>
 		<optional>false</optional>
 		<Fights>
 			<Fight>
@@ -33,6 +40,10 @@
 		<id>1</id>
 		<name>The Yard Riots</name>
 		<background1>yard</background1>
+		<background2></background2>
+		<background2movement></background2movement>
+		<foreground></foreground>
+		<foregroundmovement></foregroundmovement>
 		<optional>false</optional>
 		<Fights>
 			<Fight>
@@ -59,6 +70,10 @@
 		<id>2</id>
 		<name>The Bridge Encounter</name>
 		<background1>bridge</background1>
+		<background2></background2>
+		<background2movement></background2movement>
+		<foreground></foreground>
+		<foregroundmovement></foregroundmovement>
 		<optional>false</optional>
 		<Fights>
 			<Fight>
@@ -70,7 +85,7 @@
 			<Fight>
 				<id>1</id>
 				<enemies>guardPack</enemies>
-				<amount>4</amount>
+				<amount>6</amount>
 				<type>normal</type>
 			</Fight>
 		</Fights>
@@ -79,18 +94,22 @@
 		<id>3</id>
 		<name>Armory</name>
 		<background1>fort</background1>
+		<background2></background2>
+		<background2movement></background2movement>
+		<foreground></foreground>
+		<foregroundmovement></foregroundmovement>
 		<optional>true</optional>
 		<Fights>
 			<Fight>
 				<id>0</id>
-				<enemies>guardPack</enemies>
-				<amount>4</amount>
+				<enemies>councilGuardPack</enemies>
+				<amount>3</amount>
 				<type>normal</type>
 			</Fight>
 			<Fight>
 				<id>1</id>
-				<enemies>guardPack</enemies>
-				<amount>4</amount>
+				<enemies>councilGuardPack</enemies>
+				<amount>3</amount>
 				<type>normal</type>
 			</Fight>
 			<Fight>
@@ -105,17 +124,21 @@
 		<id>4</id>
 		<name>The Tower</name>
 		<background1>fort</background1>
+		<background2></background2>
+		<background2movement></background2movement>
+		<foreground></foreground>
+		<foregroundmovement></foregroundmovement>
 		<optional>false</optional>
 		<Fights>
 			<Fight>
 				<id>0</id>
-				<enemies>guardPack</enemies>
-				<amount>3</amount>
+				<enemies>councilGuardPack</enemies>
+				<amount>4</amount>
 				<type>normal</type>
 			</Fight>
 			<Fight>
 				<id>1</id>
-				<enemies>guardPack</enemies>
+				<enemies>councilGuardPack</enemies>
 				<amount>4</amount>
 				<type>normal</type>
 			</Fight>
@@ -125,6 +148,10 @@
 		<id>5</id>
 		<name>The City Council</name>
 		<background1>fort</background1>
+		<background2></background2>
+		<background2movement></background2movement>
+		<foreground></foreground>
+		<foregroundmovement></foregroundmovement>
 		<optional>false</optional>
 		<Fights>
 			<Fight>

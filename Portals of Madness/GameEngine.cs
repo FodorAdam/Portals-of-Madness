@@ -23,8 +23,6 @@ namespace Portals_of_Madness
         public int TurnNumber { get; set; }
         public GamePanel Panel { get; set; }
         public Controller Controller { get; set; }
-        public List<string> DialogIndex { get; set; }
-        public Dialogs DialogContainer { get; set; }
         public bool EndRun { get; set; }
 
         //When called by GameForm after starting a new game
@@ -55,7 +53,7 @@ namespace Portals_of_Madness
             AllCharacters = new List<Character>();
             try
             {
-                XMLCharacters xchs = Controller.XMLOperations.CharacterDeserializer($@"../../Characters/Characters.xml");
+                XMLCharacters xchs = (XMLCharacters)Controller.XMLOperations.GenericDeserializer<XMLCharacters>($@"../../Characters/Characters.xml");
                 foreach(XMLCharacter xch in xchs.XmlCharacter)
                 {
                     AllCharacters.Add(Controller.XMLOperations.ConvertToCharacter(xch));
@@ -65,39 +63,10 @@ namespace Portals_of_Madness
             {
                 Console.WriteLine("Characters.xml not found.");
             }
-
-            string path = $@"../../Missions/{NextMap}/Dialog.xml";
-            try
-            {
-                DialogContainer = Controller.XMLOperations.DialogDeserializer(path);
-            }
-            catch
-            {
-                Console.WriteLine($"{NextMap}/Dialog.xml not found!");
-            }
         }
 
         public void InitializeStuff(GamePanel p)
         {
-            /*for (int i = 0; i < DialogContainer.Dialog.Length; i++)
-            {
-                int ID;
-                if (int.TryParse(DialogContainer.Dialog[i].Id, out _))
-                {
-                    ID = int.Parse(DialogContainer.Dialog[i].Id);
-                }
-                else
-                {
-                    string tmp = DialogContainer.Dialog[i].Id.Substring(1);
-                    ID = int.Parse(tmp);
-                }
-
-                if (ID == NextEncounter)
-                {
-                    DialogIndex.Add(DialogContainer.Dialog[i].Id);
-                }
-            }*/
-
             EndRun = false;
             Panel = p;
             PlayerTurn = false;
@@ -189,14 +158,14 @@ namespace Portals_of_Madness
                 if(!PlayerTurn)
                 {
                     Panel.AbilityFrame.SetVisibility(false);
-                    ActionLabel(CurrentCharacter.Act(PlayerTeam, EnemyTeam));
+                    ActionEventHandler(CurrentCharacter.Act(PlayerTeam, EnemyTeam), CurrentCharacter);
                     Manage();
                 }
                 else
                 {
                     Panel.AbilityFrame.SetVisibility(true);
                     Panel.AbilityFrame.UpdateButtons(CurrentCharacter);
-                    Panel.CharacterFrame.UpdateFrame(CurrentCharacter);
+                    Panel.CharacterFrame.UpdateFrame(CurrentCharacter, Controller);
                 }
             }
             else if (AreBothTeamsAlive() == -1)
@@ -323,7 +292,7 @@ namespace Portals_of_Madness
             if (InitiativeTeam[CurrentID].WasStunned)
             {
                 InitiativeTeam[CurrentID].WasStunned = false;
-                ActionLabel($"{InitiativeTeam[CurrentID].Name} is no longer winded");
+                StunEventHandler($"{InitiativeTeam[CurrentID].Name} is no longer winded");
                 Panel.UpdateCharacterBars();
             }
 
@@ -334,7 +303,7 @@ namespace Portals_of_Madness
                 {
                     InitiativeTeam[CurrentID].Stunned = false;
                     InitiativeTeam[CurrentID].WasStunned = true;
-                    ActionLabel($"{InitiativeTeam[CurrentID].Name} is no longer stunned");
+                    StunEventHandler($"{InitiativeTeam[CurrentID].Name} is no longer stunned");
                     Panel.UpdateCharacterBars();
                 }
                 return false;
@@ -351,13 +320,27 @@ namespace Portals_of_Madness
             return true;
         }
 
-        private void ActionLabel(string msg)
+        public void StunEventHandler(string msg)
         {
             Panel.ActionLabel.Visible = true;
             Panel.ActionLabel.Text = msg;
             Application.DoEvents();
-            Thread.Sleep(new TimeSpan(0, 0, 1));
+            Thread.Sleep(new TimeSpan(0, 0, 0, 1, 500));
             Panel.ActionLabel.Visible = false;
+            Application.DoEvents();
+        }
+
+        public void ActionEventHandler(string msg, Character actor)
+        {
+            Panel.ActionLabel.Visible = true;
+            Panel.ActionLabel.Text = msg;
+            actor.SetImageToAttack();
+            Panel.UpdateCharacterImages(actor);
+            Application.DoEvents();
+            Thread.Sleep(new TimeSpan(0, 0, 0, 1, 500));
+            Panel.ActionLabel.Visible = false;
+            actor.SetImageToBase();
+            Panel.UpdateCharacterImages(actor);
             Application.DoEvents();
         } 
 

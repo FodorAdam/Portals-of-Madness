@@ -67,9 +67,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controller.cs" />
-    <Compile Include="DialogBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="DialogPanel.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -68,17 +68,5 @@ namespace Portals_of_Madness
                 Console.WriteLine($"{BaseImage}/dead not found!");
             }
         }
-
-        public Image GetProfileImage()
-        {
-            try
-            {
-                return Image.FromFile($@"../../Art/Sprites/Characters/{BaseImage}/profile.png");
-            }
-            catch
-            {
-                return Image.FromFile($@"../../Art/Sprites/Characters/{BaseImage}/base.png");
-            }
-        }
     }
 }

@@ -64,9 +64,9 @@ namespace Portals_of_Madness
                 HealthLabel.Location.Y + HealthLabel.Height);
         }
 
-        public void UpdateFrame(Character c)
+        public void UpdateFrame(Character c, Controller cont)
         {
-            CharacterImage.Image = ImageConverter(c.BaseImage);
+            CharacterImage.Image = cont.ImageConverter(c.BaseImage, "profile");
 
             HealthLabel.Text = $"{c.CurrentHealth}/{c.MaxHealth}";
             ResourceLabel.Text = $"{c.CurrentResource}/{c.MaxResource}";
@@ -82,20 +82,6 @@ namespace Portals_of_Madness
             {
                 ResourceLabel.ForeColor = Color.Blue;
             }
-        }
-
-        public Image ImageConverter(string name)
-        {
-            Image image = null;
-            try
-            {
-                image = Image.FromFile($@"../../Art/Sprites/Characters/{name}/profile.png");
-            }
-            catch
-            {
-                Console.WriteLine($"{name}/profile missing");
-            }
-            return image;
         }
     }
 }

@@ -50,12 +50,6 @@ namespace Portals_of_Madness
                 UseVisualStyleBackColor = true
             };
 
-            //TODO: If there is no saved game, hide the continue
-            /*if (true)
-            {
-                ButtonContinue.Visible = false;
-            }*/
-
             Controls.Add(ButtonNewGame);
             Controls.Add(ButtonContinue);
             Controls.Add(ButtonInfo);

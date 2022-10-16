@@ -10,10 +10,7 @@ namespace Portals_of_Madness
         public Panel HealthBar { get; set; }
         public Panel ResourceBar { get; set; }
 
-        public CharacterPicture()
-        {
-
-        }
+        public CharacterPicture() { }
 
         public void InitializeBars()
         {

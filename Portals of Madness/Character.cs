@@ -48,7 +48,9 @@ namespace Portals_of_Madness
     {
         public string ID { get; }
         public string Name { get; }
+        public string Story { get; }
         public int Level { get; set; }
+        public int XP { get; set; }
 
         public double BaseHealth { get; }
         public double HealthMult { get; }
@@ -91,7 +93,7 @@ namespace Portals_of_Madness
         public string AIType { get; }
 
         public Character(string im,
-            string id, int l, string n, string chC,
+            string id, int l, int x, string n, string s, string chC,
             double bHP, double hpM,
             string rN, int mR,
             double pAt, double pAtM, double mAt, double mAtM,
@@ -101,6 +103,7 @@ namespace Portals_of_Madness
         {
             ID = id;
             Name = n;
+            Story = s;
 
             if(l < 1)
             {
@@ -114,6 +117,7 @@ namespace Portals_of_Madness
             {
                 Level = l;
             }
+            XP = x;
 
             CharacterClass = chC;
 
@@ -597,6 +601,15 @@ namespace Portals_of_Madness
                         }
                         break;
                     case "healer":
+                        bool hasHealTarget = false;
+                        foreach(Character c in AITeam)
+                        {
+                            if(c.Alive && c.CurrentHealth < c.MaxHealth)
+                            {
+                                hasHealTarget = true;
+                                break;
+                            }
+                        }
                         if (CanCast(Abilities[2]) && Abilities[2].AbilityType == "heal")
                         {
                             int healTargets = 0;
@@ -643,12 +656,15 @@ namespace Portals_of_Madness
                 targets.Add(SelectRandomTarget(playerTeam));
             }
             CastAbility(Abilities[abilityNum], targets);
-            string action = $"{Name} used {Abilities[abilityNum].Name} on {targets[0].Name}";
-            for (int i = 1; i < targets.Count; i++)
+
+            if(targets.Count > 1)
             {
-                action += $", {targets[i]}";
+                return $"{Name} used {Abilities[abilityNum].Name} on multiple targets";
             }
-            return action;
+            else
+            {
+                return $"{Name} used {Abilities[abilityNum].Name} on {targets[0].Name}";
+            }
         }
 
         private string SnipeAct(int abilityNum, List<Character> playerTeam)
@@ -675,7 +691,7 @@ namespace Portals_of_Madness
             List<Character> targets = new List<Character>();
             Character target;
             target = AITeam[0];
-            for (int j = 0; j < Abilities[abilityNum].TargetCount; j++)
+            if(Abilities[abilityNum].TargetCount == 1)
             {
                 for (int i = 1; i < AITeam.Count; i++)
                 {
@@ -688,15 +704,32 @@ namespace Portals_of_Madness
                         target = AITeam[i];
                     }
                 }
-                CastAbility(Abilities[abilityNum], target);
                 targets.Add(target);
             }
-            string action = $"{Name} used {Abilities[abilityNum].Name} on {targets[0].Name}";
-            for (int i = 1; i < targets.Count; i++)
+            else
             {
-                action += $", {targets[i]}";
+                for (int j = 0; j < Abilities[abilityNum].TargetCount; j++)
+                {
+                    if(j == AITeam.Count)
+                    {
+                        break;
+                    }
+                    if(AITeam[j].Alive && AITeam[j].CurrentHealth < AITeam[j].MaxHealth)
+                    {
+                        targets.Add(AITeam[j]);
+                    }
+                }
             }
-            return action;
+            CastAbility(Abilities[abilityNum], targets);
+            if (targets.Count > 1)
+            {
+                return $"{Name} used {Abilities[abilityNum].Name} on multiple targets";
+            }
+            else if(targets.Count == 1)
+            {
+                return $"{Name} used {Abilities[abilityNum].Name} on {targets[0].Name}";
+            }
+            return "";
         }
 
         public override string ToString()

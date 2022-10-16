@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Portals_of_Madness
@@ -30,6 +31,20 @@ namespace Portals_of_Madness
             p.ClientSize = tmpSize;
 
             return tmpSize;
+        }
+
+        public Image ImageConverter(string name, string what)
+        {
+            Image image = null;
+            try
+            {
+                image = Image.FromFile($@"../../Art/Sprites/Characters/{name}/{what}.png");
+            }
+            catch
+            {
+                Console.WriteLine($"{name}/{what} is missing");
+            }
+            return image;
         }
     }
 }

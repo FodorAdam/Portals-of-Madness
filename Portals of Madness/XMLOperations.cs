@@ -7,13 +7,17 @@ namespace Portals_of_Madness
 {
     public class XMLOperations
     {
-        public readonly List<Ability> AllAbilities;
+        public List<Ability> AllAbilities;
 
         public XMLOperations()
         {
             AllAbilities = new List<Ability>();
-            XMLAbilities xabs = AbilityDeserializer($@"../../Abilities/Abilities.xml");
-            foreach(XMLAbility xab in xabs.XmlAbility)
+        }
+
+        private void SetUpAllAbilities()
+        {
+            XMLAbilities xabs = (XMLAbilities)GenericDeserializer<XMLAbilities>($@"../../Abilities/Abilities.xml");
+            foreach (XMLAbility xab in xabs.XmlAbility)
             {
                 AllAbilities.Add(ConvertToAbility(xab));
             }
@@ -25,68 +29,22 @@ namespace Portals_of_Madness
             }
         }
 
-        public XMLAbilities AbilityDeserializer(string path)
+        public Object GenericDeserializer<T>(string path)
         {
-            XMLAbilities obj = new XMLAbilities();
-            XmlSerializer des = new XmlSerializer(typeof(XMLAbilities));
+            T obj;
+            XmlSerializer des = new XmlSerializer(typeof(T));
             try
             {
                 TextReader sr = new StreamReader(path);
-                obj = (XMLAbilities)des.Deserialize(sr);
+                obj = (T)des.Deserialize(sr);
                 sr.Close();
+                return obj;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.InnerException);
             }
-            return obj;
-        }
-
-        public XMLCharacters CharacterDeserializer(string path)
-        {
-            XMLCharacters obj = new XMLCharacters();
-            XmlSerializer des = new XmlSerializer(typeof(XMLCharacters));
-            try
-            {
-                TextReader sr = new StreamReader(path);
-                obj = (XMLCharacters)des.Deserialize(sr);
-                sr.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.InnerException);
-            }
-            return obj;
-        }
-
-        //Deserializes a Mission XML file
-        public Encounters MissionDeserializer(string path)
-        {
-            Encounters obj = new Encounters();
-            XmlSerializer des = new XmlSerializer(typeof(Encounters));
-            try
-            {
-                TextReader sr = new StreamReader(path);
-                obj = (Encounters)des.Deserialize(sr);
-                sr.Close();
-            }
-            catch { }
-            return obj;
-        }
-
-        //Deserializes a Dialog XML file
-        public Dialogs DialogDeserializer(string path)
-        {
-            Dialogs obj = new Dialogs();
-            XmlSerializer des = new XmlSerializer(typeof(Dialogs));
-            try
-            {
-                TextReader sr = new StreamReader(path);
-                obj = (Dialogs)des.Deserialize(sr);
-                sr.Close();
-            }
-            catch { }
-            return obj;
+            return null;
         }
 
         public Ability GetAblilityByName(string abn)
@@ -110,7 +68,11 @@ namespace Portals_of_Madness
 
         public Character ConvertToCharacter(XMLCharacter x)
         {
-            return new Character(x.ImageSet, x.Id, x.Level, x.Name, x.CharacterClass, x.BaseHealth, x.HealthMult,
+            if(AllAbilities.Count == 0)
+            {
+                SetUpAllAbilities();
+            }
+            return new Character(x.ImageSet, x.Id, x.Level, x.XP, x.Name, x.Story, x.CharacterClass, x.BaseHealth, x.HealthMult,
                 x.ResourceName, x.MaxResource, x.BasePhysAttack, x.PhysAttackMult, x.BaseMagicAttack,
                 x.MagicAttackMult, x.BasePhysArmor, x.PhysArmorMult, x.BaseMagicArmor,
                 x.MagicArmorMult, x.Weaknesses,
@@ -196,8 +158,14 @@ namespace Portals_of_Madness
         [XmlElement("name")]
         public string Name { get; set; }
 
+        [XmlElement("story")]
+        public string Story { get; set; }
+
         [XmlElement("level")]
         public int Level { get; set; }
+
+        [XmlElement("xp")]
+        public int XP { get; set; }
 
         [XmlElement("characterClass")]
         public string CharacterClass { get; set; }
@@ -275,6 +243,15 @@ namespace Portals_of_Madness
         [XmlElement("name")]
         public string Name { get; set; }
 
+        [XmlElement("lore")]
+        public string Lore { get; set; }
+
+        [XmlElement("unlocked")]
+        public string Unlocked { get; set; }
+
+        [XmlElement("previous")]
+        public string Previous { get; set; }
+
         [XmlElement("side")]
         public string Side { get; set; }
 
@@ -292,6 +269,18 @@ namespace Portals_of_Madness
 
         [XmlElement("background1")]
         public string Background1 { get; set; }
+
+        [XmlElement("background2")]
+        public string Background2 { get; set; }
+
+        [XmlElement("background2movement")]
+        public string Background2Movement { get; set; }
+
+        [XmlElement("foreground")]
+        public string Foreground { get; set; }
+
+        [XmlElement("foregroundmovement")]
+        public string ForegroundMovement { get; set; }
 
         [XmlElement("optional")]
         public bool Optional { get; set; }
