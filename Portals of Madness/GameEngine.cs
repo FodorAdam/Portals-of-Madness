@@ -89,8 +89,8 @@ namespace Portals_of_Madness
         {
             TurnNumber = 0;
             CurrentMission = new Mission(Controller, NextMap, NextEncounter);
-            Panel.InitializeUI(CurrentMission.PlayerSide());
             Panel.PlaceCharacters(PlayerTeam, CurrentMission.PlayerSide());
+            Panel.InitializeUI(CurrentMission.PlayerSide());
             if (CurrentMission.IsEncounter())
             {
                 EncounterSetup();
@@ -110,6 +110,19 @@ namespace Portals_of_Madness
             {
                 EnemyTeam.Add(c);
             }
+            int tmp = PlayerTeam.Count();
+            bool b = Controller.GEH.EncounterStartEvents(NextMap, NextEncounter, PlayerTeam, EnemyTeam);
+            if (b && tmp > PlayerTeam.Count())
+            {
+                Panel.DisplaceCharacters(PlayerTeam, CurrentMission.PlayerSide());
+                b = false;
+            }
+            else if (b && tmp < PlayerTeam.Count())
+            {
+                Panel.AddCharacter(PlayerTeam.Last(), CurrentMission.PlayerSide(), PlayerTeam.Count() - 1);
+                b = false;
+            }
+
             try
             {
                 Panel.BackgroundImage =
@@ -183,7 +196,6 @@ namespace Portals_of_Madness
         private void StartNewTurn()
         {
             TurnNumber++;
-            Panel.UpdateCharacterBars();
             Console.WriteLine($"----------------Turn {TurnNumber}----------------");
             foreach (Character c in InitiativeTeam)
             {
@@ -191,7 +203,7 @@ namespace Portals_of_Madness
                 {
                     foreach (DoT dot in c.DoTs)
                     {
-                        c.CurrentHealth -= dot.Amount;
+                        c.CurrentHealth += dot.Amount;
                         dot.Tick();
                         if (dot.Duration <= 0)
                         {
@@ -221,6 +233,7 @@ namespace Portals_of_Madness
                     GainResources(c);
                 }
             }
+            Panel.UpdateCharacterBars();
         }
 
         private void GainResources(Character c)
@@ -259,6 +272,9 @@ namespace Portals_of_Madness
                     {
                         gain = 8;
                     }
+                    break;
+                case "energy":
+                    gain = 5;
                     break;
                 default:
                     break;

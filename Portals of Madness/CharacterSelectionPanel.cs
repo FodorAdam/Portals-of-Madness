@@ -143,14 +143,18 @@ namespace Portals_of_Madness
         public void UpdateAllAvailableCharacters()
         {
             var XMLCharacterList = (XMLCharacters)Controller.XMLOperations.GenericDeserializer<XMLCharacters>($@"../../Characters/Characters.xml");
-            var cEnum = XMLCharacterList.XmlCharacter.Where(a => a.Collectable == true).Select(a => a);
+            var cEnum = XMLCharacterList.XmlCharacter.Where(a => a.Collectable).Select(a => a);
             List<XMLCharacter> XCList = new List<XMLCharacter>();
             XCList.AddRange(cEnum);
+            CharacterSelector.Items.Clear();
 
             foreach (XMLCharacter ch in XCList)
             {
                 CharacterList.Add(Controller.XMLOperations.ConvertToCharacter(ch));
-                CharacterSelector.Items.Add(ch.Name);
+                if (!CharacterSelected.Items.Contains(ch.Name))
+                {
+                    CharacterSelector.Items.Add(ch.Name);
+                }
             }
         }
 

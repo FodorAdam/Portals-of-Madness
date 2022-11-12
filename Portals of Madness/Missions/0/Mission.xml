@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>  
 <Encounters>
 	<id>0</id>
-	<name>Madness</name>
+	<name>The Escape from Steelgate</name>
 	<lore>Having been (mostly) mistakenly captured by Steelgate law enforcement, our heroes find themselves having to bust out of prison if they wish to be free ever again. As they are breaking out, they feel a strange shockwave pass through...</lore>
 	<unlocked>true</unlocked>
 	<previous>0</previous>
 	<side>right</side>
 	<Encounter>
 		<id>0</id>
-		<name>Escape!</name>
+		<name>Lockdown</name>
 		<background1>prison</background1>
 		<background2></background2>
 		<background2movement></background2movement>
@@ -85,14 +85,14 @@
 			<Fight>
 				<id>1</id>
 				<enemies>guardPack</enemies>
-				<amount>6</amount>
+				<amount>4</amount>
 				<type>normal</type>
 			</Fight>
 		</Fights>
 	</Encounter>
 	<Encounter>
 		<id>3</id>
-		<name>Armory</name>
+		<name>Armory Break-in</name>
 		<background1>fort</background1>
 		<background2></background2>
 		<background2movement></background2movement>

@@ -50,6 +50,7 @@ namespace Portals_of_Madness
         public string Name { get; }
         public string Story { get; }
         public int Level { get; set; }
+        public readonly int MaxLevel = 25;
         public int XP { get; set; }
 
         public double BaseHealth { get; }
@@ -86,20 +87,21 @@ namespace Portals_of_Madness
         public int StunLength { get; set; }
         public List<DoT> DoTs { get; set; }
         public List<Buff> Buffs { get; set; }
+        public List<Character> TauntTargets { get; set; }
 
         public string Rarity { get; }
         public bool Collectable { get; set; }
         public string CharacterClass { get; }
         public string AIType { get; }
 
-        public Character(string im,
-            string id, int l, int x, string n, string s, string chC,
-            double bHP, double hpM,
-            string rN, int mR,
-            double pAt, double pAtM, double mAt, double mAtM,
-            double pAr, double pArM, double mAr, double mArM, string weak,
-            Ability ab1, Ability ab2, Ability ab3, 
-            int ini, string rar, bool coll, string ai) : base(im)
+        public Character(string im = "default",
+            string id = "default", int l = 1, int x = 0, string n = "Default Unit", string s = "", string chC = "",
+            double bHP = 100, double hpM = 1.1,
+            string rN = "mana", int mR = 20,
+            double pAt = 10, double pAtM = 1.1, double mAt = 10, double mAtM = 1.1,
+            double pAr = 0, double pArM = 0, double mAr = 0, double mArM = 0, string weak = "fire",
+            Ability ab1 = null, Ability ab2 = null, Ability ab3 = null,
+            int ini = 5, string rar = "rare", bool coll = false, string ai = "none") : base(im)
         {
             ID = id;
             Name = n;
@@ -109,9 +111,9 @@ namespace Portals_of_Madness
             {
                 Level = 1;
             }
-            else if(l > 30)
+            else if(l > MaxLevel)
             {
-                Level = 30;
+                Level = MaxLevel;
             }
             else
             {
@@ -153,14 +155,15 @@ namespace Portals_of_Madness
 
             Abilities = new List<Ability>
             {
-                ab1,
-                ab2,
-                ab3
+                ab1 ?? new Ability(),
+                ab2 ?? new Ability(),
+                ab3 ?? new Ability()
             };
 
             BaseSpeed = ini;
             Speed = ((BaseSpeed - Level % 10) >= 0 ? (BaseSpeed - Level % 10) : 0);
 
+            TauntTargets = new List<Character>();
             DoTs = new List<DoT>();
             Buffs = new List<Buff>();
             Alive = true;
@@ -170,17 +173,20 @@ namespace Portals_of_Madness
 
         public void ResetResource()
         {
-            if (ResourceName == "rage")
+            switch (ResourceName)
             {
-                CurrentResource = MaxResource / 5;
-            }
-            else if (ResourceName == "focus")
-            {
-                CurrentResource = MaxResource;
-            }
-            else
-            {
-                CurrentResource = MaxResource / 2;
+                case "rage":
+                    CurrentResource = MaxResource / 5;
+                    break;
+                case "focus":
+                    CurrentResource = MaxResource;
+                    break;
+                case "mana":
+                    CurrentResource = MaxResource / 2;
+                    break;
+                case "energy":
+                    CurrentResource = 0;
+                    break;
             }
         }
 
@@ -221,9 +227,17 @@ namespace Portals_of_Madness
                 case "debuff":
                     target.AddBuff(ab.Name, ab.Modifier, ab.ModifiedAmount, ab.Duration);
                     break;
+                case "taunt":
+                    target.AddTaunt(this);
+                    break;
                 default:
                     break;
             }
+        }
+
+        public void AddTaunt(Character attacker)
+        {
+            TauntTargets.Add(attacker);
         }
 
         //Cast a ability at the targets
@@ -266,9 +280,9 @@ namespace Portals_of_Madness
             {
                 Level = 1;
             }
-            else if (l > 30)
+            else if (l > MaxLevel)
             {
-                Level = 30;
+                Level = MaxLevel;
             }
             else
             {
@@ -344,7 +358,7 @@ namespace Portals_of_Madness
             {
                 if(CurrentHealth + amount <= 0)
                 {
-                    if (CurrentHealth >= MaxHealth * 0.8)
+                    if (CurrentHealth >= MaxHealth * 0.8 && AIType == "none")
                     {
                         CurrentHealth = 1;
                     }
@@ -413,7 +427,7 @@ namespace Portals_of_Madness
         {
             if(Alive)
             {
-                if (!WasStunned)
+                if (!WasStunned && CharacterClass != "boss")
                 {
                     Stunned = true;
                     StunLength = length;
@@ -563,6 +577,12 @@ namespace Portals_of_Madness
         {
             if (Alive)
             {
+                if (TauntTargets.Count > 0)
+                {
+                    return RandomAttackAct(0, TauntTargets);
+                }
+                Random rand = new Random();
+                int r;
                 switch (AIType)
                 {
                     case "basic":
@@ -572,13 +592,26 @@ namespace Portals_of_Madness
                         }
                         break;
                     case "advanced":
-                        Random rand = new Random();
-                        int r = rand.Next(0, 100);
+                        r = rand.Next(0, 100);
                         if (r > 40 && CanCast(Abilities[1]) && Abilities[1].AbilityType != "heal"
-                            && Abilities[1].AbilityType != "HoT")
+                            && Abilities[1].AbilityType != "HoT" && Abilities[1].AbilityType != "resurrect"
+                            && Abilities[1].AbilityType != "taunt")
+                        {
+                            return RandomAttackAct(1, playerTeam);
+                        }
+                        else if (CanCast(Abilities[0]))
+                        {
+                            return RandomAttackAct(0, playerTeam);
+                        }
+                        break;
+                    case "expert":
+                        r = rand.Next(0, 100);
+                        if (r > 40 && CanCast(Abilities[1]) && Abilities[1].AbilityType != "heal"
+                            && Abilities[1].AbilityType != "HoT" && Abilities[1].AbilityType != "resurrect"
+                            && Abilities[1].AbilityType != "taunt")
                         {
                             r = rand.Next(0, 100);
-                            if (r > 30 && Abilities[1].TargetCount == 1)
+                            if (r > 70 && Abilities[1].TargetCount == 1)
                             {
                                 return SnipeAct(1, playerTeam);
                             }
@@ -610,7 +643,7 @@ namespace Portals_of_Madness
                                 break;
                             }
                         }
-                        if (CanCast(Abilities[2]) && Abilities[2].AbilityType == "heal")
+                        if (CanCast(Abilities[2]) && hasHealTarget && Abilities[2].AbilityType == "heal")
                         {
                             int healTargets = 0;
                             foreach(Character c in AITeam)
@@ -625,21 +658,27 @@ namespace Portals_of_Madness
                                 return HealAct(2, AITeam);
                             }
                         }
-                        else if(CanCast(Abilities[1]) && Abilities[1].AbilityType == "heal")
+                        else if(CanCast(Abilities[1]) && hasHealTarget && Abilities[1].AbilityType == "heal")
                         {
                             return HealAct(1, AITeam);
                         }
-                        else
-                        {
-                            return RandomAttackAct(0, playerTeam);
-                        }
-                        break;
+                        return RandomAttackAct(0, playerTeam);
                     case "sniper":
                         if (CanCast(Abilities[0]) && Abilities[0].TargetCount == 1)
                         {
                             return SnipeAct(0, playerTeam);
                         }
                         break;
+                    case "snakeBoss":
+                        if (CanCast(Abilities[2]))
+                        {
+                            return RandomAttackAct(2, playerTeam);
+                        }
+                        if (CurrentResource % 15 == 0)
+                        {
+                            return RandomAttackAct(1, playerTeam);
+                        }
+                        return RandomAttackAct(0, playerTeam);
                     default:
                         break;
                 }
@@ -651,19 +690,56 @@ namespace Portals_of_Madness
         private string RandomAttackAct(int abilityNum, List<Character> playerTeam)
         {
             List<Character> targets = new List<Character>();
-            for (int i = 0; i < Abilities[abilityNum].TargetCount; i++)
+            if (TauntTargets.Count > 0)
+            {
+                targets.Add(TauntTargets[0]);
+                TauntTargets.Clear();
+                CastAbility(Abilities[abilityNum], targets);
+                return $"{Name} used {Abilities[abilityNum].Name} on {targets[0].Name}";
+            }
+
+            if (Abilities[abilityNum].TargetCount >= playerTeam.Count)
+            {
+                targets.AddRange(playerTeam);
+            }
+            else if(Abilities[abilityNum].TargetCount > 1)
+            {
+                Random rand = new Random();
+                int counter = rand.Next(0, playerTeam.Count);
+                for (int i = 0; i < Abilities[abilityNum].TargetCount; i++)
+                {
+                    if (playerTeam[counter].Alive)
+                    {
+                        targets.Add(playerTeam[counter]);
+                    }
+
+                    if (counter + 1 >= playerTeam.Count)
+                    {
+                        counter = 0;
+                    }
+                    else
+                    {
+                        counter++;
+                    }
+                }
+            }
+            else
             {
                 targets.Add(SelectRandomTarget(playerTeam));
             }
             CastAbility(Abilities[abilityNum], targets);
 
-            if(targets.Count > 1)
+            if (targets.Count > 1)
             {
                 return $"{Name} used {Abilities[abilityNum].Name} on multiple targets";
             }
-            else
+            else if(targets.Count == 1)
             {
                 return $"{Name} used {Abilities[abilityNum].Name} on {targets[0].Name}";
+            }
+            else
+            {
+                return $"{Name} tried to use {Abilities[abilityNum].Name} on noone";
             }
         }
 
@@ -695,7 +771,8 @@ namespace Portals_of_Madness
             {
                 for (int i = 1; i < AITeam.Count; i++)
                 {
-                    if (AITeam[i].Alive && target.CurrentHealth < AITeam[i].CurrentHealth)
+                    if (AITeam[i].Alive &&
+                        target.MaxHealth - target.CurrentHealth < AITeam[i].MaxHealth - AITeam[i].CurrentHealth)
                     {
                         target = AITeam[i];
                     }
@@ -710,7 +787,7 @@ namespace Portals_of_Madness
             {
                 for (int j = 0; j < Abilities[abilityNum].TargetCount; j++)
                 {
-                    if(j == AITeam.Count)
+                    if(j >= AITeam.Count)
                     {
                         break;
                     }

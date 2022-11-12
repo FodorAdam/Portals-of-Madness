@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+	<String Id="Company">Fodor Adam</String>
+	
+	<String Id="ProductName_x86">Portals of Madness x32</String>
+	<String Id="ProductName_x64">Portals of Madness x64</String>
+	
+	<String Id="Language">1033</String>
+
+	<String Id="Description">A turn based RPG game</String>
+	<String Id="Keywords">dotnet, installer</String>
+	<String Id="Comments">Made as a thesys</String>
+</WixLocalization>

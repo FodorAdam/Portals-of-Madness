@@ -265,7 +265,7 @@
 		</Lines>
 	</Dialog>
 	<Dialog>
-		<id>A5</id>
+		<id>5</id>
 		<type>Pre</type>
 		<image></image>
 		<Lines>
@@ -292,7 +292,7 @@
 		</Lines>
 	</Dialog>
 	<Dialog>
-		<id>B5</id>
+		<id>A5</id>
 		<type>Pre</type>
 		<image></image>
 		<Lines>
@@ -351,7 +351,7 @@
 			<Line>
 				<speaker>godfrey</speaker>
 				<side>left</side>
-				<str>I'll give you a few soldiers and I need you to reach a seeker. There are two seekers nearby, I need you to locate one of them, they will know what is really happening. Do this, and you will all recieve a full pardon.</str>
+				<str>I'll give you a few soldiers and I need you to reach a Seeker. There are two seekers nearby, I need you to locate one of them, they will know what is really happening. Do this, and you will all recieve a full pardon.</str>
 			</Line>
 			<Line>
 				<speaker>lance</speaker>

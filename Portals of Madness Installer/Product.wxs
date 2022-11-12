@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<?if $(var.Platform)=x64 ?>
+	<?define ProductCode = "{DDE2C767-B8BE-4704-AB2F-F87FD4C85539}" ?>
+	<?else?>
+	<?define ProductCode = "{5B50F378-47B6-496A-9A00-0C070FA51CD7}" ?>
+	<?endif?>
+		
+	<?define UpgradeCode = "{8CB995FD-E3DC-443D-9F5B-77399B5D34DC}" ?>
+	
+	<?define BuildVersion = 1.2.3.4 ?>
+	
+	<Product Id="$(var.ProductCode)"
+			 Name="!(loc.ProductName_$(var.Platform))"
+			 Language="!(loc.Language)"
+			 Version="$(var.BuildVersion)"
+			 Manufacturer="!(loc.Company)"
+			 UpgradeCode="$(var.UpgradeCode)">
+		<Package InstallerVersion="200"
+				 Compressed="yes"
+				 InstallScope="perMachine"
+				 Platform="$(var.Platform)"
+				 Manufacturer="!(loc.Company)"
+				 Description="!(loc.Description)"
+				 Keywords="!(loc.Keywords)"
+				 Comments="!(loc.Comments)"
+				 Languages="!(loc.Language)"
+				 />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		
+		<MediaTemplate EmbedCab="yes"/>
+
+		<Feature Id="ProductFeature" Title="Portals_of_Madness_Installer" Level="1">
+			
+			<ComponentGroupRef Id="ProductComponents" />
+			
+		</Feature>
+	
+	</Product>
+
+</Wix>

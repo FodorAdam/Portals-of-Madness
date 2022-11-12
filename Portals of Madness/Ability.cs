@@ -52,8 +52,9 @@ namespace Portals_of_Madness
         //The sprite that shows the ability in action
         public Image AttackSprite { get; }
 
-        public Ability(string n, int co, int cd, double fAD, double mAD, int dur, string aT, string tT,
-            int tC, string abT, string aM, double mA, string iI, string sp)
+        public Ability(string n = "Basic Ability", int co = 0, int cd = 0, double fAD = 1, double mAD = 1, int dur = 0,
+            string aT = "blunt", string tT = "enemy", int tC = 1, string abT = "attack", string aM = "aimed",
+            double mA = 0, string iI = "nature_bolt", string sp = "")
         {
             Name = n;
             Cost = co;

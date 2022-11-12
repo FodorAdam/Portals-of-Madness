@@ -2,7 +2,6 @@
 using System.IO;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using System;
 
 namespace Portals_of_Madness
 {
@@ -12,7 +11,7 @@ namespace Portals_of_Madness
         public Button ButtonReturn { get; set; }
         ListBox MissionSelector { get; set; }
         ListBox EncounterSelector { get; set; }
-        List<Encounters> AllEncounters { get; set; }
+        public List<int> Optional { get; set; }
         public int SelectedMission { get; set; }
         public int MaxEncounters { get; set; }
         public int SelectedEncounter { get; set; }
@@ -26,6 +25,7 @@ namespace Portals_of_Madness
             BackColor = Color.Transparent;
             SelectedMission = 0;
             SelectedEncounter = 0;
+            Optional = new List<int>();
 
             Size tmpSize = c.SetPanelResolution(this);
             int w = tmpSize.Width;
@@ -69,7 +69,7 @@ namespace Portals_of_Madness
             MissionSelector = new ListBox
             {
                 FormattingEnabled = true,
-                Size = new Size(pictureSize, buttonHeight * 37 / 8 + pictureSize),
+                Size = new Size(pictureSize * 3 / 2, buttonHeight * 37 / 8 + pictureSize),
                 Location = new Point(buttonHeight / 2, buttonHeight / 2),
                 Font = new Font("Tahoma", 12, FontStyle.Bold),
                 TabIndex = 3
@@ -79,8 +79,8 @@ namespace Portals_of_Madness
             EncounterSelector = new ListBox
             {
                 FormattingEnabled = true,
-                Size = new Size(pictureSize * 2, buttonHeight * 37 / 8 + pictureSize),
-                Location = new Point(pictureSize + buttonHeight, buttonHeight / 2),
+                Size = new Size(pictureSize * 3 / 2, buttonHeight * 37 / 8 + pictureSize),
+                Location = new Point(pictureSize * 3 / 2 + buttonHeight, buttonHeight / 2),
                 Font = new Font("Tahoma", 12, FontStyle.Bold),
                 TabIndex = 4
             };
@@ -104,14 +104,10 @@ namespace Portals_of_Madness
         public void UpdateAllAvailableMissions()
         {
             MissionSelector.Items.Clear();
-            string dirPath = $@"../../Missions/";
-            int amount = Directory.GetDirectories(dirPath).Length;
-            AllEncounters = new List<Encounters>();
-            for (int i = 0; i < amount; i++)
+            Controller.XMLOperations.SetUpAllMissions();
+            for (int i = 0; i < Controller.XMLOperations.AllEncounters.Count; i++)
             {
-                string path = $@"../../Missions/{i}/Mission.xml";
-                AllEncounters.Add((Encounters)Controller.XMLOperations.GenericDeserializer<Encounters>(path));
-                MissionSelector.Items.Add(AllEncounters[i].Name);
+                MissionSelector.Items.Add(Controller.XMLOperations.AllEncounters[i].Name);
             }
         }
 
@@ -135,14 +131,19 @@ namespace Portals_of_Madness
             MaxEncounters = 0;
             int index = MissionSelector.IndexFromPoint(e.Location);
             EncounterSelector.Items.Clear();
+            Optional.Clear();
             if (index != ListBox.NoMatches)
             {
                 SelectedMission = index;
-                MissionDesc.Text = AllEncounters[index].Lore;
-                foreach (var encounter in AllEncounters[index].Encounter)
+                MissionDesc.Text = Controller.XMLOperations.AllEncounters[index].Lore;
+                foreach (var encounter in Controller.XMLOperations.AllEncounters[index].Encounter)
                 {
                     EncounterSelector.Items.Add(encounter.Name);
                     ++MaxEncounters;
+                    if (encounter.Optional)
+                    {
+                        Optional.Add(encounter.Id);
+                    }
                 }
             }
         }

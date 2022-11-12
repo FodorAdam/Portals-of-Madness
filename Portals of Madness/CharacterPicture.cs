@@ -9,11 +9,16 @@ namespace Portals_of_Madness
         public int BaseBarWidth { get; set; }
         public Panel HealthBar { get; set; }
         public Panel ResourceBar { get; set; }
+        private bool Initialized { get; set; }
 
-        public CharacterPicture() { }
+        public CharacterPicture()
+        {
+            Initialized = false;
+        }
 
         public void InitializeBars()
         {
+            Initialized = true;
             HealthBar = new Panel();
             HealthBar.Height = 5;
             BaseBarWidth = Width;
@@ -30,9 +35,13 @@ namespace Portals_of_Madness
             {
                 ResourceBar.BackColor = Color.FromArgb(159, 29, 53);
             }
-            else
+            else if (Character.ResourceName == "mana")
             {
                 ResourceBar.BackColor = Color.Blue;
+            }
+            else if (Character.ResourceName == "energy")
+            {
+                ResourceBar.BackColor = Color.Yellow;
             }
             UpdatePanelLocations();
             UpdateBars();
@@ -60,6 +69,17 @@ namespace Portals_of_Madness
             }
             HealthBar.Width = (int)(Character.CurrentHealth / Character.MaxHealth * BaseBarWidth);
             ResourceBar.Width = (int)(Character.CurrentResource / (double)Character.MaxResource * BaseBarWidth);
+        }
+
+        public void HideBars()
+        {
+            if (Initialized)
+            {
+                HealthBar.Width = 0;
+                HealthBar.Hide();
+                ResourceBar.Width = 0;
+                ResourceBar.Hide();
+            }
         }
     }
 }

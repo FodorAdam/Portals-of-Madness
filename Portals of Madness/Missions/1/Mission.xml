@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<Encounters>
+	<id>1</id>
+	<name>Road to Red Mountain</name>
+	<lore>Instructed by the High Abbot, our band of misfits set out to find a Seeker. The nearest one is Seeker Richard of Red Mountain. Fortunately, he can be reached quickly by train. Unfortunately, the whole area is home to a bandit clan who do not like outsiders tresspassing on their land.</lore>
+	<unlocked>false</unlocked>
+	<previous>0</previous>
+	<side>left</side>
+	<Encounter>
+		<id>0</id>
+		<name>A Cozy Train Ride</name>
+		<background1>train</background1>
+		<background2></background2>
+		<background2movement></background2movement>
+		<foreground></foreground>
+		<foregroundmovement></foregroundmovement>
+		<optional>false</optional>
+		<Fights>
+			<Fight>
+				<id>0</id>
+				<enemies>banditBand</enemies>
+				<amount>3</amount>
+				<type>normal</type>
+			</Fight>
+			<Fight>
+				<id>1</id>
+				<enemies>pyromancers</enemies>
+				<amount>3</amount>
+				<type>normal</type>
+			</Fight>
+			<Fight>
+				<id>2</id>
+				<enemies>banditBand</enemies>
+				<amount>4</amount>
+				<type>normal</type>
+			</Fight>
+		</Fights>
+	</Encounter>
+	<Encounter>
+		<id>1</id>
+		<name>This, is a robbery</name>
+		<background1>train</background1>
+		<background2></background2>
+		<background2movement></background2movement>
+		<foreground></foreground>
+		<foregroundmovement></foregroundmovement>
+		<optional>false</optional>
+		<Fights>
+			<Fight>
+				<id>0</id>
+				<enemies>banditBand</enemies>
+				<amount>4</amount>
+				<type>normal</type>
+			</Fight>
+			<Fight>
+				<id>1</id>
+				<enemies>pyromancers</enemies>
+				<amount>4</amount>
+				<type>normal</type>
+			</Fight>
+			<Fight>
+				<id>2</id>
+				<enemies>banditBand</enemies>
+				<amount>6</amount>
+				<type>normal</type>
+			</Fight>
+		</Fights>
+	</Encounter>
+	<Encounter>
+		<id>2</id>
+		<name>End of the Line</name>
+		<background1>train</background1>
+		<background2></background2>
+		<background2movement></background2movement>
+		<foreground></foreground>
+		<foregroundmovement></foregroundmovement>
+		<optional>false</optional>
+		<Fights>
+			<Fight>
+				<id>1</id>
+				<enemies>buddockFirstEncounter</enemies>
+				<amount>1</amount>
+				<type>miniboss</type>
+			</Fight>
+		</Fights>
+	</Encounter>
+</Encounters>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<Dialogs>
+	<id>0</id>
+	<Dialog>
+		<id>0</id>
+		<type>Pre</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>The road ahead is treacherous and you will need a guide. I will come with you.</str>
+			</Line>
+			<Line>
+				<speaker>clumsy</speaker>
+				<side>left</side>
+				<str>Clumsy is coming with Clumsy's new friends, too.</str>
+			</Line>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>Seeker Richard is close-by. If we take the eastern railway, we can reach him in an hour or two.</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>left</side>
+				<str>He is living on top of the Red Mountain, right?</str>
+			</Line>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>Yes.</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>left</side>
+				<str>Hear that shortie? You get to visit your criminal family.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>I'm an orphan...</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>left</side>
+				<str>Me too...</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>...</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>left</side>
+				<str>I'm sorry...</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Thanks...</str>
+			</Line>
+			<Line>
+				<speaker>sam</speaker>
+				<side>left</side>
+				<str>Now kiss.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Shut it Sammy!</str>
+			</Line>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>Ah, youth, so dumb, yet so full of life.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>0</id>
+		<type>Combat</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>Welcome to Red Mountain express, unfortunately, we do not accept vagrants today.</str>
+			</Line>
+			<Line>
+				<speaker>sam</speaker>
+				<side>left</side>
+				<str>What? Bandits!</str>
+			</Line>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>We prefer to think of ourselves as wealth reposessors, and we would like to start with yours.</str>
+			</Line>
+			<Line>
+				<speaker>sam</speaker>
+				<side>right</side>
+				<str>Yeah, no.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>1</id>
+		<type>Combat</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>sam</speaker>
+				<side>left</side>
+				<str>Eddie, you are a Red Mountain bandit, right? Say something!</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>We tended to not respect other warbands' chiefs that much, but I guess I can try. You, pyromancer, do you know who I am?</str>
+			</Line>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>Please, call me Warchief Buddock. And yes, I know who you are. Adopted son of King Red, Warchief Eddie, the one who betrayed his clan by siding with a member of the Order.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Well, I tried.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>2</id>
+		<type>Combat</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Warchief Buddock, does not ring a bell, even tho I knew all the warchiefs personally.</str>
+			</Line>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>Heheheh... That is, because, you see, I replaced you. It was easy, only took a little convincing and I even got your seat at the big table... and your other gun.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Oh, now this is personal.</str>
+			</Line>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>Bring it, Shortie!</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>2</id>
+		<type>Post</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>There, you are beaten. Now give me my gun!</str>
+			</Line>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>Foolish boy! You accomplished nothing! This won't be the last time you see me. My master... my true master that is, will see to it to undo this pathetic world. Until then, see you.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Damn it, my gun!</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>left</side>
+				<str>Don't worry, we will find your gun.</str>
+			</Line>
+			<Line>
+				<speaker>clumsy</speaker>
+				<side>left</side>
+				<str>Clumsy will help Eddie and Lance find Eddie's gun.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Thanks guys.</str>
+			</Line>
+			<Line>
+				<speaker>sam</speaker>
+				<side>left</side>
+				<str>What did he mean by his true master?</str>
+			</Line>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>I do not know, but it cannot be good.</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>left</side>
+				<str>Whatever he meant, we will need to worry about it some other time, we are here.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+</Dialogs>

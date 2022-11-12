@@ -27,10 +27,11 @@ namespace Portals_of_Madness
         public int MaxLines { get; set; }
         public Button ButtonNext { get; set; }
         public Button ButtonStart { get; set; }
-        public RichTextBox DialogRTBox { get; set; }
+        public Label DialogLabelBox { get; set; }
         public PictureBox LeftCharacter { get; set; }
         public PictureBox RightCharacter { get; set; }
         public XMLCharacters XMLCharacterList { get; set; }
+        private int PicSize { get; set; }
 
         public GamePanel(Controller c, int mapNumber, int encounterNumber)
         {
@@ -74,23 +75,24 @@ namespace Portals_of_Madness
                 BackColor = Color.Black,
                 ForeColor = Color.White,
                 TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Tahoma", 12, FontStyle.Bold),
                 Visible = false
             };
             Controls.Add(ActionLabel);
 
             LeftSide = new List<CharacterPicture>();
             RightSide = new List<CharacterPicture>();
-            int picSize = ScreenSize.Width / 16;
+            PicSize = ScreenSize.Width / 16;
             for (int i = 0; i < 10; i++)
             {
                 LeftSide.Add(new CharacterPicture());
-                SetupBoxes(LeftSide[i], picSize);
+                SetupBoxes(LeftSide[i]);
                 RightSide.Add(new CharacterPicture());
-                SetupBoxes(RightSide[i], picSize);
+                SetupBoxes(RightSide[i]);
             }
 
-            PlacePictureBoxes("left", LeftSide, picSize, ScreenSize);
-            PlacePictureBoxes("right", RightSide, picSize, ScreenSize);
+            PlacePictureBoxes("left", LeftSide, ScreenSize);
+            PlacePictureBoxes("right", RightSide, ScreenSize);
 
             ResultButton = new Button
             {
@@ -137,16 +139,17 @@ namespace Portals_of_Madness
             };
             Controls.Add(ButtonStart);
 
-            DialogRTBox = new RichTextBox
+            DialogLabelBox = new Label
             {
                 Location = new Point(w * 5 / 18, h / 3),
                 Size = new Size(w * 8 / 18, h / 6),
                 TabIndex = 4,
                 Text = "",
-                ReadOnly = true,
-                SelectionFont = new Font("Tahoma", 20, FontStyle.Bold),
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.Fixed3D,
+                Font = new Font("Tahoma", 12, FontStyle.Bold),
             };
-            Controls.Add(DialogRTBox);
+            Controls.Add(DialogLabelBox);
 
             LeftCharacter = new PictureBox
             {
@@ -196,7 +199,7 @@ namespace Portals_of_Madness
             {
                 LeftCharacter.Hide();
                 RightCharacter.Hide();
-                DialogRTBox.Hide();
+                DialogLabelBox.Hide();
             }
             else
             {
@@ -209,7 +212,7 @@ namespace Portals_of_Madness
         {
             LeftCharacter.Hide();
             RightCharacter.Hide();
-            DialogRTBox.Hide();
+            DialogLabelBox.Hide();
             ButtonStart.Hide();
             AbilityFrame.Show();
         }
@@ -229,20 +232,29 @@ namespace Portals_of_Madness
         public void UpdateDialog()
         {
             string stringid = DialogContainer.Dialog[DialogIndex].Lines.Line[LineIndex].Speaker;
-            var cEnum = XMLCharacterList.XmlCharacter.Where(a => a.Id.Contains(stringid)).Select(a => a).First();
-            Character speaker = Controller.XMLOperations.ConvertToCharacter(cEnum);
-
-            if (DialogContainer.Dialog[DialogIndex].Lines.Line[LineIndex].Side == "left")
+            try
             {
-                LeftCharacter.Image = Controller.ImageConverter(speaker.BaseImage, "profile");
-            }
-            else
-            {
-                RightCharacter.Image = Controller.ImageConverter(speaker.BaseImage, "profile");
-                RightCharacter.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
-            }
+                var cEnum = XMLCharacterList.XmlCharacter.Where(a => a.Id.Contains(stringid)).Select(a => a).First();
+                Character speaker = Controller.XMLOperations.ConvertToCharacter(cEnum);
 
-            DialogRTBox.Text = $"{speaker.Name}: {DialogContainer.Dialog[DialogIndex].Lines.Line[LineIndex].Str}";
+                if (DialogContainer.Dialog[DialogIndex].Lines.Line[LineIndex].Side == "left")
+                {
+                    LeftCharacter.Image = Controller.ImageConverter(speaker.BaseImage, "profile");
+                    RightCharacter.Image = null;
+                }
+                else
+                {
+                    RightCharacter.Image = Controller.ImageConverter(speaker.BaseImage, "profile");
+                    RightCharacter.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                    LeftCharacter.Image = null;
+                }
+
+                DialogLabelBox.Text = $"{speaker.Name}: {DialogContainer.Dialog[DialogIndex].Lines.Line[LineIndex].Str}";
+            }
+            catch
+            {
+                DialogLabelBox.Text = $"{stringid}: {DialogContainer.Dialog[DialogIndex].Lines.Line[LineIndex].Str}";
+            }
         }
 
         private void ButtonNext_Click(object sender, EventArgs e)
@@ -298,12 +310,49 @@ namespace Portals_of_Madness
         }
 
         //Sets up the character pictures
-        public void SetupBoxes(CharacterPicture charPic, int picSize)
+        public void SetupBoxes(CharacterPicture charPic)
         {
-            charPic.Size = new Size(picSize, picSize);
             charPic.SizeMode = PictureBoxSizeMode.StretchImage;
             charPic.BackColor = Color.Transparent;
             Controls.Add(charPic);
+        }
+
+        //Assigns the characters to their pictures
+        public void AddCharacter(Character ch, string side, int loc)
+        {
+            if ("left".Equals(side))
+            {
+                AddCharacterInCorrectSide(LeftSide, side, ch, loc);
+            }
+            else
+            {
+                AddCharacterInCorrectSide(RightSide, side, ch, loc);
+            }
+        }
+
+        private void AddCharacterInCorrectSide(List<CharacterPicture> CharPicList, string side, Character ch, int loc)
+        {
+            if (loc < CharPicList.Count())
+            {
+                CharPicList[loc].Character = ch;
+                if (CharPicList[loc].Character.CharacterClass == "miniboss")
+                {
+                    CharPicList[loc].Size = new Size(PicSize * 11 / 10, PicSize * 11 / 10);
+                }
+                else
+                {
+                    CharPicList[loc].Size = new Size(PicSize, PicSize);
+                }
+                CharPicList[loc].Image = ch.Image;
+                CharPicList[loc].InitializeBars();
+                if (side == "right")
+                {
+                    CharPicList[loc].Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                }
+                Controls.Add(CharPicList[loc].HealthBar);
+                Controls.Add(CharPicList[loc].ResourceBar);
+                CharPicList[loc].Click += AssignCharacterClickFunctions;
+            }
         }
 
         //Assigns the characters to their pictures
@@ -311,26 +360,83 @@ namespace Portals_of_Madness
         {
             if ("left".Equals(side))
             {
-                for (int i = 0; i < 10; i++)
+                PlaceCharactersInCorrectSide(LeftSide, side, team);
+            }
+            else
+            {
+                PlaceCharactersInCorrectSide(RightSide, side, team);
+            }
+        }
+
+        //Assigns the characters to their pictures
+        public void DisplaceCharacters(List<Character> team, string side)
+        {
+            if ("left".Equals(side))
+            {
+                ClearMissingCharacters(LeftSide, team);
+            }
+            else
+            {
+                ClearMissingCharacters(RightSide, team);
+            }
+        }
+
+        private void CharPicInit(List<CharacterPicture> CharPicList, string side, Character ch, int index)
+        {
+            CharPicList[index].Image = ch.Image;
+            CharPicList[index].InitializeBars();
+            if (side == "right")
+            {
+                CharPicList[index].Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            }
+            Controls.Add(CharPicList[index].HealthBar);
+            Controls.Add(CharPicList[index].ResourceBar);
+            CharPicList[index].Click += AssignCharacterClickFunctions;
+        }
+
+        public void ClearMissingCharacters(List<CharacterPicture> CharPicList, List<Character> team)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                if (i >= team.Count())
                 {
-                    if (i < team.Count())
-                    {
-                        LeftSide[i].Character = team[i];
-                        LeftSide[i].Image = team[i].Image;
-                        LeftSide[i].InitializeBars();
-                        Controls.Add(LeftSide[i].HealthBar);
-                        Controls.Add(LeftSide[i].ResourceBar);
-                        LeftSide[i].Click += AssignCharacterClickFunctions;
-                    }
-                    else
-                    {
-                        LeftSide[i].Character = null;
-                        LeftSide[i].Image = null;
-                        Controls.Remove(LeftSide[i].HealthBar);
-                        Controls.Remove(LeftSide[i].ResourceBar);
-                        LeftSide[i].Click -= AssignCharacterClickFunctions;
-                    }
+                    CharPicList[i].Character = null;
+                    CharPicList[i].Image = null;
+                    CharPicList[i].HideBars();
+                    Controls.Remove(CharPicList[i].HealthBar);
+                    Controls.Remove(CharPicList[i].ResourceBar);
+                    CharPicList[i].Click -= AssignCharacterClickFunctions;
                 }
+            }
+        }
+
+        private void PlaceCharactersInCorrectSide(List<CharacterPicture> CharPicList, string side, List<Character> team)
+        {
+            if(team[0].CharacterClass == "boss")
+            {
+                CharPicList[0].Character = team[0];
+                for (int i = 1; i < 10; i++)
+                {
+                    CharPicList[i].Character = null;
+                    CharPicList[i].Image = null;
+                    Controls.Remove(CharPicList[i].HealthBar);
+                    Controls.Remove(CharPicList[i].ResourceBar);
+                    CharPicList[i].Location = new Point(0, 0);
+                    CharPicList[i].Click -= AssignCharacterClickFunctions;
+                }
+
+                int w = ScreenSize.Width;
+                int h = ScreenSize.Height;
+                CharPicList[0].Size = new Size(PicSize * 4, PicSize * 4);
+                if(side == "right")
+                {
+                    CharPicList[0].Location = new Point(w / 2 + PicSize, h / 4);
+                }
+                else
+                {
+                    CharPicList[0].Location = new Point(w / 2 - PicSize, h / 4);
+                }
+                CharPicInit(CharPicList, side, team[0], 0);
             }
             else
             {
@@ -338,34 +444,37 @@ namespace Portals_of_Madness
                 {
                     if (i < team.Count())
                     {
-                        RightSide[i].Character = team[i];
-                        RightSide[i].Image = team[i].Image;
-                        RightSide[i].InitializeBars();
-                        RightSide[i].Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
-                        Controls.Add(RightSide[i].HealthBar);
-                        Controls.Add(RightSide[i].ResourceBar);
-                        RightSide[i].Click += AssignCharacterClickFunctions;
+                        CharPicList[i].Character = team[i];
+                        if (CharPicList[i].Character.CharacterClass == "miniboss")
+                        {
+                            CharPicList[i].Size = new Size(PicSize * 11 / 10, PicSize * 11 / 10);
+                        }
+                        else
+                        {
+                            CharPicList[i].Size = new Size(PicSize, PicSize);
+                        }
+                        CharPicInit(CharPicList, side, team[i], i);
                     }
                     else
                     {
-                        RightSide[i].Character = null;
-                        RightSide[i].Image = null;
-                        Controls.Remove(RightSide[i].HealthBar);
-                        Controls.Remove(RightSide[i].ResourceBar);
-                        RightSide[i].Click -= AssignCharacterClickFunctions;
+                        CharPicList[i].Character = null;
+                        CharPicList[i].Image = null;
+                        Controls.Remove(CharPicList[i].HealthBar);
+                        Controls.Remove(CharPicList[i].ResourceBar);
+                        CharPicList[i].Click -= AssignCharacterClickFunctions;
                     }
                 }
             }
         }
 
         //Places the character picture boxes in a triangular pattern
-        public void PlacePictureBoxes(string side, List<CharacterPicture> list, int size, Size screenSize)
+        public void PlacePictureBoxes(string side, List<CharacterPicture> list, Size screenSize)
         {
             int baseX = screenSize.Width * 2 / 5;
             int mult = 1;
             if (side == "right")
             {
-                baseX = screenSize.Width - screenSize.Width * 2 / 5 - size;
+                baseX = screenSize.Width - screenSize.Width * 2 / 5 - PicSize;
                 mult = -1;
             }
             int baseY = screenSize.Height / 2;
@@ -374,8 +483,8 @@ namespace Portals_of_Madness
             {
                 for (int k = 0; k < j; k++)
                 {
-                    list[i].Location = new Point(baseX - (int)((j - 1) * 1.4 * size * mult),
-                        baseY + (j - 1) * size - (int)(k * 1.4 * size));
+                    list[i].Location = new Point(baseX - (int)((j - 1) * 1.4 * PicSize * mult),
+                        baseY + (j - 1) * PicSize - (int)(k * 1.4 * PicSize));
                     ++i;
                 }
             }
@@ -388,6 +497,7 @@ namespace Portals_of_Madness
             Character target = t.Character;
             if (Casting && CorrectTarget(t))
             {
+                Casting = false;
                 if (SelectedAbility.TargetCount == 1)
                 {
                     Engine.CurrentCharacter.CastAbility(SelectedAbility, target);
@@ -401,7 +511,6 @@ namespace Portals_of_Madness
                     Engine.CurrentCharacter.CastAbility(SelectedAbility, targets);
                     Engine.ActionEventHandler($"{Engine.CurrentCharacter.Name} used {SelectedAbility.Name} on multiple targets", Engine.CurrentCharacter);
                 }
-                Casting = false;
                 Engine.Manage();
             }
         }
@@ -551,13 +660,15 @@ namespace Portals_of_Madness
         {
             AbilityFrame.Hide();
             ResultButton.Show();
+            ResultButton.Text = "Continue";
+            ActionLabel.Show();
             if (res)
             {
-                ResultButton.Text = "Victory!";
+                ActionLabel.Text = "Victory!";
             }
             else
             {
-                ResultButton.Text = "You lost.";
+                ActionLabel.Text = "You lost.";
             }
         }
 

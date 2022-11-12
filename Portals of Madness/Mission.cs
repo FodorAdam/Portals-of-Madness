@@ -83,7 +83,7 @@ namespace Portals_of_Madness
 
         public Character SelectCharacter(string n)
         {
-            var cEnum = XMLCharacterList.XmlCharacter.Where(a => a.Id.Contains(n)).Select(a => a);
+            var cEnum = XMLCharacterList.XmlCharacter.Where(a => a.Id.StartsWith(n)).Select(a => a);
             List<XMLCharacter> cList = new List<XMLCharacter>();
             cList.AddRange(cEnum);
             int i = Rand.Next(0, cList.Count());
@@ -92,6 +92,7 @@ namespace Portals_of_Madness
 
         public Character SelectAICharacter()
         {
+            int r;
             switch (EncounterContainer.Encounter[EncounterNumber].Fights.Fight[FightNumber].Enemies)
             {
                 case "prisonPack":
@@ -99,12 +100,39 @@ namespace Portals_of_Madness
                 case "guardPack":
                     return SelectCharacter("cityguard");
                 case "councilGuardPack":
-                    int r = Rand.Next(0, 10);
-                    if(r < 5)
+                    r = Rand.Next(0, 10);
+                    if(r < 6)
                     {
                         return SelectCharacter("cityguard");
                     }
                     return SelectCharacter("paladin");
+                case "banditBand":
+                    r = Rand.Next(0, 10);
+                    if (r < 7)
+                    {
+                        return SelectCharacter("bandit");
+                    }
+                    return SelectCharacter("pyromancer");
+                case "eliteBanditBand":
+                    r = Rand.Next(0, 10);
+                    if (r < 4)
+                    {
+                        return SelectCharacter("bandit");
+                    }
+                    else if (r < 7)
+                    {
+                        return SelectCharacter("elitebandit");
+                    }
+                    return SelectCharacter("pyromancer");
+                case "pyromancers":
+                    return SelectCharacter("pyromancer");
+                case "pyromancersPlus":
+                    r = Rand.Next(0, 10);
+                    if (r < 5)
+                    {
+                        return SelectCharacter("fireelemental");
+                    }
+                    return SelectCharacter("pyromancer");
                 default:
                     break;
             }
@@ -129,6 +157,32 @@ namespace Portals_of_Madness
                     characters.Add(SelectCharacter("maxwellEn"));
                     characters.Add(SelectCharacter("godfrey"));
                     characters.Add(SelectCharacter("paladin"));
+                    break;
+                case "buddockFirstEncounter":
+                    characters.Add(SelectCharacter("buddock"));
+                    characters.Add(SelectCharacter("pyromancer"));
+                    characters.Add(SelectCharacter("pyromancer"));
+                    break;
+                case "banditLords":
+                    characters.Add(SelectCharacter("buddock"));
+                    characters.Add(SelectCharacter("warchief1"));
+                    characters.Add(SelectCharacter("warchief2"));
+                    break;
+                case "banditKing":
+                    characters.Add(SelectCharacter("redEn"));
+                    characters.Add(SelectCharacter("elitebanditwarrior"));
+                    characters.Add(SelectCharacter("elitebanditwarrior"));
+                    break;
+                case "fireColossal":
+                    characters.Add(SelectCharacter("firecolossus"));
+                    break;
+                case "buddockSecondEncounter":
+                    characters.Add(SelectCharacter("buddock"));
+                    characters.Add(SelectCharacter("pyromancer"));
+                    characters.Add(SelectCharacter("pyromancer"));
+                    characters.Add(SelectCharacter("fireelemental"));
+                    characters.Add(SelectCharacter("fireelemental"));
+                    characters.Add(SelectCharacter("fireelemental"));
                     break;
                 default:
                     break;

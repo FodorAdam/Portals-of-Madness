@@ -7,10 +7,14 @@ namespace Portals_of_Madness
     public class Controller
     {
         public XMLOperations XMLOperations { get; set; }
+        public GameEventHandler GEH { get; set; }
+        public Tests Testing { get; set; }
 
         public Controller()
         {
             XMLOperations = new XMLOperations();
+            GEH = new GameEventHandler(this);
+            Testing = new Tests(this);
         }
 
         //Set the size of the form to the resolution, then maximize it
@@ -22,6 +26,11 @@ namespace Portals_of_Madness
             f.WindowState = FormWindowState.Maximized;
 
             return tmpSize;
+        }
+
+        public void RunTests()
+        {
+            Testing.RunTests();
         }
 
         public Size SetPanelResolution(Panel p)

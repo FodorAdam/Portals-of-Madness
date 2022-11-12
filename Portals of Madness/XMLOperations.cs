@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace Portals_of_Madness
@@ -8,10 +9,36 @@ namespace Portals_of_Madness
     public class XMLOperations
     {
         public List<Ability> AllAbilities;
+        public List<Encounters> AllEncounters;
+        public List<Character> AllCharacters;
 
         public XMLOperations()
         {
             AllAbilities = new List<Ability>();
+            AllEncounters = new List<Encounters>();
+            AllCharacters = new List<Character>();
+        }
+
+        public void SetUpAllCharacters()
+        {
+            var XMLCharacterList = (XMLCharacters)GenericDeserializer<XMLCharacters>($@"../../Characters/Characters.xml");
+
+            foreach (XMLCharacter ch in XMLCharacterList.XmlCharacter)
+            {
+                AllCharacters.Add(ConvertToCharacter(ch));
+            }
+        }
+
+        public void SetUpAllMissions()
+        {
+            string dirPath = $@"../../Missions/";
+            int amount = Directory.GetDirectories(dirPath).Length;
+            AllEncounters = new List<Encounters>();
+            for (int i = 0; i < amount; i++)
+            {
+                string path = $@"../../Missions/{i}/Mission.xml";
+                AllEncounters.Add((Encounters)GenericDeserializer<Encounters>(path));
+            }
         }
 
         private void SetUpAllAbilities()

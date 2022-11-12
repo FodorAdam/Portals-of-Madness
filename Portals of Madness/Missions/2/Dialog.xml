@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<Dialogs>
+	<id>0</id>
+	<Dialog>
+		<id>0</id>
+		<type>Pre</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>We are here. I will never understand why Richard choose to live amongst the bandits, but he managed to get along with them so far, let's hope that is still the case.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>As far as I remember, it was something about fresh air, the lack of politics and trying to get away from a relative he had a disagreement with.</str>
+			</Line>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>Finally, my guests of honor have arrived.</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>left</side>
+				<str>Oh look, it's the guy who's ass we kicked ten minutes ago.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>I still want my gun.</str>
+			</Line>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>Then come and get it! Guys, take care of these pests for me!</str>
+			</Line>
+			<Line>
+				<speaker>banditwarrior</speaker>
+				<side>right</side>
+				<str>Right away, boss.</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>left</side>
+				<str>More bandits, hurray!</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>1</id>
+		<type>Pre</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>sam</speaker>
+				<side>left</side>
+				<str>There are too many of them! Is this the only way to the Seeker's place?</str>
+			</Line>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>No, but the other ways would take too long. I get the feeling we haven't much time.</str>
+			</Line>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>Right you are, old timer. Now how about you just die? Guys! Sick 'em!</str>
+			</Line>
+			<Line>
+				<speaker>sam</speaker>
+				<side>left</side>
+				<str>I am getting really tired of this guy.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>2</id>
+		<type>Pre</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>We are about to reach the town center. Expect heavy resistance!</str>
+			</Line>
+			<Line>
+				<speaker>sam</speaker>
+				<side>left</side>
+				<str>I can see the tower!</str>
+			</Line>
+			<Line>
+				<speaker>clumsy</speaker>
+				<side>left</side>
+				<str>And smoke!</str>
+			</Line>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>Oh no!</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>2</id>
+		<type>Combat</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>warchief1</speaker>
+				<side>right</side>
+				<str>Arghhh!</str>
+			</Line>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>Right you are, Warchief Whatever. These guys are really annoying. They just refuse to go away.</str>
+			</Line>
+			<Line>
+				<speaker>warchief2</speaker>
+				<side>right</side>
+				<str>Rargh!</str>
+			</Line>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>Heheheheh. Warchief Whosawhatsit, you are always such a kidder.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Okay. That is just messed up. I never liked these guys, but this is too much. You will regret this, Buddock!</str>
+			</Line>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>Oh will I? Just try me.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>2</id>
+		<type>Post</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>Damn, not again! You will not stop me from accomplishing my goal!</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Come back you coward!</str>
+			</Line>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>Calm yourself young rat. Rushing after him will only get you killed.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Shut up, Maxwell! King Red might be in danger!</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>left</side>
+				<str>Hold it Shortie!</str>
+			</Line>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>Don't worry Lance! And Eddie, I am sure he is alright.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>3</id>
+		<type>Pre</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>red</speaker>
+				<side>right</side>
+				<str>Arghhh! Rargh Rarrr!</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Oh no! Dad!</str>
+			</Line>
+			<Line>
+				<speaker>red</speaker>
+				<side>right</side>
+				<str>Rrrrrgh!</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>3</id>
+		<type>Combat</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Go easy on him, he is not himself!</str>
+			</Line>
+			<Line>
+				<speaker>sam</speaker>
+				<side>left</side>
+				<str>Okay, don't worry, we will.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>3</id>
+		<type>Post</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Dad, are you alright?</str>
+			</Line>
+			<Line>
+				<speaker>red</speaker>
+				<side>right</side>
+				<str>*cough* *cough* *cough* I am now. What happened?</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>A pyromancer named Buddock was contolling you.</str>
+			</Line>
+			<Line>
+				<speaker>red</speaker>
+				<side>right</side>
+				<str>I have no idea... *cough* who that is. Why are there Order members here?</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Long story, but we need to reach Seeker Richard.</str>
+			</Line>
+			<Line>
+				<speaker>red</speaker>
+				<side>right</side>
+				<str>I will come with you.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>4</id>
+		<type>Pre</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>red</speaker>
+				<side>left</side>
+				<str>Oh no, what is happening? You there, pyromancer, stop setting everything on fire!</str>
+			</Line>
+			<Line>
+				<speaker>pyromancer</speaker>
+				<side>right</side>
+				<str>Heh, look boys, the old fool is back to his senses!</str>
+			</Line>
+			<Line>
+				<speaker>pyromancer</speaker>
+				<side>right</side>
+				<str>Let's go get him!</str>
+			</Line>
+			<Line>
+				<speaker>red</speaker>
+				<side>left</side>
+				<str>*sigh* And this, my son, is why we never accept spellcasters into our ranks.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Yep.</str>
+			</Line>
+			<Line>
+				<speaker>sam</speaker>
+				<side>left</side>
+				<str>Hmmm.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Sorry, Sam!</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>5</id>
+		<type>Pre</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>Ah, look, the old fool, his little whelp and the rest of the clown possey! Just my lucky day.</str>
+			</Line>
+			<Line>
+				<speaker>red</speaker>
+				<side>left</side>
+				<str>The voice from my head! It was him, he was in my head!</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>We know, dad.</str>
+			</Line>
+			<Line>
+				<speaker>red</speaker>
+				<side>left</side>
+				<str>Get the hell out of my town, pyromancer!</str>
+			</Line>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>I'd rather turn your town into hell, old man.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>5</id>
+		<type>Combat</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>lance</speaker>
+				<side>left</side>
+				<str>We already beat you twice, what chances do you think you have?</str>
+			</Line>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>Heheh, plenty. I don't need to beat you, I just need to delay you until my master's pet turns that ancient fool and his apprentice into ash.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>5</id>
+		<type>Post</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>Figures... *cough* *cough* You just cannot find good help these days.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>This ends here and now Buddock!</str>
+			</Line>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>I agree, but not for me. Say goodbye to dear old dad, Eddie.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Nooo!</str>
+			</Line>
+			<Line>
+				<speaker>buddock</speaker>
+				<side>right</side>
+				<str>Ahahahahaha, see you later, weaklings!</str>
+			</Line>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>Don't worry, Eddie, I'll save your father. Just go and save the Seeker!</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Thank you, Maxwell! And... sorry about earlier.</str>
+			</Line>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>Save Richard and we will be good.</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>6</id>
+		<type>Combat</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>firecolossus</speaker>
+				<side>right</side>
+				<str>Aaaaaargh!</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>What the hell is that!?</str>
+			</Line>
+			<Line>
+				<speaker>sam</speaker>
+				<side>left</side>
+				<str>I have never seen an elemental that big in my life.</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>left</side>
+				<str>We beat some elementals before, we will do it again, come on, Maxwell is counting on us!</str>
+			</Line>
+		</Lines>
+	</Dialog>
+	<Dialog>
+		<id>6</id>
+		<type>Post</type>
+		<image></image>
+		<Lines>
+			<Line>
+				<speaker>lance</speaker>
+				<side>left</side>
+				<str>We did it!</str>
+			</Line>
+			<Line>
+				<speaker>sam</speaker>
+				<side>left</side>
+				<str>Yes, we are the best!</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Yes, we are!</str>
+			</Line>
+			<Line>
+				<speaker>clumsy</speaker>
+				<side>left</side>
+				<str>Clumsy almost fainted.</str>
+			</Line>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>Are we too late?</str>
+			</Line>
+			<Line>
+				<speaker>red</speaker>
+				<side>left</side>
+				<str>*cough* *cought* Richard!</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Take it easy, da... King Red!</str>
+			</Line>
+			<Line>
+				<speaker>lance</speaker>
+				<side>left</side>
+				<str>Heh, awkward.</str>
+			</Line>
+			<Line>
+				<speaker>eddie</speaker>
+				<side>left</side>
+				<str>Shut it!</str>
+			</Line>
+			<Line>
+				<speaker>richard</speaker>
+				<side>right</side>
+				<str>Is... is the beast gone?</str>
+			</Line>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>Richard!</str>
+			</Line>
+			<Line>
+				<speaker>richard</speaker>
+				<side>right</side>
+				<str>Max!</str>
+			</Line>
+			<Line>
+				<speaker>rabbit</speaker>
+				<side>right</side>
+				<str>Uncle Maxwell!</str>
+			</Line>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>Thank the Great Capybara you are alive! Look, I am so sorry about last time, but we have so many questions!</str>
+			</Line>
+			<Line>
+				<speaker>richard</speaker>
+				<side>right</side>
+				<str>I know. The whole world has gone crazy. One moment I am teaching the young lad how to stare into the Void, the next he are getting our house burnt down.</str>
+			</Line>
+			<Line>
+				<speaker>richard</speaker>
+				<side>right</side>
+				<str>Something terrible has happened, Max. Portals to other realms have been opened up all over the world at the same time. The tremendous amount of chaotic energies from the portals caused everyone to go insane.</str>
+			</Line>
+			<Line>
+				<speaker>richard</speaker>
+				<side>right</side>
+				<str>Well, everyone but the people blessed or protected by the creatures residing in these realms and those in close proximity to them.</str>
+			</Line>
+			<Line>
+				<speaker>richard</speaker>
+				<side>right</side>
+				<str>The effects will wear off in time, but I fear this was only the first wave.</str>
+			</Line>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>How do we stop this?</str>
+			</Line>
+			<Line>
+				<speaker>richard</speaker>
+				<side>right</side>
+				<str>I'm afraid I cannot tell. The void doesn't allow me to peer into it too long for some reason. It starts to pull me in every time.</str>
+			</Line>
+			<Line>
+				<speaker>richard</speaker>
+				<side>right</side>
+				<str>I can also no longer feel the presence of the other Seekers. The Seeker of the Northern Glaive was the last one I could contact, but he too has gone silent.</str>
+			</Line>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>So we should to go to the Northern Glaive and pay him a visit?</str>
+			</Line>
+			<Line>
+				<speaker>richard</speaker>
+				<side>right</side>
+				<str>Yes, but stay a while, brother. You all seem so exhausted.</str>
+			</Line>
+			<Line>
+				<speaker>maxwell</speaker>
+				<side>left</side>
+				<str>Thank you, brother.</str>
+			</Line>
+			<Line>
+				<speaker>rabbit</speaker>
+				<side>right</side>
+				<str>Yay! Family reunion!</str>
+			</Line>
+		</Lines>
+	</Dialog>
+</Dialogs>

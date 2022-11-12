@@ -5,7 +5,7 @@
 		<imageSet>eddie</imageSet>
 		<name>Eddie</name>
 		<story>Chief Eddie
-A city rat abandoned by his kin due his small, sickly stature. He was taken in by the bandit lord of the Mountain Clan, where he quickly rose up the ranks until he eventually became a Warchief of his very own band. He was well known as a highly effective but reasonable bandit, always trying to stop unnecessary bloodshed whenever possible. After his latest heist, some paladins of The Order attacked him and his band, only for both bands to be ambushed by elementals.</story>
+A city rat abandoned by his kin due his small, sickly stature. He was eventually taken in by the bandit lord of the Red Mountain Clan, where he quickly rose up the ranks until he eventually became a Warchief of his very own band. He was well known as a highly effective but reasonable bandit, always trying to stop unnecessary bloodshed whenever possible. After his latest heist, some paladins of The Order attacked him and his band, only for both bands to be ambushed by elementals.</story>
 		<level>1</level>
 		<xp>0</xp>
 		<characterClass>Hunter</characterClass>
@@ -46,7 +46,7 @@ Rescued from a burning building during the Steelgate Riots, the young orphan was
 		<maxResource>20</maxResource>
 		<basePhysAttack>16</basePhysAttack>
 		<physAttackMult>1.1</physAttackMult>
-		<baseMagicAttack>8</baseMagicAttack>
+		<baseMagicAttack>10</baseMagicAttack>
 		<magicAttackMult>1.09</magicAttackMult>
 		<basePhysArmor>8</basePhysArmor>
 		<physArmorMult>1.12</physArmorMult>
@@ -54,8 +54,8 @@ Rescued from a burning building during the Steelgate Riots, the young orphan was
 		<magicArmorMult>1.1</magicArmorMult>
 		<weaknesses>bleed</weaknesses>
 		<ability1Name>Slash</ability1Name>
-		<ability2Name>Heal</ability2Name>
-		<ability3Name>Protection Aura</ability3Name>
+		<ability2Name>Taunt</ability2Name>
+		<ability3Name>Heal</ability3Name>
 		<baseSpeed>8</baseSpeed>
 		<rarity>epic</rarity>
 		<acquired>true</acquired>
@@ -388,8 +388,8 @@ Thief, bandit, fearsome. All things Clumsy wishes he would be associated with, b
 		<ability1Name>Slash</ability1Name>
 		<ability2Name>Bash</ability2Name>
 		<ability3Name>Protection Aura</ability3Name>
-		<baseSpeed>8</baseSpeed>
-		<rarity>epic</rarity>
+		<baseSpeed>9</baseSpeed>
+		<rarity>normal</rarity>
 		<acquired>false</acquired>
 		<aiName>advanced</aiName>
 		<collectable>false</collectable>
@@ -419,7 +419,7 @@ The young Maxwell was assigned to guard Steelgate officials during the riots. It
 		<ability1Name>Slash</ability1Name>
 		<ability2Name>Bash</ability2Name>
 		<ability3Name>Protection Aura</ability3Name>
-		<baseSpeed>8</baseSpeed>
+		<baseSpeed>9</baseSpeed>
 		<rarity>epic</rarity>
 		<acquired>false</acquired>
 		<aiName>none</aiName>
@@ -449,10 +449,371 @@ The young Maxwell was assigned to guard Steelgate officials during the riots. It
 		<ability1Name>Nature Bolt</ability1Name>
 		<ability2Name>Heal</ability2Name>
 		<ability3Name>Protection Aura</ability3Name>
-		<baseSpeed>8</baseSpeed>
-		<rarity>epic</rarity>
+		<baseSpeed>10</baseSpeed>
+		<rarity>normal</rarity>
 		<acquired>false</acquired>
 		<aiName>healer</aiName>
+		<collectable>false</collectable>
+	</XMLCharacter>
+	<XMLCharacter>
+		<id>banditranged</id>
+		<imageSet>bandit1</imageSet>
+		<name>Bandit Sniper</name>
+		<story></story>
+		<level>1</level>
+		<xp>0</xp>
+		<characterClass>normal</characterClass>
+		<baseHealth>40</baseHealth>
+		<healthMult>1.1</healthMult>
+		<resourceName>focus</resourceName>
+		<maxResource>20</maxResource>
+		<basePhysAttack>20</basePhysAttack>
+		<physAttackMult>1.12</physAttackMult>
+		<baseMagicAttack>2</baseMagicAttack>
+		<magicAttackMult>1.09</magicAttackMult>
+		<basePhysArmor>5</basePhysArmor>
+		<physArmorMult>1.1</physArmorMult>
+		<baseMagicArmor>0</baseMagicArmor>
+		<magicArmorMult>0</magicArmorMult>
+		<weaknesses>poison,frost</weaknesses>
+		<ability1Name>Steady Shot</ability1Name>
+		<ability2Name>Piercing Shot</ability2Name>
+		<ability3Name>Aimed Shot</ability3Name>
+		<baseSpeed>4</baseSpeed>
+		<rarity>normal</rarity>
+		<acquired>false</acquired>
+		<aiName>sniper</aiName>
+		<collectable>false</collectable>
+	</XMLCharacter>
+	<XMLCharacter>
+		<id>banditrogue</id>
+		<imageSet>bandit2</imageSet>
+		<name>Bandit Assassin</name>
+		<story></story>
+		<level>1</level>
+		<xp>0</xp>
+		<characterClass>normal</characterClass>
+		<baseHealth>45</baseHealth>
+		<healthMult>1.1</healthMult>
+		<resourceName>focus</resourceName>
+		<maxResource>20</maxResource>
+		<basePhysAttack>18</basePhysAttack>
+		<physAttackMult>1.12</physAttackMult>
+		<baseMagicAttack>10</baseMagicAttack>
+		<magicAttackMult>1.09</magicAttackMult>
+		<basePhysArmor>4</basePhysArmor>
+		<physArmorMult>1.12</physArmorMult>
+		<baseMagicArmor>4</baseMagicArmor>
+		<magicArmorMult>1.12</magicArmorMult>
+		<weaknesses>poison,frost</weaknesses>
+		<ability1Name>Slash</ability1Name>
+		<ability2Name>Bash</ability2Name>
+		<ability3Name>Bash</ability3Name>
+		<baseSpeed>3</baseSpeed>
+		<rarity>normal</rarity>
+		<acquired>false</acquired>
+		<aiName>advanced</aiName>
+		<collectable>false</collectable>
+	</XMLCharacter>
+	<XMLCharacter>
+		<id>banditwarrior</id>
+		<imageSet>bandit3</imageSet>
+		<name>Bandit Warrior</name>
+		<story></story>
+		<level>1</level>
+		<xp>0</xp>
+		<characterClass>normal</characterClass>
+		<baseHealth>80</baseHealth>
+		<healthMult>1.1</healthMult>
+		<resourceName>rage</resourceName>
+		<maxResource>20</maxResource>
+		<basePhysAttack>18</basePhysAttack>
+		<physAttackMult>1.1</physAttackMult>
+		<baseMagicAttack>0</baseMagicAttack>
+		<magicAttackMult>0</magicAttackMult>
+		<basePhysArmor>6</basePhysArmor>
+		<physArmorMult>1.1</physArmorMult>
+		<baseMagicArmor>0</baseMagicArmor>
+		<magicArmorMult>0</magicArmorMult>
+		<weaknesses>poison,frost</weaknesses>
+		<ability1Name>Slash</ability1Name>
+		<ability2Name>Cleave</ability2Name>
+		<ability3Name>Cleave</ability3Name>
+		<baseSpeed>6</baseSpeed>
+		<rarity>normal</rarity>
+		<acquired>false</acquired>
+		<aiName>advanced</aiName>
+		<collectable>false</collectable>
+	</XMLCharacter>
+	<XMLCharacter>
+		<id>pyromancer</id>
+		<imageSet>pyromancer</imageSet>
+		<name>Pyromancer</name>
+		<story></story>
+		<level>1</level>
+		<xp>0</xp>
+		<characterClass>normal</characterClass>
+		<baseHealth>50</baseHealth>
+		<healthMult>1.1</healthMult>
+		<resourceName>mana</resourceName>
+		<maxResource>30</maxResource>
+		<basePhysAttack>6</basePhysAttack>
+		<physAttackMult>1.09</physAttackMult>
+		<baseMagicAttack>22</baseMagicAttack>
+		<magicAttackMult>1.12</magicAttackMult>
+		<basePhysArmor>2</basePhysArmor>
+		<physArmorMult>1.1</physArmorMult>
+		<baseMagicArmor>10</baseMagicArmor>
+		<magicArmorMult>1.12</magicArmorMult>
+		<weaknesses>poison</weaknesses>
+		<ability1Name>Fireball</ability1Name>
+		<ability2Name>Flamestrike</ability2Name>
+		<ability3Name>Flamestrike</ability3Name>
+		<baseSpeed>5</baseSpeed>
+		<rarity>normal</rarity>
+		<acquired>false</acquired>
+		<aiName>advanced</aiName>
+		<collectable>false</collectable>
+	</XMLCharacter>
+	<XMLCharacter>
+		<id>buddock</id>
+		<imageSet>buddock</imageSet>
+		<name>Pyromancer Buddock</name>
+		<story></story>
+		<level>1</level>
+		<xp>0</xp>
+		<characterClass>miniboss</characterClass>
+		<baseHealth>300</baseHealth>
+		<healthMult>1.1</healthMult>
+		<resourceName>mana</resourceName>
+		<maxResource>30</maxResource>
+		<basePhysAttack>6</basePhysAttack>
+		<physAttackMult>1.09</physAttackMult>
+		<baseMagicAttack>26</baseMagicAttack>
+		<magicAttackMult>1.12</magicAttackMult>
+		<basePhysArmor>2</basePhysArmor>
+		<physArmorMult>1.1</physArmorMult>
+		<baseMagicArmor>10</baseMagicArmor>
+		<magicArmorMult>1.12</magicArmorMult>
+		<weaknesses>poison</weaknesses>
+		<ability1Name>Fireball</ability1Name>
+		<ability2Name>Flamestrike</ability2Name>
+		<ability3Name>Flamestrike</ability3Name>
+		<baseSpeed>5</baseSpeed>
+		<rarity>normal</rarity>
+		<acquired>false</acquired>
+		<aiName>advanced</aiName>
+		<collectable>false</collectable>
+	</XMLCharacter>
+	<XMLCharacter>
+		<id>redEn</id>
+		<imageSet>red</imageSet>
+		<name>Red</name>
+		<story></story>
+		<level>1</level>
+		<xp>0</xp>
+		<characterClass>Hunter</characterClass>
+		<baseHealth>60</baseHealth>
+		<healthMult>1.1</healthMult>
+		<resourceName>focus</resourceName>
+		<maxResource>40</maxResource>
+		<basePhysAttack>24</basePhysAttack>
+		<physAttackMult>1.13</physAttackMult>
+		<baseMagicAttack>0</baseMagicAttack>
+		<magicAttackMult>0</magicAttackMult>
+		<basePhysArmor>5</basePhysArmor>
+		<physArmorMult>1.1</physArmorMult>
+		<baseMagicArmor>0</baseMagicArmor>
+		<magicArmorMult>0</magicArmorMult>
+		<weaknesses>fire</weaknesses>
+		<ability1Name>Steady Shot</ability1Name>
+		<ability2Name>Piercing Shot</ability2Name>
+		<ability3Name>Volley</ability3Name>
+		<baseSpeed>3</baseSpeed>
+		<rarity>normal</rarity>
+		<acquired>false</acquired>
+		<aiName>expert</aiName>
+		<collectable>false</collectable>
+	</XMLCharacter>
+	<XMLCharacter>
+		<id>redPl</id>
+		<imageSet>red</imageSet>
+		<name>Red</name>
+		<story>Red Williams, the Bandit King
+Not much is known about Red's early life. What is known is that he once had a wife and son who perished in the Steelgate riots. The young Red was devastated. He earned most of his infamy during this time, lashing out at anyone coming in and out of Steelgate, ruthlessly beating everyone in combat, but never crossing his promise to his late wife - to never take an innocent life. This went on, until the newly elected bandit king had a surprise visitor in the form of a city rat who snuck past all of his guards and tryed to take his favourite pistol. The king took the young rat in as his adopted son and raised him to be a fighter as fierce as him.</story>
+		<level>1</level>
+		<xp>0</xp>
+		<characterClass>Hunter</characterClass>
+		<baseHealth>60</baseHealth>
+		<healthMult>1.1</healthMult>
+		<resourceName>focus</resourceName>
+		<maxResource>40</maxResource>
+		<basePhysAttack>24</basePhysAttack>
+		<physAttackMult>1.13</physAttackMult>
+		<baseMagicAttack>0</baseMagicAttack>
+		<magicAttackMult>0</magicAttackMult>
+		<basePhysArmor>5</basePhysArmor>
+		<physArmorMult>1.1</physArmorMult>
+		<baseMagicArmor>0</baseMagicArmor>
+		<magicArmorMult>0</magicArmorMult>
+		<weaknesses>fire</weaknesses>
+		<ability1Name>Steady Shot</ability1Name>
+		<ability2Name>Piercing Shot</ability2Name>
+		<ability3Name>Volley</ability3Name>
+		<baseSpeed>3</baseSpeed>
+		<rarity>legendary</rarity>
+		<acquired>false</acquired>
+		<aiName>none</aiName>
+		<collectable>true</collectable>
+	</XMLCharacter>
+	<XMLCharacter>
+		<id>elitebanditwarrior</id>
+		<imageSet>banditelite</imageSet>
+		<name>Elite Bandit Warrior</name>
+		<story></story>
+		<level>1</level>
+		<xp>0</xp>
+		<characterClass>normal</characterClass>
+		<baseHealth>100</baseHealth>
+		<healthMult>1.1</healthMult>
+		<resourceName>rage</resourceName>
+		<maxResource>20</maxResource>
+		<basePhysAttack>18</basePhysAttack>
+		<physAttackMult>1.1</physAttackMult>
+		<baseMagicAttack>0</baseMagicAttack>
+		<magicAttackMult>0</magicAttackMult>
+		<basePhysArmor>7</basePhysArmor>
+		<physArmorMult>1.1</physArmorMult>
+		<baseMagicArmor>0</baseMagicArmor>
+		<magicArmorMult>0</magicArmorMult>
+		<weaknesses>poison,bleed</weaknesses>
+		<ability1Name>Slash</ability1Name>
+		<ability2Name>Cleave</ability2Name>
+		<ability3Name>Bash</ability3Name>
+		<baseSpeed>6</baseSpeed>
+		<rarity>normal</rarity>
+		<acquired>false</acquired>
+		<aiName>advanced</aiName>
+		<collectable>false</collectable>
+	</XMLCharacter>
+	<XMLCharacter>
+		<id>fireelemental</id>
+		<imageSet>fireelemental</imageSet>
+		<name>Fire Elemental</name>
+		<story></story>
+		<level>1</level>
+		<xp>0</xp>
+		<characterClass>normal</characterClass>
+		<baseHealth>100</baseHealth>
+		<healthMult>1.2</healthMult>
+		<resourceName>rage</resourceName>
+		<maxResource>20</maxResource>
+		<basePhysAttack>14</basePhysAttack>
+		<physAttackMult>1.1</physAttackMult>
+		<baseMagicAttack>14</baseMagicAttack>
+		<magicAttackMult>1.1</magicAttackMult>
+		<basePhysArmor>0</basePhysArmor>
+		<physArmorMult>0</physArmorMult>
+		<baseMagicArmor>0</baseMagicArmor>
+		<magicArmorMult>0</magicArmorMult>
+		<weaknesses>frost</weaknesses>
+		<ability1Name>Fireball</ability1Name>
+		<ability2Name>Flamestrike</ability2Name>
+		<ability3Name>Scorch</ability3Name>
+		<baseSpeed>15</baseSpeed>
+		<rarity>normal</rarity>
+		<acquired>false</acquired>
+		<aiName>advanced</aiName>
+		<collectable>false</collectable>
+	</XMLCharacter>
+	<XMLCharacter>
+		<id>firecolossus</id>
+		<imageSet>firecolossus</imageSet>
+		<name>Ancient Fire Colossus</name>
+		<story></story>
+		<level>1</level>
+		<xp>0</xp>
+		<characterClass>boss</characterClass>
+		<baseHealth>500</baseHealth>
+		<healthMult>1.2</healthMult>
+		<resourceName>energy</resourceName>
+		<maxResource>50</maxResource>
+		<basePhysAttack>20</basePhysAttack>
+		<physAttackMult>1.1</physAttackMult>
+		<baseMagicAttack>20</baseMagicAttack>
+		<magicAttackMult>1.1</magicAttackMult>
+		<basePhysArmor>0</basePhysArmor>
+		<physArmorMult>0</physArmorMult>
+		<baseMagicArmor>0</baseMagicArmor>
+		<magicArmorMult>0</magicArmorMult>
+		<weaknesses>frost</weaknesses>
+		<ability1Name>Greater Fireball</ability1Name>
+		<ability2Name>Scorch</ability2Name>
+		<ability3Name>Armageddon</ability3Name>
+		<baseSpeed>15</baseSpeed>
+		<rarity>normal</rarity>
+		<acquired>false</acquired>
+		<aiName>snakeBoss</aiName>
+		<collectable>false</collectable>
+	</XMLCharacter>
+	<XMLCharacter>
+		<id>warchief1</id>
+		<imageSet>warchief1</imageSet>
+		<name>Warchief of the Golden Axe</name>
+		<story></story>
+		<level>1</level>
+		<xp>0</xp>
+		<characterClass>miniboss</characterClass>
+		<baseHealth>200</baseHealth>
+		<healthMult>1.1</healthMult>
+		<resourceName>rage</resourceName>
+		<maxResource>20</maxResource>
+		<basePhysAttack>18</basePhysAttack>
+		<physAttackMult>1.1</physAttackMult>
+		<baseMagicAttack>0</baseMagicAttack>
+		<magicAttackMult>0</magicAttackMult>
+		<basePhysArmor>7</basePhysArmor>
+		<physArmorMult>1.1</physArmorMult>
+		<baseMagicArmor>0</baseMagicArmor>
+		<magicArmorMult>0</magicArmorMult>
+		<weaknesses>poison,bleed</weaknesses>
+		<ability1Name>Slash</ability1Name>
+		<ability2Name>Cleave</ability2Name>
+		<ability3Name>Bash</ability3Name>
+		<baseSpeed>6</baseSpeed>
+		<rarity>normal</rarity>
+		<acquired>false</acquired>
+		<aiName>advanced</aiName>
+		<collectable>false</collectable>
+	</XMLCharacter>
+	<XMLCharacter>
+		<id>warchief2</id>
+		<imageSet>warchief2</imageSet>
+		<name>Warchief of the Setting Sun</name>
+		<story></story>
+		<level>1</level>
+		<xp>0</xp>
+		<characterClass>miniboss</characterClass>
+		<baseHealth>135</baseHealth>
+		<healthMult>1.1</healthMult>
+		<resourceName>focus</resourceName>
+		<maxResource>20</maxResource>
+		<basePhysAttack>18</basePhysAttack>
+		<physAttackMult>1.12</physAttackMult>
+		<baseMagicAttack>10</baseMagicAttack>
+		<magicAttackMult>1.09</magicAttackMult>
+		<basePhysArmor>4</basePhysArmor>
+		<physArmorMult>1.12</physArmorMult>
+		<baseMagicArmor>4</baseMagicArmor>
+		<magicArmorMult>1.12</magicArmorMult>
+		<weaknesses>poison,frost</weaknesses>
+		<ability1Name>Slash</ability1Name>
+		<ability2Name>Bash</ability2Name>
+		<ability3Name>Bash</ability3Name>
+		<baseSpeed>3</baseSpeed>
+		<rarity>normal</rarity>
+		<acquired>false</acquired>
+		<aiName>advanced</aiName>
 		<collectable>false</collectable>
 	</XMLCharacter>
 </XMLCharacters>
