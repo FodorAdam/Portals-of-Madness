@@ -18,10 +18,12 @@ namespace Portals_of_Madness
     public class Tests
     {
         private Controller Cont { get; set; }
+        private int Counter { get; set; }
 
         public Tests(Controller c)
         {
             Cont = c;
+            Counter = 0;
         }
 
         private Response ComparisonShouldSucceed<T, S>(T First, S Second)
@@ -44,11 +46,12 @@ namespace Portals_of_Madness
 
         private string Verdict(bool result, string testname = "Default Test Name", string info = "")
         {
+            Counter++;
             if (result)
             {
-                return $"Test [{testname}]: [OK]\n";
+                return $"Test {Counter}: [OK]\n{testname}\n";
             }
-            return $"Test [{testname}]: [Failed]\n{info}\n";
+            return $"Test {Counter}: [Failed]\n{testname}\n{info}\n";
         }
 
         public void RunTests()
@@ -56,11 +59,15 @@ namespace Portals_of_Madness
             List <string> lines = new List<string>();
             StreamWriter file = new StreamWriter("Test Results.txt");
 
-            Character TestSubject1 = new Character(n: "Test Subject 1", ab2: new Ability(n: "Resurrect", abT: "resurrect"));
+            Character TestSubject1 = new Character(n: "Test Subject 1",
+                ab2: new Ability("Resurrect", abT: "resurrect"),
+                ab3: new Ability("Heal", 5, fAD: 0, mAD: 2, tT: "ally", abT: "heal"));
             Character TestSubject2 = new Character(n: "Test Subject 2");
+            Character TestSubject3 = new Character(n: "Test Subject 3", pAr: 100, pArM: 1, mAr: 100, mArM: 1);
 
             Response Test;
             string TestName;
+            Counter = 0;
 
             //Test 1
 
@@ -148,6 +155,38 @@ namespace Portals_of_Madness
 
             Test = ComparisonShouldSucceed(20.0, TestSubject2.CurrentHealth);
             TestName = $"Checking if {TestSubject2.Name} has 20 health after resurrection";
+
+            lines.Add(Verdict(Test.Verdict, TestName, Test.Message));
+
+            //Test 12
+
+            TestSubject1.SetLevel(1);
+
+            Test = ComparisonShouldSucceed(10, TestSubject1.CurrentResource);
+            TestName = $"Checking if {TestSubject1.Name} has the correct amount of mana";
+
+            lines.Add(Verdict(Test.Verdict, TestName, Test.Message));
+
+            //Test 13
+
+            TestSubject1.CastAbility(TestSubject1.Abilities[2], TestSubject2);
+
+            Test = ComparisonShouldSucceed(40.0, TestSubject2.CurrentHealth);
+            TestName = $"Checking if {TestSubject2.Name} has 40 health after healing";
+
+            lines.Add(Verdict(Test.Verdict, TestName, Test.Message));
+
+            //Test 14
+
+            Test = ComparisonShouldSucceed(5, TestSubject1.CurrentResource);
+            TestName = $"Checking if {TestSubject1.Name} has the correct amount of mana after using some";
+
+            lines.Add(Verdict(Test.Verdict, TestName, Test.Message));
+
+            //Test 15
+
+            Test = ComparisonShouldFail(true, TestSubject3.CurrentHealth < TestSubject3.MaxHealth);
+            TestName = $"Testing armor";
 
             lines.Add(Verdict(Test.Verdict, TestName, Test.Message));
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -25,8 +26,14 @@ namespace Portals_of_Madness
         {
             InitializeComponent();
 
+            BackgroundImage = Image.FromFile($@"../../Art/Backgrounds/title_screen.png");
+            BackgroundImageLayout = ImageLayout.Stretch;
+
             Controller = c;
             Controller.SetFormResolution(this);
+
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+
             MissionNumber = 0;
             EncounterNumber = 0;
             HasCharacters = false;

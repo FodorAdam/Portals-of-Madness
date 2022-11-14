@@ -31,6 +31,8 @@
 		
 		<MediaTemplate EmbedCab="yes"/>
 
+		<UIRef Id="WixUI_Minimal" />
+
 		<Feature Id="ProductFeature" Title="Portals_of_Madness_Installer" Level="1">
 			
 			<ComponentGroupRef Id="ProductComponents" />
